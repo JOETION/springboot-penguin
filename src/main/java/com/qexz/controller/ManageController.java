@@ -41,7 +41,7 @@ public class ManageController {
     /**
      * 管理员登录页
      */
-    @RequestMapping(value="/login", method= RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(HttpServletRequest request, Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
@@ -56,7 +56,7 @@ public class ManageController {
     /**
      * 用户管理
      */
-    @RequestMapping(value="/account/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/account/list", method = RequestMethod.GET)
     public String accountList(HttpServletRequest request,
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               Model model) {
@@ -77,7 +77,7 @@ public class ManageController {
     /**
      * 考试管理
      */
-    @RequestMapping(value="/contest/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/contest/list", method = RequestMethod.GET)
     public String contestList(HttpServletRequest request,
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               Model model) {
@@ -100,7 +100,7 @@ public class ManageController {
     /**
      * 考试管理-查看试题
      */
-    @RequestMapping(value="/contest/{contestId}/problems", method= RequestMethod.GET)
+    @RequestMapping(value = "/contest/{contestId}/problems", method = RequestMethod.GET)
     public String contestProblemList(HttpServletRequest request,
                                      @PathVariable("contestId") Integer contestId, Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
@@ -125,7 +125,7 @@ public class ManageController {
     /**
      * 題目管理
      */
-    @RequestMapping(value="/question/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/question/list", method = RequestMethod.GET)
     public String questionList(HttpServletRequest request,
                                @RequestParam(value = "page", defaultValue = "1") int page,
                                @RequestParam(value = "content", defaultValue = "") String content,
@@ -158,10 +158,10 @@ public class ManageController {
     /**
      * 成绩管理-考试列表
      */
-    @RequestMapping(value="/result/contest/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/result/contest/list", method = RequestMethod.GET)
     public String resultContestList(HttpServletRequest request,
-                              @RequestParam(value = "page", defaultValue = "1") int page,
-                              Model model) {
+                                    @RequestParam(value = "page", defaultValue = "1") int page,
+                                    Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         //TODO::处理
         //currentAccount = accountService.getAccountByUsername("admin");
@@ -181,7 +181,7 @@ public class ManageController {
     /**
      * 成绩管理-考试列表-学生成绩列表
      */
-    @RequestMapping(value="/result/contest/{contestId}/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/result/contest/{contestId}/list", method = RequestMethod.GET)
     public String resultStudentList(HttpServletRequest request,
                                     @PathVariable("contestId") int contestId,
                                     @RequestParam(value = "page", defaultValue = "1") int page,
@@ -217,7 +217,7 @@ public class ManageController {
     /**
      * 课程管理
      */
-    @RequestMapping(value="/subject/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/subject/list", method = RequestMethod.GET)
     public String subjectList(HttpServletRequest request,
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               Model model) {
@@ -238,10 +238,10 @@ public class ManageController {
     /**
      * 帖子管理
      */
-    @RequestMapping(value="/post/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/post/list", method = RequestMethod.GET)
     public String postList(HttpServletRequest request,
-                              @RequestParam(value = "page", defaultValue = "1") int page,
-                              Model model) {
+                           @RequestParam(value = "page", defaultValue = "1") int page,
+                           Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         //TODO::处理
         //currentAccount = accountService.getAccountByUsername("admin");
@@ -267,10 +267,10 @@ public class ManageController {
     /**
      * 评论管理
      */
-    @RequestMapping(value="/comment/list", method= RequestMethod.GET)
+    @RequestMapping(value = "/comment/list", method = RequestMethod.GET)
     public String commentList(HttpServletRequest request,
-                           @RequestParam(value = "page", defaultValue = "1") int page,
-                           Model model) {
+                              @RequestParam(value = "page", defaultValue = "1") int page,
+                              Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         //TODO::处理
         //currentAccount = accountService.getAccountByUsername("admin");

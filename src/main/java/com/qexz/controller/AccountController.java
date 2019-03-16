@@ -1,5 +1,6 @@
 package com.qexz.controller;
 
+import com.alibaba.druid.pool.DruidDataSource;
 import com.qexz.common.QexzConst;
 import com.qexz.dto.AjaxResult;
 import com.qexz.exception.QexzWebError;
@@ -15,14 +16,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -48,7 +46,7 @@ public class AccountController {
     /**
      * 个人信息页面
      */
-    @RequestMapping(value="/profile", method= RequestMethod.GET)
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(HttpServletRequest request, Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         //TODO::拦截器过滤处理
@@ -63,7 +61,7 @@ public class AccountController {
     /**
      * 更改密码页面
      */
-    @RequestMapping(value="/password", method= RequestMethod.GET)
+    @RequestMapping(value = "/password", method = RequestMethod.GET)
     public String password(HttpServletRequest request, Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         //TODO::拦截器过滤处理
@@ -78,7 +76,7 @@ public class AccountController {
     /**
      * 考试记录页面
      */
-    @RequestMapping(value="/myExam", method= RequestMethod.GET)
+    @RequestMapping(value = "/myExam", method = RequestMethod.GET)
     public String myExam(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         //TODO::拦截器过滤处理
@@ -110,7 +108,7 @@ public class AccountController {
     /**
      * 我的发帖页面
      */
-    @RequestMapping(value="/myDiscussPost", method= RequestMethod.GET)
+    @RequestMapping(value = "/myDiscussPost", method = RequestMethod.GET)
     public String myDiscussPost(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
         //TODO::拦截器过滤处理
@@ -135,8 +133,8 @@ public class AccountController {
             String oldPassword = request.getParameter("oldPassword");
             String newPassword = request.getParameter("newPassword");
             String confirmNewPassword = request.getParameter("confirmNewPassword");
-            String md5OldPassword = MD5.md5(QexzConst.MD5_SALT+oldPassword);
-            String md5NewPassword = MD5.md5(QexzConst.MD5_SALT+newPassword);
+            String md5OldPassword = MD5.md5(QexzConst.MD5_SALT + oldPassword);
+            String md5NewPassword = MD5.md5(QexzConst.MD5_SALT + newPassword);
             if (StringUtils.isNotEmpty(newPassword) && StringUtils.isNotEmpty(confirmNewPassword)
                     && !newPassword.equals(confirmNewPassword)) {
                 return AjaxResult.fixedError(QexzWebError.NOT_EQUALS_CONFIRM_PASSWORD);
@@ -195,12 +193,12 @@ public class AccountController {
             String username = request.getParameter("username");
             String password = request.getParameter("password");
             Account current_account = accountService.getAccountByUsername(username);
-            if(current_account != null) {
-                String pwd = MD5.md5(QexzConst.MD5_SALT+password);
-                if(pwd.equals(current_account.getPassword())) {
+            if (current_account != null) {
+                String pwd = MD5.md5(QexzConst.MD5_SALT + password);
+                if (pwd.equals(current_account.getPassword())) {
                     //设置单位为秒，设置为-1永不过期
                     //request.getSession().setMaxInactiveInterval(180*60);    //3小时
-                    request.getSession().setAttribute(QexzConst.CURRENT_ACCOUNT,current_account);
+                    request.getSession().setAttribute(QexzConst.CURRENT_ACCOUNT, current_account);
                     ajaxResult.setData(current_account);
                 } else {
                     return AjaxResult.fixedError(QexzWebError.WRONG_PASSWORD);
@@ -217,15 +215,16 @@ public class AccountController {
 
     /**
      * 用户退出
+     *
      * @param request
      * @return
      */
-    @RequestMapping(value = "/logout", method= RequestMethod.GET)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
-        request.getSession().setAttribute(QexzConst.CURRENT_ACCOUNT,null);
-        String url=request.getHeader("Referer");
+        request.getSession().setAttribute(QexzConst.CURRENT_ACCOUNT, null);
+        String url = request.getHeader("Referer");
         LOG.info("url = " + url);
-        return "redirect:"+url;
+        return "redirect:" + url;
     }
 
     /**
@@ -233,7 +232,7 @@ public class AccountController {
      */
     @RequestMapping(value = "/api/uploadAvatar", method = RequestMethod.POST)
     @ResponseBody
-    public Map<String,Object> uploadAvatar(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IllegalStateException, IOException{
+    public Map<String, Object> uploadAvatar(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IllegalStateException, IOException {
         AjaxResult ajaxResult = new AjaxResult();
         try {
             //原始名称
@@ -242,16 +241,16 @@ public class AccountController {
             String file_path = QexzConst.UPLOAD_FILE_IMAGE_PATH;
             LOG.info("file_path = " + file_path);
             //上传图片
-            if(file!=null && oldFileName!=null && oldFileName.length()>0){
+            if (file != null && oldFileName != null && oldFileName.length() > 0) {
                 //新的图片名称
                 String newFileName = UUID.randomUUID() + oldFileName.substring(oldFileName.lastIndexOf("."));
                 //新图片
-                File newFile = new File(file_path+newFileName);
+                File newFile = new File(file_path + newFileName);
                 //将内存中的数据写入磁盘
                 file.transferTo(newFile);
                 //将新图片名称返回到前端
                 ajaxResult.setData(newFileName);
-            }else{
+            } else {
                 return AjaxResult.fixedError(QexzWebError.UPLOAD_FILE_IMAGE_NOT_QUALIFIED);
             }
         } catch (Exception e) {
@@ -264,13 +263,13 @@ public class AccountController {
     /**
      * API:添加用户
      */
-    @RequestMapping(value="/api/addAccount", method= RequestMethod.POST)
+    @RequestMapping(value = "/api/addAccount", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult addAccount(@RequestBody Account account) {
         AjaxResult ajaxResult = new AjaxResult();
         Account existAccount = accountService.getAccountByUsername(account.getUsername());
-        if(existAccount == null) {//检测该用户是否已经注册
-            account.setPassword(MD5.md5(QexzConst.MD5_SALT+account.getPassword()));
+        if (existAccount == null) {//检测该用户是否已经注册
+            account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
             account.setAvatarImgUrl(QexzConst.DEFAULT_AVATAR_IMG_URL);
             account.setDescription("");
             int accountId = accountService.addAccount(account);
@@ -282,11 +281,11 @@ public class AccountController {
     /**
      * API:更新用户
      */
-    @RequestMapping(value="/api/updateManegeAccount", method= RequestMethod.POST)
+    @RequestMapping(value = "/api/updateManegeAccount", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult updateAccount(@RequestBody Account account) {
         AjaxResult ajaxResult = new AjaxResult();
-        account.setPassword(MD5.md5(QexzConst.MD5_SALT+account.getPassword()));
+        account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
         boolean result = accountService.updateAccount(account);
         return new AjaxResult().setData(result);
     }
@@ -305,7 +304,7 @@ public class AccountController {
     /**
      * API:禁用账号
      */
-    @RequestMapping(value="/api/disabledAccount/{id}", method= RequestMethod.POST)
+    @RequestMapping(value = "/api/disabledAccount/{id}", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult disabledAccount(@PathVariable int id) {
         AjaxResult ajaxResult = new AjaxResult();
@@ -316,7 +315,7 @@ public class AccountController {
     /**
      * API:解禁账号
      */
-    @RequestMapping(value="/api/abledAccount/{id}", method= RequestMethod.POST)
+    @RequestMapping(value = "/api/abledAccount/{id}", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResult abledAccount(@PathVariable int id) {
         AjaxResult ajaxResult = new AjaxResult();
