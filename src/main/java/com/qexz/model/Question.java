@@ -24,6 +24,30 @@ public class Question {
 
     private String subjectName;
 
+    public Question() {
+    }
+
+    public Question(int id, String title, String content, int questionType, String optionA, String optionB, String optionC, String optionD, String answer, String parse, int subjectId, int contestId, int score, int difficulty, Date createTime, Date updateTime, int state, String subjectName) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.questionType = questionType;
+        this.optionA = optionA;
+        this.optionB = optionB;
+        this.optionC = optionC;
+        this.optionD = optionD;
+        this.answer = answer;
+        this.parse = parse;
+        this.subjectId = subjectId;
+        this.contestId = contestId;
+        this.score = score;
+        this.difficulty = difficulty;
+        this.createTime = createTime;
+        this.updateTime = updateTime;
+        this.state = state;
+        this.subjectName = subjectName;
+    }
+
     public int getId() {
         return id;
     }
@@ -191,4 +215,128 @@ public class Question {
                 ", subjectName='" + subjectName + '\'' +
                 '}';
     }
+
+    public Question(Builder builder) {
+        this.answer = builder.answer;
+        this.content = builder.content;
+        this.contestId = builder.contestId;
+        this.difficulty = builder.difficulty;
+        this.optionA = builder.optionA;
+        this.optionB = builder.optionB;
+        this.optionC = builder.optionC;
+        this.optionD = builder.optionD;
+        this.parse = builder.parse;
+        this.questionType = builder.questionType;
+        this.score = builder.score;
+        this.title = builder.title;
+        this.subjectId = builder.subjectId;
+        this.state = builder.state;
+    }
+
+
+    public static class Builder {
+        private String title;
+        private String content;
+        private int questionType;
+        private String optionA;
+        private String optionB;
+        private String optionC;
+        private String optionD;
+        private String answer;
+        private String parse;
+        private int subjectId;
+        private int contestId;
+        private int score;
+        private int difficulty;
+        private int state;
+
+
+        public Builder setTitle(String title) {
+            this.title = title;
+            return this;
+        }
+
+
+        public Builder setContent(String content) {
+            this.content = content;
+            return this;
+        }
+
+
+        public Builder setQuestionType(int questionType) {
+            this.questionType = questionType;
+            return this;
+        }
+
+
+        public Builder setOptionA(String optionA) {
+            this.optionA = optionA;
+            return this;
+        }
+
+
+        public Builder setOptionB(String optionB) {
+            this.optionB = optionB;
+            return this;
+        }
+
+
+        public Builder setOptionC(String optionC) {
+            this.optionC = optionC;
+            return this;
+        }
+
+
+        public Builder setOptionD(String optionD) {
+            this.optionD = optionD;
+            return this;
+        }
+
+
+        public Builder setAnswer(String answer) {
+            this.answer = answer;
+            return this;
+        }
+
+
+        public Builder setParse(String parse) {
+            this.parse = parse;
+            return this;
+        }
+
+
+        public Builder setSubjectId(int subjectId) {
+            this.subjectId = subjectId;
+            return this;
+        }
+
+
+        public Builder setContestId(int contestId) {
+            this.contestId = contestId;
+            return this;
+        }
+
+
+        public Builder setScore(int score) {
+            this.score = score;
+            return this;
+        }
+
+
+        public Builder setDifficulty(int difficulty) {
+            this.difficulty = difficulty;
+            return this;
+        }
+
+        public Builder setState(int state) {
+            this.state = state;
+            return this;
+        }
+
+        public Question build() {
+            return new Question(this);
+        }
+    }
+
+
 }

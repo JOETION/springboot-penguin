@@ -1,54 +1,80 @@
 /**
  * 模块JavaScript
  */
-var passwordPage = {
+var managePasswordPage = {
     init: function () {
+
+
+        //新增考试，弹出新增窗口
+        $("#ModifyPassword").click(function () {
+            //输入框初始化数据
+            managePasswordPage.initPassword();
+            $("#updatePasswordModal").modal({
+                keyboard: false,
+                show: true,
+                backdrop: "static"
+            });
+        });
         /**
          * toastr提示消息位置
          */
         toastr.options.positionClass = 'toast-top-center';
+
+        $("#updatePasswordErrorMessage").click(function () {
+            $(this).hide(500);
+        });
+
+
+        //新增考试，取消考试增加
+        $('#cancelUpdatePassword').click(function () {
+            $("#updatePasswordModal").modal('hide');
+        });
+
         /**
          * 更新密码提交按钮触发
          */
         $('#updatePasswordButton').click(function (e) {
-            passwordPage.updatePassword();
-        });
-        /**
-         * 更新密码错误提示消息可关闭
-         */
-        $('#updatePasswordErrorMessage,.close').on('click', function () {
-            $(this).closest('#updatePasswordErrorMessage').transition('fade');
+            managePasswordPage.updatePassword();
         });
     },
+    initPassword: function () {
+        //初始化数据
+        $('#oldPassword').val("");
+        $('#newPassword').val("");
+        $('#confirmNewPassword').val("");
+        $('#updatePasswordErrorMessage').hide();
+        $('#updatePasswordErrorMessage').html("");
+    },
+
     /**
      * 检查密码输入是否合法
      */
     checkPassword: function (oldPassword, newPassword, confirmNewPassword) {
         if (oldPassword == null || oldPassword == ''
             || oldPassword.replace(/(^s*)|(s*$)/g, "").length == 0) {
-            $('#updatePasswordErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
+            $('#updatePasswordErrorMessage').html('<div class="header">错误提示</div>\n' +
                 '                <p>' + '原密码不能为空' + '</p>');
-            $('#updatePasswordErrorMessage').removeClass('hidden');
+            $('#updatePasswordErrorMessage').show(500);
             return false;
         }
         if (newPassword == null || newPassword == ''
             || newPassword.replace(/(^s*)|(s*$)/g, "").length == 0) {
-            $('#updatePasswordErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
+            $('#updatePasswordErrorMessage').html('<div class="header">错误提示</div>\n' +
                 '                <p>' + '新密码不能为空' + '</p>');
-            $('#updatePasswordErrorMessage').removeClass('hidden');
+            $('#updatePasswordErrorMessage').show(500);
             return false;
         }
         if (confirmNewPassword == null || confirmNewPassword == ''
             || confirmNewPassword.replace(/(^s*)|(s*$)/g, "").length == 0) {
-            $('#updatePasswordErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
+            $('#updatePasswordErrorMessage').html('<div class="header">错误提示</div>\n' +
                 '                <p>' + '确认密码不能为空' + '</p>');
-            $('#updatePasswordErrorMessage').removeClass('hidden');
+            $('#updatePasswordErrorMessage').show(500);
             return false;
         }
         if (newPassword != confirmNewPassword) {
-            $('#updatePasswordErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
+            $('#updatePasswordErrorMessage').html('<div class="header">错误提示</div>\n' +
                 '                <p>' + '新密码和确认密码不一致' + '</p>');
-            $('#updatePasswordErrorMessage').removeClass('hidden');
+            $('#updatePasswordErrorMessage').show(500);
             return false;
         }
         return true;
@@ -60,7 +86,7 @@ var passwordPage = {
         var oldPassword = $('#oldPassword').val();
         var newPassword = $('#newPassword').val();
         var confirmPassword = $('#confirmNewPassword').val();
-        if (passwordPage.checkPassword(oldPassword, newPassword, confirmPassword)) {
+        if (managePasswordPage.checkPassword(oldPassword, newPassword, confirmPassword)) {
             //调用后端API
             $.post(app.URL.updatePasswordUrl(), {
                 oldPassword: oldPassword,
@@ -75,9 +101,9 @@ var passwordPage = {
                         window.location.reload();
                     }, 2000);
                 } else {
-                    $('#updatePasswordErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
+                    $('#updatePasswordErrorMessage').html('<div class="header">错误提示</div>\n' +
                         '                <p>' + result.message + '</p>');
-                    $('#updatePasswordErrorMessage').removeClass('hidden');
+                    $('#updatePasswordErrorMessage').show(500);
                 }
             }, "json");
         }

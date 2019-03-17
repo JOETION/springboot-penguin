@@ -35,10 +35,15 @@ public class QuestionServiceImpl implements QuestionService {
         } else {
             question.setState(0);
             Contest contest = contestMapper.getContestById(question.getContestId());
-            contest.setTotalScore(contest.getTotalScore()+question.getScore());
+            contest.setTotalScore(contest.getTotalScore() + question.getScore());
             contestMapper.updateContestById(contest);
         }
         return questionMapper.insertQuestion(question);
+    }
+
+    @Override
+    public int addQuestions(List<Question> questions) {
+        return questionMapper.insertQuestionByList(questions);
     }
 
     @Override
@@ -46,8 +51,8 @@ public class QuestionServiceImpl implements QuestionService {
         if (question.getContestId() != 0) {
             Contest contest = contestMapper.getContestById(question.getContestId());
             Question sourceQuestion = questionMapper.getQuestionById(question.getId());
-            contest.setTotalScore(contest.getTotalScore()-sourceQuestion.getScore()
-                    +question.getScore());
+            contest.setTotalScore(contest.getTotalScore() - sourceQuestion.getScore()
+                    + question.getScore());
             contestMapper.updateContestById(contest);
         }
         return questionMapper.updateQuestionById(question) > 0;

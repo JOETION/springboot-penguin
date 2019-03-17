@@ -9,6 +9,8 @@ public interface QuestionService {
 
     int addQuestion(Question question);
 
+    int addQuestions(List<Question> questions);
+
     boolean updateQuestion(Question question);
 
     List<Question> getQuestionsByContestId(int contestId);

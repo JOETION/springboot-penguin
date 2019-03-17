@@ -2,114 +2,117 @@
  * 模块JavaScript
  */
 var app = {
-    data:{
+    data: {
         nowTime: null,
         contextPath: null,
     },
     // 封装相关的ajax的url
     URL: {
         now: function () {
-            return app.data.contextPath+"/time/now";
+            return app.data.contextPath + "/time/now";
         },
         checkLoginUrl: function () {
-            return app.data.contextPath+"/account/api/login";
+            return app.data.contextPath + "/account/api/login";
         },
         logoutUrl: function () {
-            return app.data.contextPath+"/account/logout";
+            return app.data.contextPath + "/account/logout";
         },
         homeUrl: function () {
-            return app.data.contextPath+"/";
+            return app.data.contextPath + "/";
         },
         problemsetUrl: function () {
-            return app.data.contextPath+"/problemset/list";
+            return app.data.contextPath + "/problemset/list";
         },
         updateAccountUrl: function () {
-            return app.data.contextPath+"/account/api/updateAccount";
+            return app.data.contextPath + "/account/api/updateAccount";
         },
         updatePasswordUrl: function () {
-            return app.data.contextPath+"/account/api/updatePassword";
+            return app.data.contextPath + "/account/api/updatePassword";
         },
         manageContestListUrl: function () {
-            return app.data.contextPath+"/manage/contest/list";
+            return app.data.contextPath + "/manage/contest/list";
         },
         addContestUrl: function () {
-            return app.data.contextPath+"/contest/api/addContest"
+            return app.data.contextPath + "/contest/api/addContest"
         },
         updateContestUrl: function () {
-            return app.data.contextPath+"/contest/api/updateContest"
+            return app.data.contextPath + "/contest/api/updateContest"
         },
         deleteContestUrl: function () {
-            return app.data.contextPath+"/contest/api/deleteContest/";
+            return app.data.contextPath + "/contest/api/deleteContest/";
         },
         finishContestUrl: function () {
-            return app.data.contextPath+"/contest/api/finishContest/";
+            return app.data.contextPath + "/contest/api/finishContest/";
         },
         addQuestionUrl: function () {
-            return app.data.contextPath+"/question/api/addQuestion";
+            return app.data.contextPath + "/question/api/addQuestion";
         },
         updateQuestionUrl: function () {
-            return app.data.contextPath+"/question/api/updateQuestion"
+            return app.data.contextPath + "/question/api/updateQuestion"
         },
         deleteQuestionUrl: function () {
-            return app.data.contextPath+"/question/api/deleteQuestion/";
+            return app.data.contextPath + "/question/api/deleteQuestion/";
         },
         manageQuestionUrl: function () {
-            return app.data.contextPath+"/manage/question/list"
+            return app.data.contextPath + "/manage/question/list"
         },
         manageResultContestListUrl: function () {
-            return app.data.contextPath+"/manage/result/contest/list";
+            return app.data.contextPath + "/manage/result/contest/list";
         },
         manageResultStudentListUrl: function (contestId) {
-            return app.data.contextPath+"/manage/result/contest/"+contestId+"/list";
+            return app.data.contextPath + "/manage/result/contest/" + contestId + "/list";
         },
         finishGradeUrl: function () {
-            return app.data.contextPath+"/grade/api/finishGrade"
+            return app.data.contextPath + "/grade/api/finishGrade"
         },
         manageAccountListUrl: function () {
-            return app.data.contextPath+"/manage/account/list";
+            return app.data.contextPath + "/manage/account/list";
         },
         addAccountUrl: function () {
-            return app.data.contextPath+"/account/api/addAccount";
+            return app.data.contextPath + "/account/api/addAccount";
         },
         updateAccountUrl: function () {
-            return app.data.contextPath+"/account/api/updateManegeAccount";
+            return app.data.contextPath + "/account/api/updateManegeAccount";
         },
         deleteAccountUrl: function () {
-            return app.data.contextPath+"/account/api/deleteAccount/";
+            return app.data.contextPath + "/account/api/deleteAccount/";
         },
         abledAccountUrl: function () {
-            return app.data.contextPath+"/account/api/abledAccount/";
+            return app.data.contextPath + "/account/api/abledAccount/";
         },
         disabledAccountUrl: function () {
-            return app.data.contextPath+"/account/api/disabledAccount/";
+            return app.data.contextPath + "/account/api/disabledAccount/";
         },
         manageSubjectListUrl: function () {
-            return app.data.contextPath+"/manage/subject/list"
+            return app.data.contextPath + "/manage/subject/list"
         },
         addSubjectUrl: function () {
-            return app.data.contextPath+"/subject/api/addSubject";
+            return app.data.contextPath + "/subject/api/addSubject";
         },
         updateSubjectUrl: function () {
-            return app.data.contextPath+"/subject/api/updateSubject"
+            return app.data.contextPath + "/subject/api/updateSubject"
         },
         deleteSubjectUrl: function () {
-            return app.data.contextPath+"/subject/api/deleteSubject/";
+            return app.data.contextPath + "/subject/api/deleteSubject/";
         },
         managePostListUrl: function () {
-            return app.data.contextPath+"/manage/post/list"
+            return app.data.contextPath + "/manage/post/list"
         },
         updatePostUrl: function () {
-            return app.data.contextPath+"/post/api/updatePost"
+            return app.data.contextPath + "/post/api/updatePost"
         },
         deletePostUrl: function () {
-            return app.data.contextPath+"/post/api/deletePost/";
+            return app.data.contextPath + "/post/api/deletePost/";
         },
         manageCommentListUrl: function () {
-            return app.data.contextPath+"/manage/comment/list"
+            return app.data.contextPath + "/manage/comment/list"
         },
         deleteCommentUrl: function () {
-            return app.data.contextPath+"/comment/api/deleteComment/";
+            return app.data.contextPath + "/comment/api/deleteComment/";
         },
+        uploadQuestionUrl: function () {
+            return app.data.contextPath + "/manage/question/upload/";
+        }
 
     },
     /**

@@ -15,3 +15,4 @@ modules/logs
 .project
 .settings
 .classpath
+logs

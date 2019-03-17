@@ -1,39 +1,86 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
     <title>GDUFE在线考试系统控制台-考试管理</title>
-    <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" />
-    <link th:href="@{https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet" />
-    <link th:href="@{/css/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet" />
-    <link rel="stylesheet" th:href="@{/css/manage/manage-app.css}" />
+    <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link th:href="@{https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/manage/manage-app.css}"/>
 
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript" th:src="@{/js/manage/manage-app.js}"></script>
     <script type="text/javascript" th:src="@{/js/manage/manage-questionBoard.js}"></script>
 </head>
 
 <body>
 
+<!--上传文件模态框-->
+<div id="uploadQuestionModal" class="bootbox modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">上传文件</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" onsubmit="return false;" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">文件大小</label>
+
+                        <div class="col-sm-8">
+                            <input id="uploadFileSize" type="text" class="form-control" placeholder="选择文件后显示" disabled="disabled"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">选择文件</label>
+
+                        <div class="col-sm-8">
+                            <input id="uploadQuestionFile" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" name="file" type="file" class="form-control" placeholder="点击选择文件"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">上传进度</label>
+
+                        <div class="col-sm-8 ">
+                            <span class="form-control" id="progress"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button data-bb-handler="confirm" type="button" id="confirmUploadQuestionBtn" class="btn btn-success radius">
+                    <span><i class="icon-ok"></i></span> 确定
+                </button>
+                <button data-bb-handler="cancel" type="button" class="btn btn-danger radius" id="cancelUploadQuestionBtn">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--导航条-->
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#"><img style="width: 32px;height: 32px;" th:src="@{/img/manage-logo.png}" /></a>
+            <a class="navbar-brand" href="#"><img style="width: 32px;height: 32px;" th:src="@{/img/manage-logo.png}"/></a>
             <a class="navbar-brand" href="#">GDUFE在线考试系统控制台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img class="img-circle" style="width: 32px;height: 32px;" th:src="@{'/upload/images/'+${current_account.avatarImgUrl}}" />&nbsp;&nbsp;<span th:text="${current_account.name}"></span>
+                        <img class="img-circle" style="width: 32px;height: 32px;" th:src="@{'/upload/images/'+${current_account.avatarImgUrl}}"/>&nbsp;&nbsp;<span th:text="${current_account.name}"></span>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -61,13 +108,15 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">题目管理</h1>
+
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-md-8">
-                    <input type="text" class="form-control" id="content" placeholder="请输入题目内容" />
+                    <input type="text" class="form-control" id="content" placeholder="请输入题目内容"/>
                 </div>
                 <div class="col-md-4">
                     <button type="button" class="btn btn-success" id="queryQuestionBtn"><i class="glyphicon glyphicon-search"></i>查询</button>
                     <button type="button" class="btn btn-success" id="addQuestionBtn"><i class="fa fa-plus"></i>添加题目</button>
+                    <button type="button" class="btn btn-success" id="uploadQuestionBtn"><i class="fa fa-plus"></i>上传题目文件</button>
                 </div>
             </div>
             <div class="table-responsive">
@@ -163,18 +212,21 @@
 
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目标题</label>
+
                         <div class="col-sm-8">
-                            <input id="questionTitle" type="text" class="form-control" placeholder="" />
+                            <input id="questionTitle" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目内容</label>
+
                         <div class="col-sm-8">
-                            <textarea  id="questionContent" class="form-control" rows="8"></textarea>
+                            <textarea id="questionContent" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目类型</label>
+
                         <div class="col-sm-8">
                             <select class="form-control" id="questionType">
                                 <option th:value="0">单选</option>
@@ -186,6 +238,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">所属课程</label>
+
                         <div class="col-sm-8">
                             <select class="form-control" id="subjectId">
                                 <option th:each="item,itemStats : ${data['subjects']}"
@@ -197,42 +250,49 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">A选项</label>
+
                         <div class="col-sm-8">
-                            <input id="optionA" type="text" class="form-control" placeholder="" />
+                            <input id="optionA" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">B选项</label>
+
                         <div class="col-sm-8">
-                            <input id="optionB" type="text" class="form-control" placeholder="" />
+                            <input id="optionB" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">C选项</label>
+
                         <div class="col-sm-8">
-                            <input id="optionC" type="text" class="form-control" placeholder="" />
+                            <input id="optionC" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">D选项</label>
+
                         <div class="col-sm-8">
-                            <input id="optionD" type="text" class="form-control" placeholder="" />
+                            <input id="optionD" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目答案</label>
+
                         <div class="col-sm-8">
-                            <textarea  id="questionAnswer" class="form-control" rows="8"></textarea>
+                            <textarea id="questionAnswer" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">答案解析</label>
+
                         <div class="col-sm-8">
-                            <textarea  id="questionParse" class="form-control" rows="8"></textarea>
+                            <textarea id="questionParse" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目难度</label>
+
                         <div class="col-sm-8">
                             <select class="form-control" id="questionDifficulty">
                                 <option th:value="1">
@@ -255,8 +315,9 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目分值</label>
+
                         <div class="col-sm-8">
-                            <input id="questionScore" type="text" class="form-control" placeholder="" />
+                            <input id="questionScore" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                 </form>
@@ -281,21 +342,25 @@
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" role="form" onsubmit="return false;">
-                    <input type="hidden" id="updateQuestionIndex" />
+                    <input type="hidden" id="updateQuestionIndex"/>
+
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目标题</label>
+
                         <div class="col-sm-8">
-                            <input id="updateQuestionTitle" type="text" class="form-control" placeholder="" />
+                            <input id="updateQuestionTitle" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目内容</label>
+
                         <div class="col-sm-8">
-                            <textarea  id="updateQuestionContent" class="form-control" rows="8"></textarea>
+                            <textarea id="updateQuestionContent" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目类型</label>
+
                         <div class="col-sm-8">
                             <select class="form-control" id="updateQuestionType">
                                 <option th:value="0">单选</option>
@@ -307,6 +372,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">所属课程</label>
+
                         <div class="col-sm-8">
                             <select class="form-control" id="updateSubjectId">
                                 <option th:each="item,itemStats : ${data['subjects']}"
@@ -318,42 +384,49 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">A选项</label>
+
                         <div class="col-sm-8">
-                            <input id="updateOptionA" type="text" class="form-control" placeholder="" />
+                            <input id="updateOptionA" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">B选项</label>
+
                         <div class="col-sm-8">
-                            <input id="updateOptionB" type="text" class="form-control" placeholder="" />
+                            <input id="updateOptionB" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">C选项</label>
+
                         <div class="col-sm-8">
-                            <input id="updateOptionC" type="text" class="form-control" placeholder="" />
+                            <input id="updateOptionC" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">D选项</label>
+
                         <div class="col-sm-8">
-                            <input id="updateOptionD" type="text" class="form-control" placeholder="" />
+                            <input id="updateOptionD" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目答案</label>
+
                         <div class="col-sm-8">
-                            <textarea  id="updateQuestionAnswer" class="form-control" rows="8"></textarea>
+                            <textarea id="updateQuestionAnswer" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">答案解析</label>
+
                         <div class="col-sm-8">
-                            <textarea  id="updateQuestionParse" class="form-control" rows="8"></textarea>
+                            <textarea id="updateQuestionParse" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目难度</label>
+
                         <div class="col-sm-8">
                             <select class="form-control" id="updateQuestionDifficulty">
                                 <option th:value="1">
@@ -376,8 +449,9 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目分值</label>
+
                         <div class="col-sm-8">
-                            <input id="updateQuestionScore" type="text" class="form-control" placeholder="" />
+                            <input id="updateQuestionScore" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                 </form>
@@ -401,7 +475,7 @@
     var questions = /*[[${data['questions']}]]*/;
     var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/;
 
-    $(function(){
+    $(function () {
         app.init(contextPath);
         manageQuestionBoardPage.init(pageNum, pageSize, totalPageNum, totalPageSize, content, questions);
     });

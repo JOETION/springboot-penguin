@@ -1,19 +1,22 @@
 package com.qexz.controller;
 
 import com.qexz.common.QexzConst;
+import com.qexz.exception.QexzWebError;
+import com.qexz.exception.QexzWebException;
+import com.qexz.jobs.ImportQuestionJobs;
 import com.qexz.model.*;
 import com.qexz.service.*;
+import com.qexz.util.CommonUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -154,6 +157,41 @@ public class ManageController {
             return "/manage/manage-questionBoard";
         }
     }
+
+
+    /**
+     * 上传试题excel文件，并处理后放进数据库
+     *
+     * @param file
+     * @throws QexzWebException
+     */
+    @RequestMapping(value = "/question/upload", method = RequestMethod.POST)
+    @ResponseBody
+    public void fileUpload(@RequestParam("file") MultipartFile file) throws QexzWebException {
+
+        // 判断文件是否为空
+        String fileName = file.getOriginalFilename().toLowerCase();
+        if (!file.isEmpty() && fileName.endsWith(QexzConst.EXCEL_XLS_SUFFIX) || fileName.endsWith(QexzConst.EXCEL_XLSX_SUFFIX)) {
+            try {
+                File upload = new File(QexzConst.UPLOAD_QUESTION_EXCEL + CommonUtils.geCurrentTime() + "_" + fileName);
+                if (upload.exists()) {
+                    upload.delete();
+                } else {
+                    upload.createNewFile();
+                }
+                //保存文件
+                file.transferTo(upload);
+                //添加试题导入数据库任务
+                ImportQuestionJobs.addQuestionJob(upload);
+            } catch (Exception e) {
+                System.out.println("上传文件失败，原因：" + e.toString());
+                //异常抛到前端
+                throw new QexzWebException(QexzWebError.UPLOAD_FILE_IMAGE_ANALYZE_ERROR);
+            }
+        }
+
+    }
+
 
     /**
      * 成绩管理-考试列表

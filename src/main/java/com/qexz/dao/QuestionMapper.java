@@ -13,6 +13,8 @@ public interface QuestionMapper {
 
     int insertQuestion(@Param("question") Question question);
 
+    int insertQuestionByList(@Param("list") List<Question> questions);
+
     int deleteQuestion(@Param("id") int id);
 
     int updateQuestionById(@Param("question") Question question);
@@ -35,4 +37,6 @@ public interface QuestionMapper {
 
     int updateQuestionsStateByContestId(@Param("contestId") int contestId,
                                         @Param("state") int state);
+
+
 }

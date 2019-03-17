@@ -13,6 +13,14 @@ public class QexzConst {
     public static final String UPLOAD_FILE_PATH = "file:/usr/java/data/springboot-penguin/upload/";
     public static final String UPLOAD_FILE_IMAGE_PATH = "/usr/java/data/springboot-penguin/upload/images/";
 
+
+    //试题Excel文件保存位置
+    public static final String UPLOAD_QUESTION_EXCEL = "E:\\Company\\springboot-penguin\\upload\\excel\\";
+
+    //excel后缀
+    public static final String EXCEL_XLS_SUFFIX = ".xls";
+    public static final String EXCEL_XLSX_SUFFIX = ".xlsx";
+
     //默认头像url
     public static final String DEFAULT_AVATAR_IMG_URL = "headimg_placeholder.png";
     //课程默认图片
