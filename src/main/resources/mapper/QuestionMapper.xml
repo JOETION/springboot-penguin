@@ -13,42 +13,35 @@
         <result column="answer" property="answer" jdbcType="LONGVARCHAR"/>
         <result column="parse" property="parse" jdbcType="LONGVARCHAR"/>
         <result column="subject_id" property="subjectId" jdbcType="INTEGER"/>
-        <result column="contest_id" property="contestId" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
-        <result column="score" property="score" jdbcType="INTEGER"/>
-        <result column="difficulty" property="difficulty" jdbcType="INTEGER"/>
-        <result column="state" property="state" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         id,title,content,question_type,option_a,option_b,option_c,
-        option_d,answer,parse,subject_id,contest_id,create_time,
-        update_time,score,difficulty,state
+        option_d,answer,parse,subject_id,create_time,
+        update_time
     </sql>
 
-    <insert id="insertQuestion" parameterType="com.qexz.model.Question">
+    <insert id="insertQuestion"  useGeneratedKeys="true" keyProperty="question.id" parameterType="com.qexz.model.Question">
         insert into t_penguin_question
         (title, content, question_type, option_a, option_b, option_c,
-        option_d, answer, parse, subject_id, contest_id, score, difficulty,
-        state)
+        option_d, answer, parse, subject_id
+        )
         values (#{question.title}, #{question.content}, #{question.questionType},
         #{question.optionA}, #{question.optionB}, #{question.optionC}, #{question.optionD},
-        #{question.answer}, #{question.parse}, #{question.subjectId}, #{question.contestId},
-        #{question.score}, #{question.difficulty}, #{question.state})
+        #{question.answer}, #{question.parse}, #{question.subjectId})
     </insert>
 
     <insert id="insertQuestionByList" parameterType="java.util.List">
         insert into t_penguin_question
         (title, content, question_type, option_a, option_b, option_c,
-        option_d, answer, parse, subject_id, contest_id, score, difficulty,
-        state)
+        option_d, answer, parse, subject_id)
         values
         <foreach collection="list" item="question" index="index" separator=",">
             (
             #{question.title}, #{question.content}, #{question.questionType},
             #{question.optionA}, #{question.optionB}, #{question.optionC}, #{question.optionD},
-            #{question.answer}, #{question.parse}, #{question.subjectId}, #{question.contestId},
-            #{question.score}, #{question.difficulty}, #{question.state}
+            #{question.answer}, #{question.parse}, #{question.subjectId}
             )
         </foreach>
     </insert>
@@ -65,9 +58,7 @@
           question_type = #{question.questionType}, option_a = #{question.optionA},
           option_b = #{question.optionB}, option_c = #{question.optionC},
           option_d = #{question.optionD}, answer = #{question.answer},
-          parse = #{question.parse}, subject_id = #{question.subjectId},
-          contest_id = #{question.contestId}, score = #{question.score},
-          difficulty = #{question.difficulty}
+          parse = #{question.parse}, subject_id = #{question.subjectId}
         WHERE
         id = #{question.id}
     </update>
@@ -83,7 +74,7 @@
         SELECT
         COUNT(1)
         FROM t_penguin_question
-        WHERE 1 = 1 AND state = 1
+        WHERE 1 = 1
         <if test="content != null and content != ''">
             AND content LIKE CONCAT(CONCAT('%', #{content}), '%')
         </if>
@@ -93,7 +84,7 @@
         SELECT
         *
         FROM t_penguin_question
-        WHERE 1 = 1 AND state = 1
+        WHERE 1 = 1
         <if test="content != null and content != ''">
             AND content LIKE CONCAT(CONCAT('%', #{content}), '%')
         </if>
@@ -111,7 +102,7 @@
         SELECT
         COUNT(1)
         FROM t_penguin_question
-        WHERE state = 1 AND subject_id = #{problemsetId}
+        WHERE AND subject_id = #{problemsetId}
         <if test="content != null and content != ''">
             AND content LIKE CONCAT(CONCAT('%', #{content}), '%')
         </if>
@@ -124,7 +115,7 @@
         SELECT
         *
         FROM t_penguin_question
-        WHERE state = 1 AND subject_id = #{problemsetId}
+        WHERE subject_id = #{problemsetId}
         <if test="content != null and content != ''">
             AND content LIKE CONCAT(CONCAT('%', #{content}), '%')
         </if>
@@ -133,11 +124,33 @@
         </if>
     </select>
 
-    <update id="updateQuestionsStateByContestId">
+  <!--  <update id="updateQuestionsStateByContestId">
         UPDATE t_penguin_question
         SET
           state = #{state}
         WHERE
         contest_id = #{contestId}
     </update>
+-->
+    <insert id="addQuestionToContest">
+
+        INSERT INTO t_penguin_contest_content (contest_id,question_id,score,diffculty,state) VALUES (
+        #{contestId},#{id},0,0,0
+        )
+    </insert>
+
+
+    <select id="getQuestionByIds" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM t_penguin_question
+        WHERE 1 = 1
+        <if test="questionIds != null and questionIds.size > 0">
+            AND id IN
+            <foreach collection="questionIds" item="questionId" open="(" separator="," close=")">
+                #{questionId}
+            </foreach>
+        </if>
+    </select>
+
 </mapper>

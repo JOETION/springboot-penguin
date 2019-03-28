@@ -11,19 +11,71 @@
     <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}"/>
     <link th:href="@{https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
     <link th:href="@{/css/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
-    <link rel="stylesheet" href="https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css"/>
+    <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/manage/manage-app.css}"/>
 
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker/locales/bootstrap-datetimepicker.zh-CN.js}"></script>
-    <script type="text/javascript" src="https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/manage/manage-app.js}"></script>
     <script type="text/javascript" th:src="@{/js/manage/manage-questionBoard.js}"></script>
 </head>
 
 <body>
+
+
+<!--添加问题到考试模态框-->
+<div id="addQuestionToContestModal" class="bootbox modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">添加问题到考试</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form" onsubmit="return false;" enctype="multipart/form-data" method="post">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">考试名称</label>
+
+                        <div class="col-sm-8">
+                            <select class="form-control" id="selectContest" onchange="manageQuestionBoardPage.setContestTime(this.value)">
+                                <option th:text="请选择考试" th:value="-1"></option>
+                                <option th:each="item,itemStats : ${data['contests']}"
+                                        th:value="${item.id}" th:text="${item.title}">
+                                </option>
+                            </select>
+                            <p hidden="hidden" th:each="item,itemStats : ${data['contests']}" th:id="'timeTemp'+${item.id}" th:title="${#dates.format(item.startTime, 'yyyy-MM-dd HH:mm:ss')}" th:value="${#dates.format(item.endTime, 'yyyy-MM-dd HH:mm:ss')}">2018-1-11 09:00:00</p>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">开始时间</label>
+
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control form_datetime" id="startTime" data-date-format="yyyy-mm-dd hh:ii" placeholder="选择考试后显示" readonly="readonly"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">结束时间</label>
+
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control form_datetime" id="endTime" data-date-format="yyyy-mm-dd hh:ii" placeholder="选择考试后显示" readonly="readonly"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button data-bb-handler="confirm" type="button" id="confirmAddQuestionToContest" class="btn btn-success radius">
+                    <span><i class="icon-ok"></i></span> 确定
+                </button>
+                <button data-bb-handler="cancel" type="button" class="btn btn-danger radius" id="cancelAddQuestionToContest">取消</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!--上传文件模态框-->
 <div id="uploadQuestionModal" class="bootbox modal fade" tabindex="-1" role="dialog">
@@ -127,7 +179,6 @@
                         <th>题目</th>
                         <th>课程</th>
                         <th>题型</th>
-                        <th>难度</th>
                         <th>操作</th>
                     </tr>
                     </thead>
@@ -147,44 +198,10 @@
                         <td th:if="${item.questionType == 1}">多选</td>
                         <td th:if="${item.questionType == 2}">问答</td>
                         <td th:if="${item.questionType == 3}">编程</td>
-                        <td th:if="${item.difficulty == 1}">
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                        </td>
-                        <td th:if="${item.difficulty == 2}">
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                        </td>
-                        <td th:if="${item.difficulty == 3}">
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                        </td>
-                        <td th:if="${item.difficulty == 4}">
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star-empty"></i>
-                        </td>
-                        <td th:if="${item.difficulty == 5}">
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                            <i class="glyphicon glyphicon-star"></i>
-                        </td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-xs" th:onclick="'manageQuestionBoardPage.updateQuestionModalAction('+${itemStats.index}+')'"><i class="fa fa-edit"></i>编辑</button>
-                            <button type="button" class="btn btn-danger btn-xs" th:onclick="'manageQuestionBoardPage.deleteQuestionAction('+${item.id}+')'"><i class="fa fa-trash"></i>删除</button>
+                            <button type="button" class="btn btn-primary btn-xs" th:onclick="'manageQuestionBoardPage.updateQuestionModalAction('+${itemStats.index}+')'"><i class="fa fa-edit"></i> 编辑</button>
+                            <button type="button" class="btn btn-danger btn-xs" th:onclick="'manageQuestionBoardPage.deleteQuestionAction('+${item.id}+')'"><i class="fa fa-trash"></i> 删除</button>
+                            <button type="button" class="btn btn-success btn-xs" th:onclick="'manageQuestionBoardPage.openAddQuestionToContestModal('+${item.id}+')'"><i class="fa fa-plus-square"></i> 添加到考试</button>
                         </td>
                     </tr>
                     </tbody>
@@ -290,36 +307,6 @@
                             <textarea id="questionParse" class="form-control" rows="8"></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">题目难度</label>
-
-                        <div class="col-sm-8">
-                            <select class="form-control" id="questionDifficulty">
-                                <option th:value="1">
-                                    一星难度
-                                </option>
-                                <option th:value="2">
-                                    二星难度
-                                </option>
-                                <option th:value="3">
-                                    三星难度
-                                </option>
-                                <option th:value="4">
-                                    四星难度
-                                </option>
-                                <option th:value="5">
-                                    五星难度
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">题目分值</label>
-
-                        <div class="col-sm-8">
-                            <input id="questionScore" type="text" class="form-control" placeholder=""/>
-                        </div>
-                    </div>
                 </form>
             </div>
             <div class="modal-footer">
@@ -377,7 +364,6 @@
                             <select class="form-control" id="updateSubjectId">
                                 <option th:each="item,itemStats : ${data['subjects']}"
                                         th:value="${item.id}" th:text="${item.name}">
-
                                 </option>
                             </select>
                         </div>
@@ -422,36 +408,6 @@
 
                         <div class="col-sm-8">
                             <textarea id="updateQuestionParse" class="form-control" rows="8"></textarea>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">题目难度</label>
-
-                        <div class="col-sm-8">
-                            <select class="form-control" id="updateQuestionDifficulty">
-                                <option th:value="1">
-                                    一星难度
-                                </option>
-                                <option th:value="2">
-                                    二星难度
-                                </option>
-                                <option th:value="3">
-                                    三星难度
-                                </option>
-                                <option th:value="4">
-                                    四星难度
-                                </option>
-                                <option th:value="5">
-                                    五星难度
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">题目分值</label>
-
-                        <div class="col-sm-8">
-                            <input id="updateQuestionScore" type="text" class="form-control" placeholder=""/>
                         </div>
                     </div>
                 </form>

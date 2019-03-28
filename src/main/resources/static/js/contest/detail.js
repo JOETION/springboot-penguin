@@ -248,7 +248,7 @@ var contestDetailPage = {
         contestDetailPage.submittingContestAction();
     },
     //正在交卷
-    submittingContestAction: function () {
+    submittingContestAction: function (studentId) {
         $('#waitSubmitModal').modal({
             /**
              * 必须点击相关按钮才能关闭
@@ -282,6 +282,15 @@ var contestDetailPage = {
             data : JSON.stringify({
                 contestId: contestDetailPage.data.contest.id,
                 answerJson: answerJsonStr,
+                answer:{
+                    contestId:contestDetailPage.data.contest.id,
+                    studentId:studentId,
+                    answerJson:answerJsonStr,
+                    startTime:11,
+                    finishTime:111,
+                    state:0
+                }
+
             }),
             success:function(result) {
                 if (result && result['success']) {

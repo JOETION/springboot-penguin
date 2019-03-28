@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qexz.dao.AnswerMapper">
+    <resultMap id="BaseResultMap" type="com.qexz.model.Answer">
+        <result column="contest_id" property="contestId" jdbcType="INTEGER"/>
+        <result column="student_id" property="studentId" jdbcType="INTEGER"/>
+        <result column="answer_json" property="answerJson" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
+        <result column="finish_time" property="finishTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        contest_id,student_id,answer_json,state,start_time,finish_time
+    </sql>
+
+
+    <insert id="insertAnswer" parameterType="com.qexz.model.Answer">
+        INSERT INTO t_penguin_answer(contest_id,student_id,answer_json,state,start_time,finish_time)
+        VALUES (#{answer.contestId},#{answer.student_id},#{answer.answer_json},#{state},#{start_time},#{finish_time})
+    </insert>
+
+    <update id="updateAnswerState">
+        UPDATE  t_penguin_answer
+        SET
+        state=#{state}
+        WHERE
+        contest_id=#{contestId} AND  student_id=#{studentId}
+    </update>
+
+    <select id="queryAnswer" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_answer WHERE contest_id=#{contestId} AND
+        student_id=#{studentId} AND state=#{state}
+    </select>
+
+    <select id="getAllAnswerByContestId" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_answer WHERE contest_id=#{contestId} ORDER BY student_id ASC
+    </select>
+
+</mapper>

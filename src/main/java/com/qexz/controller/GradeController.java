@@ -2,12 +2,17 @@ package com.qexz.controller;
 
 import com.qexz.common.QexzConst;
 import com.qexz.dto.AjaxResult;
+import com.qexz.dto.AnswerDto;
+import com.qexz.dto.ContestResultDto;
+import com.qexz.dto.ContestContentDto;
 import com.qexz.model.Account;
+import com.qexz.model.Answer;
+import com.qexz.model.ContestContent;
 import com.qexz.model.Grade;
-import com.qexz.model.Question;
+import com.qexz.service.AnswerService;
+import com.qexz.service.ContestContentService;
 import com.qexz.service.GradeService;
 import com.qexz.service.QuestionService;
-import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(value = "/grade")
@@ -30,43 +37,73 @@ public class GradeController {
 
     @Autowired
     private GradeService gradeService;
+
     @Autowired
-    private QuestionService questionService;
+    private ContestContentService contestContentService;
 
-    //提交试卷
-    @RequestMapping(value="/api/submitContest", method= RequestMethod.POST)
+    @Autowired
+    private AnswerService answerService;
+
+    //提交试卷，自动生成选择题分数
+    /*保存答案json*/
+    @RequestMapping(value = "/api/submitContest", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult submitContest(HttpServletRequest request, @RequestBody Grade grade) {
-        AjaxResult ajaxResult = new AjaxResult();
+    public AjaxResult submitContest(HttpServletRequest request, @RequestBody AnswerDto answerDto) {
         Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
-        List<String> answerStrs = Arrays.asList(grade.getAnswerJson().split(QexzConst.SPLIT_CHAR));
-        int autoResult = 0;
-        List<Question> questions = questionService.getQuestionsByContestId(grade.getContestId());
 
-        for (int i = 0; i < questions.size(); i++) {
-            Question question = questions.get(i);
-            if (question.getQuestionType() <= 1 && question.getAnswer()
-                    .equals(answerStrs.get(i))) {
-                autoResult += question.getScore();
+
+        int autoResult = 0;
+        //取得所有考试内容信息，包括问题内容，每道题的分数信息等
+        List<ContestContentDto> contestContentDtos = contestContentService.getContentByContestId(answerDto.getAnswer().getContestId());
+        Map<Integer, AnswerDto.AnswerContent> content = answerDto.getAnswerContents().stream().collect(Collectors.toMap(AnswerDto.AnswerContent::getQuestionId, answer1 -> answer1));
+
+        for (ContestContentDto contestContentDto : contestContentDtos) {
+            if (contestContentDto.getQuestion().getQuestionType() < 1) {
+                if (contestContentDto.getQuestion().getAnswer().equals(content.get(contestContentDto.getQuestion().getId()))) {
+                    autoResult += contestContentDto.getContestContent().getScore();
+                }
             }
         }
-        grade.setStudentId(currentAccount.getId());
-        grade.setResult(autoResult);
-        grade.setAutoResult(autoResult);
-        grade.setManulResult(0);
-        int gradeId = gradeService.addGrade(grade);
-        return new AjaxResult().setData(gradeId);
+        answerDto.getAnswer().setStudentId(currentAccount.getId());
+        Answer answer1 = answerService.getAnswer(answerDto.getAnswer().getContestId(), currentAccount.getId(), 0);
+        if (answer1 != null) {
+            return new AjaxResult().setMessage("试卷以提交，请勿重复提交");
+        } else {
+            answerService.addAnswer(answerDto.getAnswer());
+            Grade grade = new Grade();
+            grade.setAutoResult(autoResult);
+            grade.setContestId(answerDto.getAnswer().getContestId());
+            grade.setManulReason(null);
+            grade.setManulResult(0);
+            grade.setResult(autoResult);
+            grade.setStudentId(currentAccount.getId());
+            int row = gradeService.addGrade(grade);
+            if (row > 0) {
+                return new AjaxResult().setData("提交成功！");
+            } else {
+                return new AjaxResult().setData("提交失败！");
+            }
+        }
     }
 
     //完成批改试卷
-    @RequestMapping(value="/api/finishGrade", method= RequestMethod.POST)
+    @RequestMapping(value = "/api/finishGrade", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult finishGrade(@RequestBody Grade grade) {
-        AjaxResult ajaxResult = new AjaxResult();
-        grade.setResult(grade.getAutoResult()+grade.getManulResult());
-        grade.setFinishTime(new Date());
-        grade.setState(1);
+    public AjaxResult finishGrade(@RequestBody ContestResultDto contestResultDto) {
+        //更新考试成绩
+        Grade grade = new Grade();
+        int contestId = contestResultDto.getGrade().getContestId();
+        int studentId = contestResultDto.getGrade().getStudentId();
+        grade.setContestId(contestId);
+        grade.setStudentId(studentId);
+        grade.setManulResult(contestResultDto.getGrade().getManulResult());
+        grade.setManulReason(contestResultDto.getGrade().getManulReason());
+        grade.setResult(contestResultDto.getGrade().getResult());
         boolean result = gradeService.updateGrade(grade);
-        return new AjaxResult().setData(result);
+        //更新考试答案
+        boolean b = answerService.updateAnswerState(studentId, contestId, 1);
+        return new AjaxResult().setData(result && b);
     }
+
+
 }

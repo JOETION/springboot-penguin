@@ -23,4 +23,13 @@ public interface ContestService {
     boolean updateStateToEnd();
 
     List<Contest> getContestsByContestIds(Set<Integer> contestIds);
+
+    //得到所有考试内容
+    List<Contest> getAllContests();
+
+    //更新考试分数
+    boolean updateContestScore(int contestId, int score);
+
+    //更新考试状态
+    boolean updateContestStateById(int id);
 }

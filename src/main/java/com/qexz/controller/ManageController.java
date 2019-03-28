@@ -1,6 +1,11 @@
 package com.qexz.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.qexz.common.QexzConst;
+import com.qexz.dto.AnswerDto;
+import com.qexz.dto.ContestContentDto;
+import com.qexz.dto.ContestResultDto;
 import com.qexz.exception.QexzWebError;
 import com.qexz.exception.QexzWebException;
 import com.qexz.jobs.ImportQuestionJobs;
@@ -40,6 +45,12 @@ public class ManageController {
     private PostService postService;
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private AnswerService answerService;
+
+    @Autowired
+    private ContestContentService contestContentService;
 
     /**
      * 管理员登录页
@@ -103,6 +114,7 @@ public class ManageController {
     /**
      * 考试管理-查看试题
      */
+    //TODO 管理员和教师权限不够明白，后期区分
     @RequestMapping(value = "/contest/{contestId}/problems", method = RequestMethod.GET)
     public String contestProblemList(HttpServletRequest request,
                                      @PathVariable("contestId") Integer contestId, Model model) {
@@ -115,10 +127,18 @@ public class ManageController {
             return "/error/404";
         } else {
             Map<String, Object> data = new HashMap<>();
-            List<Question> questions = questionService.getQuestionsByContestId(contestId);
+
+            List<ContestContentDto> contestContentDtos = contestContentService.getContentByContestId(contestId);
             Contest contest = contestService.getContestById(contestId);
-            data.put("questionsSize", questions.size());
-            data.put("questions", questions);
+            data.put("questionsSize", contestContentDtos.size());
+            data.put("questions", contestContentDtos);
+
+            //更新分数，以免删除题库的题后分数显示不正确
+            int score = contestContentService.getTotalScoreByContestId(contestId);
+            if (contest.getTotalScore() != score) {
+                contest.setTotalScore(score);
+                contestService.updateContestScore(contestId, score);
+            }
             data.put("contest", contest);
             model.addAttribute(QexzConst.DATA, data);
             return "/manage/manage-editContestProblem";
@@ -145,6 +165,7 @@ public class ManageController {
                     QexzConst.questionPageSize, content);
             List<Question> questions = (List<Question>) data.get("questions");
             List<Subject> subjects = subjectService.getSubjects();
+            List<Contest> contests = contestService.getAllContests();
             Map<Integer, String> subjectId2name = subjects.stream().
                     collect(Collectors.toMap(Subject::getId, Subject::getName));
             for (Question question : questions) {
@@ -153,6 +174,7 @@ public class ManageController {
             }
             data.put("subjects", subjects);
             data.put("content", content);
+            data.put("contests", contests);
             model.addAttribute("data", data);
             return "/manage/manage-questionBoard";
         }
@@ -229,22 +251,49 @@ public class ManageController {
         //currentAccount = accountService.getAccountByUsername("admin");
         model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
         if (currentAccount == null || currentAccount.getLevel() < 1) {
-            //return "redirect:/";
             return "/error/404";
         } else {
-            Map<String, Object> data = new HashMap<>();
-            List<Grade> grades = gradeService.getGradesByContestId(contestId);
+
+
+            //用于获得考试等信息
             Contest contest = contestService.getContestById(contestId);
-            List<Question> questions = questionService.getQuestionsByContestId(contestId);
+
+            //设置question，用于批阅试卷
+            List<Question> questions = new ArrayList<>();
+            List<ContestContentDto> contestContentDtos = contestContentService.getContentByContestId(contestId);
+            for (ContestContentDto contestContentDto : contestContentDtos) {
+                Question question = contestContentDto.getQuestion();
+                if (question.getQuestionType() == 2) {
+                    questions.add(question);//仅添加主观题
+                }
+            }
+
+            //用于设置考试信息，考试信息和答案信息需要分页
+            Map<String, Object> data = gradeService.getGradesByContestId(contestId, page, QexzConst.gradePageSize);
+            List<Grade> grades = (List<Grade>) data.remove("grades");
             List<Integer> studentIds = grades.stream().map(Grade::getStudentId).collect(Collectors.toList());
             List<Account> students = accountService.getAccountsByStudentIds(studentIds);
             Map<Integer, Account> id2student = students.stream().
                     collect(Collectors.toMap(Account::getId, account -> account));
+            List<Answer> answers = answerService.getAnswerByContestId(contestId, page, QexzConst.gradePageSize);
+            Map<Integer, Answer> id2Answer = answers.stream().collect(Collectors.toMap(Answer::getStudentId, answer -> answer));
+            List<ContestResultDto> contestResultDtos = new ArrayList<>();
+            Gson gson = new Gson();
             for (Grade grade : grades) {
-                Account student = id2student.get(grade.getStudentId());
-                grade.setStudent(student);
+                ContestResultDto contestResultDto = new ContestResultDto();
+                contestResultDto.setGrade(grade);
+                contestResultDto.setAccount(id2student.get(grade.getStudentId()));
+                AnswerDto answerDto = new AnswerDto();
+                answerDto.setAnswer(id2Answer.get(grade.getStudentId()));
+                List<AnswerDto.AnswerContent> answerContents = gson.fromJson(id2Answer.get(grade.getStudentId()).getAnswerJson(), new TypeToken<List<AnswerDto.AnswerContent>>() {
+                }.getType());
+                //仅添加主观题
+                List<AnswerDto.AnswerContent> collect = answerContents.stream().filter(a -> a.getQuestionType() == 2).collect(Collectors.toList());
+                answerDto.setAnswerContents(collect);
+                contestResultDto.setAnswerDto(answerDto);
+                contestResultDtos.add(contestResultDto);
             }
-            data.put("grades", grades);
+            data.put("contestResultDtos", contestResultDtos);
             data.put("contest", contest);
             data.put("questions", questions);
             model.addAttribute(QexzConst.DATA, data);

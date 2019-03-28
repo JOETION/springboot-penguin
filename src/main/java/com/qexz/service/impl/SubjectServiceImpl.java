@@ -2,7 +2,6 @@ package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.qexz.common.QexzConst;
-import com.qexz.controller.DefaultController;
 import com.qexz.dao.SubjectMapper;
 import com.qexz.model.Subject;
 import com.qexz.service.SubjectService;

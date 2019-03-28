@@ -47,11 +47,25 @@ var app = {
         addQuestionUrl: function () {
             return app.data.contextPath + "/question/api/addQuestion";
         },
+
+        addContestContentUrl: function () {
+            return app.data.contextPath + "/contest/api/addContestContent";
+        },
         updateQuestionUrl: function () {
             return app.data.contextPath + "/question/api/updateQuestion"
         },
         deleteQuestionUrl: function () {
             return app.data.contextPath + "/question/api/deleteQuestion/";
+        },
+
+        deleteContestContentUrl: function () {
+            return app.data.contextPath + "/contest/api/deleteContestContent";
+        },
+        updateContestContentUrl: function () {
+            return app.data.contextPath + "/contest/api/updateContestContent";
+        },
+        addQuestionToContest: function () {
+            return app.data.contextPath + "/question/api/addQuestionToContest";
         },
         manageQuestionUrl: function () {
             return app.data.contextPath + "/manage/question/list"

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qexz.dao.ContestContentMapper">
+    <resultMap id="BaseResultMap" type="com.qexz.model.ContestContent">
+        <result column="contest_id" property="contestId" jdbcType="INTEGER"/>
+        <result column="question_id" property="questionId" jdbcType="INTEGER"/>
+        <result column="score" property="score" jdbcType="INTEGER"/>
+        <result column="diffculty" property="diffculty" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="getContentByContestId" resultMap="BaseResultMap">
+        SELECT
+        *
+        FROM t_penguin_contest_content
+        WHERE contest_id=#{contestId}
+    </select>
+
+    <delete id="deleteContent">
+        DELETE FROM t_penguin_contest_content WHERE contest_id=#{contestId} AND question_id=#{questionId}
+    </delete>
+
+    <update id="updateContent" parameterType="com.qexz.model.ContestContent">
+        UPDATE t_penguin_contest_content SET score=#{contestContent.score},diffculty=#{contestContent.diffculty}
+        WHERE contest_id=#{contestContent.contestId} AND question_id=#{contestContent.questionId}
+    </update>
+
+    <!--得到考试分数-->
+    <select id="getTotalScoreByContestId" resultType="java.lang.Integer">
+       SELECT sum(t_penguin_contest_content.score) from t_penguin_contest_content WHERE contest_id=#{contestId}
+    </select>
+
+    <!--插入考试内容-->
+    <insert id="insertContestContent" parameterType="com.qexz.model.ContestContent">
+        INSERT t_penguin_contest_content(contest_id,question_id,score,diffculty,state)  VALUES (
+        #{contestContent.contestId},#{contestContent.questionId},#{contestContent.score},#{contestContent.diffculty},#{contestContent.state}
+        )
+    </insert>
+
+    <!--根据问题编号删除所有问题-->
+
+    <delete id="deleteAllQuestionById">
+        DELETE FROM t_penguin_contest_content
+        WHERE question_id=#{questionId}
+    </delete>
+
+    <!--更新考试内容状态-->
+
+    <update id="updateContestContentState">
+        UPDATE t_penguin_contest_content
+        SET
+        state=#{state} WHERE
+        contest_id=#{contestId} AND question_id=#{questionId}
+    </update>
+
+</mapper>

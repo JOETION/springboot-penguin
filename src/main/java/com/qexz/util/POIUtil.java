@@ -62,8 +62,9 @@ public class POIUtil {
                     //获得当前行的开始列
                     int firstCellNum = row.getFirstCellNum();
                     //获得当前行的列数
-                    int lastCellNum = row.getPhysicalNumberOfCells();
-                    String[] cells = new String[row.getPhysicalNumberOfCells()];
+                    //sheet.getRow(0).getPhysicalNumberOfCells()返回的结果是不包含空列的行数，要想获取带空列的行中列数，要用sheet.getRow(0).getLastCellNum()方法
+                    int lastCellNum = row.getLastCellNum();
+                    String[] cells = new String[lastCellNum];
                     //循环当前行
                     for (int cellNum = firstCellNum; cellNum < lastCellNum; cellNum++) {
                         Cell cell = row.getCell(cellNum);
@@ -150,33 +151,17 @@ public class POIUtil {
         return cellValue;
     }
 
+    public static void main(String args[]) throws IOException {
 
-    public static List<Question> convertToQuestion(File file) {
-        List<Question> questions = new ArrayList<>();
-        try {
-            List<String[]> strings = POIUtil.readExcel(file);
-            for (String[] s : strings) {
-                Question question = new Question.Builder()
-                        .setTitle(s[0]).setContent(s[1]).
-                                setQuestionType(Integer.parseInt(s[2])).setOptionA(s[3]).
-                                setOptionB(s[4]).setOptionC(s[5]).
-                                setOptionD(s[6]).setAnswer(s[7]).
-                                setParse(s[8]).setSubjectId(Integer.parseInt(s[9])).
-                                setContestId(Integer.parseInt(s[10])).
-                                setScore(Integer.parseInt(s[11])).setDifficulty(Integer.parseInt(s[12])).
-                                setState(Integer.parseInt(s[13])).build();
-                questions.add(question);
-                return questions;
+        List<String[]> strings = readExcel(new File("E:/test.xls"));
+        for (String[] string : strings) {
+            for (String s : string) {
+                System.out.print(s + "\t");
             }
-
-        } catch (IOException e) {
-            System.out.println("定时导入试题出错，原因：" + e.toString());
+            System.out.println();
         }
-        return null;
-    }
 
-    public static void main(String args[]) {
-        convertToQuestion(new File("E:\\Company\\springboot-penguin\\upload\\excel\\2019-03-17-08-46-27_t_penguin_question.xls"));
+
     }
 
 }

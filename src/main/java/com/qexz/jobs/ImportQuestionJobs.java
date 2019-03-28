@@ -82,13 +82,11 @@ public class ImportQuestionJobs {
             for (String[] s : strings) {
                 Question question = new Question.Builder()
                         .setTitle(s[0]).setContent(s[1]).
-                                setQuestionType(Integer.parseInt(s[2])).setOptionA(s[3]).
-                                setOptionB(s[4]).setOptionC(s[5]).
-                                setOptionD(s[6]).setAnswer(s[7]).
-                                setParse(s[8]).setSubjectId(Integer.parseInt(s[9])).
-                                setContestId(Integer.parseInt(s[10])).
-                                setScore(Integer.parseInt(s[11])).setDifficulty(Integer.parseInt(s[12])).
-                                setState(Integer.parseInt(s[13])).build();
+                                setSubjectId(Integer.parseInt(s[2])).setQuestionType(Integer.parseInt(s[3])).setOptionA(s[4]).
+                                setOptionB(s[5]).setOptionC(s[6]).
+                                setOptionD(s[7]).setAnswer(s[8]).
+                                setParse(s[9]).
+                                build();
                 questions.add(question);
             }
             return questions;

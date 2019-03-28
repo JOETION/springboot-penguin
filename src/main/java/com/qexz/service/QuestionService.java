@@ -27,4 +27,8 @@ public interface QuestionService {
     Question getQuestionById(int id);
 
     boolean updateQuestionsStateByContestId(int contestId, int state);
+
+    int addQuestionToContest(int contestId, int id);
+
+    List<Question> getQuestionByIds(List<Integer> questionIds);
 }

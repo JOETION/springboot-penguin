@@ -98,13 +98,12 @@ public class AccountController {
         Map<Integer, Contest> id2contest = contests.stream().
                 collect(Collectors.toMap(Contest::getId, contest -> contest));
         for (Grade grade : grades) {
-            grade.setContest(id2contest.get(grade.getContestId()));
+//            grade.setContest(id2contest.get(grade.getContestId()));
         }
         model.addAttribute(QexzConst.DATA, data);
         model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
         return "/user/myExam";
     }
-
     /**
      * 我的发帖页面
      */

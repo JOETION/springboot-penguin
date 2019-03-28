@@ -24,4 +24,6 @@ public interface GradeMapper {
     List<Grade> getGradesByStudentId(@Param("studentId") int studentId);
 
     List<Grade> getGradesByContestId(@Param("contestId") int contestId);
+
+    int getCountByContestId(@Param("contestId") int contestId);
 }

@@ -1,0 +1,19 @@
+
+table.tablesorter thead tr .sortColumn {
+    background-image: url("../../img/bg.gif");
+    background-repeat: no-repeat;
+    background-position: center right;
+    cursor: pointer;
+}
+
+table.tablesorter thead tr .tablesorter-headerAsc {
+    background-image: url("../../img/asc.gif");
+}
+
+table.tablesorter thead tr .tablesorter-headerDesc {
+    background-image: url("../../img/desc.gif");
+}
+
+table.tablesorter thead tr .tablesorter-headerAsc:hover, table.tablesorter thead tr .tablesorter-headerDesc:hover {
+    background-color: #8dbdd8;
+}

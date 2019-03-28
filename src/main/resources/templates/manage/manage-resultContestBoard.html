@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="" />
-    <meta name="author" content="" />
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
     <title>GDUFE在线考试系统控制台-成绩管理</title>
-    <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}" />
-    <link th:href="@{https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet" />
-    <link th:href="@{/css/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet" />
-    <link rel="stylesheet" th:href="@{/css/manage/manage-app.css}" />
+    <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css}"/>
+    <link th:href="@{https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css}" rel="stylesheet"/>
+    <link th:href="@{/css/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
+    <link rel="stylesheet" th:href="@{/css/manage/manage-app.css}"/>
 
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
@@ -26,14 +26,14 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#"><img style="width: 32px;height: 32px;" th:src="@{/img/manage-logo.png}" /></a>
+            <a class="navbar-brand" href="#"><img style="width: 32px;height: 32px;" th:src="@{/img/manage-logo.png}"/></a>
             <a class="navbar-brand" href="#">GDUFE在线考试系统控制台</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown">
                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                        <img class="img-circle" style="width: 32px;height: 32px;" th:src="@{'/upload/images/'+${current_account.avatarImgUrl}}" />&nbsp;&nbsp;<span th:text="${current_account.name}"></span>
+                        <img class="img-circle" style="width: 32px;height: 32px;" th:src="@{'/upload/images/'+${current_account.avatarImgUrl}}"/>&nbsp;&nbsp;<span th:text="${current_account.name}"></span>
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -61,6 +61,7 @@
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">成绩管理</h1>
+
             <div class="row" style="margin-bottom: 5px;">
                 <div class="col-md-10">
                 </div>
@@ -90,9 +91,13 @@
                         <td th:if="${item.state == 2}"><span class="label label-info">批卷中</span></td>
                         <td th:if="${item.state == 3}"><span class="label label-danger">已结束</span></td>
                         <td>
+                            <!--考试状态大于等于3-->
                             <button type="button" th:if="${item.state ge 3}" class="btn btn-info btn-xs" th:onclick="'manageResultContestBoardPage.targetResultStudentBoardAction('+${item.id}+')'"><i class="fa fa-search"></i>查看成绩</button>
+                            <!--考试状态小于3-->
                             <button type="button" th:if="${item.state lt 3}" class="btn btn-xs disabled"><i class="fa fa-search"></i>查看成绩</button>
+                            <!--考试状态等于2-->
                             <button type="button" th:if="${item.state == 2}" class="btn btn-primary btn-xs" th:onclick="'manageResultContestBoardPage.targetResultStudentBoardAction('+${item.id}+')'"><i class="fa fa-check-square"></i>批改试卷</button>
+                            <!--考试状态小于2-->
                             <button type="button" th:if="${item.state != 2}" class="btn btn-xs disabled"><i class="fa fa-check-square"></i>批改试卷</button>
                         </td>
                     </tr>
@@ -117,7 +122,7 @@
     var contests = /*[[${data['contests']}]]*/;
     var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/;
 
-    $(function(){
+    $(function () {
         app.init(contextPath);
         manageResultContestBoardPage.init(pageNum, pageSize, totalPageNum, totalPageSize, contests);
     });

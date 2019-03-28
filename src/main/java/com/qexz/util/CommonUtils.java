@@ -40,4 +40,5 @@ public class CommonUtils {
         DateFormat format = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
         return format.format(new Date());
     }
+
 }

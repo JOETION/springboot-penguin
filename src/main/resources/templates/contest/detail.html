@@ -126,7 +126,7 @@
                         -->
                     </div>
                     <div class="extra content">
-                        <button type="button" onclick="contestDetailPage.finishContestAction()" class="ui positive button">交卷</button>
+                        <button type="button" th:onclick="contestDetailPage.finishContestAction(${current_account.id})" class="ui positive button">交卷</button>
                     </div>
                 </div>
             </div>

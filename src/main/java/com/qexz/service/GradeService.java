@@ -17,5 +17,6 @@ public interface GradeService {
 
     Map<String, Object> getGradesByStudentId(int pageNum, int pageSize, int studentId);
 
-    List<Grade> getGradesByContestId(int contestId);
+    Map<String, Object> getGradesByContestId(int contestId, int pageNum, int pageSize);
+
 }

@@ -2,7 +2,7 @@
  * 模块JavaScript
  */
 var contestIndexPage = {
-    data:{
+    data: {
         pageNum: 0,
         pageSize: 0,
         totalPageNum: 0,
@@ -42,18 +42,18 @@ var contestIndexPage = {
         window.location.href = app.URL.contestIndexUrl() + '?page=1';
     },
     prevPage: function () {
-        window.location.href = app.URL.contestIndexUrl() + '?page=' + (pageNum-1);
+        window.location.href = app.URL.contestIndexUrl() + '?page=' + (pageNum - 1);
     },
     targetPage: function (page) {
         window.location.href = app.URL.contestIndexUrl() + '?page=' + page;
     },
     nextPage: function () {
-        window.location.href = app.URL.contestIndexUrl() + '?page=' + (pageNum+1);
+        window.location.href = app.URL.contestIndexUrl() + '?page=' + (pageNum + 1);
     },
     lastPage: function () {
         window.location.href = app.URL.contestIndexUrl() + '?page=' + contestIndexPage.data.totalPageNum;
     },
-    subPageMenuInit: function(){
+    subPageMenuInit: function () {
         var subPageStr = '';
         if (contestIndexPage.data.pageNum == 1) {
             subPageStr += '<a class="item disabled">首页</a>';
@@ -62,17 +62,17 @@ var contestIndexPage = {
             subPageStr += '<a onclick="contestIndexPage.firstPage()" class="item">首页</a>';
             subPageStr += '<a onclick="contestIndexPage.prevPage()" class="item">上一页</a>';
         }
-        var startPage = (contestIndexPage.data.pageNum-4 > 0 ? contestIndexPage.data.pageNum-4 : 1);
-        var endPage = (startPage+7 > contestIndexPage.data.totalPageNum ? contestIndexPage.data.totalPageNum : startPage+7);
+        var startPage = (contestIndexPage.data.pageNum - 4 > 0 ? contestIndexPage.data.pageNum - 4 : 1);
+        var endPage = (startPage + 7 > contestIndexPage.data.totalPageNum ? contestIndexPage.data.totalPageNum : startPage + 7);
         console.log('startPage = ' + startPage);
         console.log('endPage = ' + endPage);
         console.log('pageNum = ' + contestIndexPage.data.pageNum);
         console.log('totalPageNum = ' + contestIndexPage.data.totalPageNum);
         for (var i = startPage; i <= endPage; i++) {
             if (i == contestIndexPage.data.pageNum) {
-                subPageStr += '<a onclick="contestIndexPage.targetPage('+i+')" class="active item">'+i+'</a>';
+                subPageStr += '<a onclick="contestIndexPage.targetPage(' + i + ')" class="active item">' + i + '</a>';
             } else {
-                subPageStr += '<a onclick="contestIndexPage.targetPage('+i+')" class="item">'+i+'</a>'
+                subPageStr += '<a onclick="contestIndexPage.targetPage(' + i + ')" class="item">' + i + '</a>'
             }
         }
         if (contestIndexPage.data.pageNum == contestIndexPage.data.totalPageNum) {
@@ -85,6 +85,6 @@ var contestIndexPage = {
         $('#subPageMenu').html(subPageStr);
     },
     startToContestAction: function (contestId) {
-        window.location.href = app.URL.contestDetailUrl()+contestId;
+        window.location.href = app.URL.contestDetailUrl() + contestId;
     },
 };

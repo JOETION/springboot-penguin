@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Service("contestService")
-public class ContestServiceImpl implements ContestService{
+public class ContestServiceImpl implements ContestService {
 
     private static Log LOG = LogFactory.getLog(ContestServiceImpl.class);
 
@@ -100,4 +100,33 @@ public class ContestServiceImpl implements ContestService{
     public List<Contest> getContestsByContestIds(Set<Integer> contestIds) {
         return contestMapper.getContestsByContestIds(contestIds);
     }
+
+    //得到所有考试内容
+    @Override
+    public List<Contest> getAllContests() {
+        List<Contest> contests = contestMapper.getAllContests();
+        if (contests != null) {
+            return contests;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean updateContestScore(int contestId, int score) {
+        int i = contestMapper.updateContestScore(contestId, score);
+        if (i > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updateContestStateById(int id) {
+        int row = contestMapper.updateContestStateById(id);
+        if (row > 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

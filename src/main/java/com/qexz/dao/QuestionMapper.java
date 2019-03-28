@@ -38,5 +38,10 @@ public interface QuestionMapper {
     int updateQuestionsStateByContestId(@Param("contestId") int contestId,
                                         @Param("state") int state);
 
+    //添加考试内容
+    //TODO 此处添加考试内容方法是否欠妥
+    int addQuestionToContest(@Param("contestId") int contestId, @Param("id") int id);
 
+    //根据编号得到信息
+    List<Question> getQuestionByIds(@Param("questionIds")List<Integer> questionIds);
 }
