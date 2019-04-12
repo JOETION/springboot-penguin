@@ -1,4 +1,4 @@
-package com.qexz.dto;
+package com.qexz.vo;
 
 /* 				    
  **********************************************
@@ -12,7 +12,7 @@ import com.qexz.model.Answer;
 
 import java.util.List;
 
-public class AnswerDto {
+public class AnswerVo {
     private Answer answer;
     private List<AnswerContent> answerContents;
 

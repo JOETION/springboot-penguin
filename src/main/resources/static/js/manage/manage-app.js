@@ -126,6 +126,16 @@ var app = {
         },
         uploadQuestionUrl: function () {
             return app.data.contextPath + "/manage/question/upload/";
+        },
+        manageComplaintListUrl: function () {
+            return app.data.contextPath + "/manage/complaint/list"
+        },
+        updateComplaintUrl: function () {
+            return app.data.contextPath + "/complaint/api/updateComplaint"
+        },
+
+        cloudCheckUrl: function () {
+            return app.data.contextPath + "/complaint/cloudCheck";
         }
 
     },

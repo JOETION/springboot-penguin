@@ -13,9 +13,6 @@ var postDiscussPage = {
         $('#postDiscussSubmitButton').click(function (e) {
             postDiscussPage.postDiscuss();
         });
-        /**
-         TODO::代码规范,文本编辑器
-         */
         postDiscussPage.data.E = window.wangEditor;
         postDiscussPage.data.editor = new postDiscussPage.data.E('#editor'); // 或者 var editor = new E( document.getElementById('editor') )
         postDiscussPage.data.editor.create();

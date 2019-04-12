@@ -7,14 +7,14 @@ var myExamPage = {
         pageSize: 0,
         totalPageNum: 0,
         totalPageSize: 0,
-        grades: [],
+        examVos: [],
     },
-    init: function (pageNum, pageSize, totalPageNum, totalPageSize, grades) {
+    init: function (pageNum, pageSize, totalPageNum, totalPageSize, examVos) {
         myExamPage.data.pageNum = pageNum;
         myExamPage.data.pageSize = pageSize;
         myExamPage.data.totalPageNum = totalPageNum;
         myExamPage.data.totalPageSize = totalPageSize;
-        myExamPage.data.grades = grades;
+        myExamPage.data.examVos = examVos;
         //分页初始化
         myExamPage.subPageMenuInit();
         /**

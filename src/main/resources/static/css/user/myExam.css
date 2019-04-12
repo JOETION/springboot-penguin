@@ -12,7 +12,7 @@ body {
 }
 
 .second-footer {
-    height: 100px;
+    height: 250px;
 }
 .paper {
 
@@ -32,4 +32,7 @@ body {
 .ui.pagination.menu {
     margin-left: 4em;
     margin-top: 2em;
+}
+.ui.menu{
+    margin: 0px 0px;
 }

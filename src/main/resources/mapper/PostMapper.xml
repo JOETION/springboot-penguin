@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.qexz.dao.PostMapper" >
-    <resultMap id="BaseResultMap" type="com.qexz.model.Post" >
-        <id column="id" property="id" jdbcType="INTEGER" />
-        <result column="author_id" property="authorId" jdbcType="INTEGER" />
-        <result column="html_content" property="htmlContent" jdbcType="LONGVARCHAR" />
-        <result column="text_content" property="textContent" jdbcType="LONGVARCHAR" />
-        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
-        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
-        <result column="last_reply_time" property="lastReplyTime" jdbcType="TIMESTAMP" />
-        <result column="reply_num" property="replyNum" jdbcType="INTEGER" />
-        <result column="title" property="title" jdbcType="VARCHAR" />
+<mapper namespace="com.qexz.dao.PostMapper">
+    <resultMap id="BaseResultMap" type="com.qexz.model.Post">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="author_id" property="authorId" jdbcType="INTEGER"/>
+        <result column="html_content" property="htmlContent" jdbcType="LONGVARCHAR"/>
+        <result column="text_content" property="textContent" jdbcType="LONGVARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="last_reply_time" property="lastReplyTime" jdbcType="TIMESTAMP"/>
+        <result column="reply_num" property="replyNum" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
     </resultMap>
-    <sql id="Base_Column_List" >
+    <sql id="Base_Column_List">
         id, author_id, html_content, text_content, create_time,
         update_time, last_reply_time, reply_num, title
     </sql>
 
-    <insert id="insertPost" parameterType="com.qexz.model.Post" >
+    <insert id="insertPost" parameterType="com.qexz.model.Post">
         insert into t_penguin_post
         (author_id, title, html_content, text_content)
         values (#{post.authorId}, #{post.title}, #{post.htmlContent}, #{post.textContent})
@@ -26,19 +26,19 @@
     <update id="updatePostById" parameterType="com.qexz.model.Post">
         UPDATE t_penguin_post
         SET
-          title = #{title}, html_content = #{post.htmlContent}, text_content = #{post.textContent}
+          title = #{post.title}, html_content = #{post.htmlContent}, text_content = #{post.textContent}
         WHERE
         id = #{post.id}
     </update>
 
-    <select id="getPostById" resultMap="BaseResultMap" parameterType="int" >
+    <select id="getPostById" resultMap="BaseResultMap" parameterType="int">
         SELECT
         *
         FROM t_penguin_post
         WHERE id = #{id}
     </select>
 
-    <delete id="deletePostById" parameterType="int" >
+    <delete id="deletePostById" parameterType="int">
         delete from t_penguin_post
         where id = #{id}
     </delete>
@@ -49,11 +49,20 @@
         FROM t_penguin_post
     </select>
 
-    <select id="getPosts" resultMap="BaseResultMap" >
+    <select id="getPosts" resultMap="BaseResultMap">
         SELECT
         *
         FROM t_penguin_post
-        ORDER BY last_reply_time DESC, update_time DESC, create_time DESC
+        <if test="type==0">
+            ORDER BY last_reply_time DESC
+        </if>
+        <if test="type==1">
+            ORDER BY create_time DESC
+        </if>
+        <if test="type==2">
+            ORDER BY reply_num DESC
+        </if>
+
     </select>
 
     <update id="updateReplyNumById">
@@ -71,12 +80,23 @@
         WHERE author_id = #{authorId}
     </select>
 
-    <select id="getPostsByAuthorId" resultMap="BaseResultMap" >
+    <select id="getPostsByAuthorId" resultMap="BaseResultMap">
         SELECT
         *
         FROM t_penguin_post
         WHERE author_id = #{authorId}
         ORDER BY last_reply_time DESC, update_time DESC, create_time DESC
+    </select>
+
+    <select id="getPostsByIds" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_post
+        WHERE 1=1
+        <if test="ids != null and ids.size > 0">
+            AND id IN
+            <foreach collection="ids" item="id1" open="(" separator="," close=")">
+                #{id1}
+            </foreach>
+        </if>
     </select>
 
 </mapper>

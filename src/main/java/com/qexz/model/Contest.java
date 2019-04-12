@@ -14,8 +14,6 @@ public class Contest {
     private Date endTime;
     private int state;
 
-    private String subjectName;
-
     public int getId() {
         return id;
     }
@@ -88,14 +86,6 @@ public class Contest {
         this.state = state;
     }
 
-    public String getSubjectName() {
-        return subjectName;
-    }
-
-    public void setSubjectName(String subjectName) {
-        this.subjectName = subjectName;
-    }
-
     @Override
     public String toString() {
         return "Contest{" +
@@ -108,7 +98,6 @@ public class Contest {
                 ", startTime=" + startTime +
                 ", endTime=" + endTime +
                 ", state=" + state +
-                ", subjectName='" + subjectName + '\'' +
                 '}';
     }
 }

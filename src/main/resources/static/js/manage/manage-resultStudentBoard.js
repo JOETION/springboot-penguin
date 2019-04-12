@@ -5,21 +5,21 @@ var manageResultStudentBoardPage = {
         data: {
             contest: "",
             questions: [],
-            contestResultDtos: [],
+            contestRankVos: [],
             answer: [],
             pageNum: 0,
             pageSize: 0,
             totalPageNum: 0,
             totalPageSize: 0,
         },
-        init: function (contest, questions, contestResultDtos, pageNum, pageSize, totalPageNum, totalPageSize) {
+        init: function (contest, questions, contestRankVos, pageNum, pageSize, totalPageNum, totalPageSize) {
             manageResultStudentBoardPage.data.pageNum = pageNum;
             manageResultStudentBoardPage.data.pageSize = pageSize;
             manageResultStudentBoardPage.data.totalPageNum = totalPageNum;
             manageResultStudentBoardPage.data.totalPageSize = totalPageSize;
             manageResultStudentBoardPage.data.contest = contest;
             manageResultStudentBoardPage.data.questions = questions;
-            manageResultStudentBoardPage.data.contestResultDtos = contestResultDtos;
+            manageResultStudentBoardPage.data.contestRankVos = contestRankVos;
 
 
             //分页初始化
@@ -74,7 +74,7 @@ var manageResultStudentBoardPage = {
             //输入框初始化数据
             manageResultStudentBoardPage.initGradeModal(index);
 
-            var contestResultDto = manageResultStudentBoardPage.data.contestResultDtos[index];
+            var contestResultDto = manageResultStudentBoardPage.data.contestRankVos[index];
             //第0号选项用于保存学生编号和考试结果索引
             var accountId = contestResultDto.account.id;
             var questions = manageResultStudentBoardPage.data.questions;
@@ -139,7 +139,7 @@ var manageResultStudentBoardPage = {
             $("#grade").val("");
             $("#gradeReason").val("");
             var index = document.getElementById("selectContest").options[0].getAttribute("name");
-            var contestResultDto = manageResultStudentBoardPage.data.contestResultDtos[index];
+            var contestResultDto = manageResultStudentBoardPage.data.contestRankVos[index];
             var manulQuestions = contestResultDto.answerDto.answerContents;
             var accountId = contestResultDto.account.id;
             for (var i = 0; i < manulQuestions.length; i++) {
@@ -217,7 +217,7 @@ var manageResultStudentBoardPage = {
                 }
             }
             var index = document.getElementById("selectContest").options[0].getAttribute("name");
-            var grade = manageResultStudentBoardPage.data.contestResultDtos[index].grade;
+            var grade = manageResultStudentBoardPage.data.contestRankVos[index].grade;
             $.ajax({
                 url: app.URL.finishGradeUrl(),
                 type: "POST",

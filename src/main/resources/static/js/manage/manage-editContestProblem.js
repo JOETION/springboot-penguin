@@ -4,11 +4,11 @@
 var manageEditContestProblemPage = {
     data: {
         contest: null,
-        questions: [],
+        contestDetailVos: [],
     },
-    init: function (contest, questions) {
+    init: function (contest, contestDetailVos) {
         manageEditContestProblemPage.data.contest = contest;
-        manageEditContestProblemPage.data.questions = questions;
+        manageEditContestProblemPage.data.contestDetailVos = contestDetailVos;
 
         //新增题目，弹出新增窗口
         $("#addQuestionBtn").click(function () {
@@ -143,28 +143,29 @@ var manageEditContestProblemPage = {
     },
     initUpdateQuestionData: function (index) {
         //初始化数据
+        var contestDetailVos=manageEditContestProblemPage.data.contestDetailVos;
         $('#updateQuestionIndex').val(index);
-        $('#updateQuestionTitle').val(questions[index].question.title);
-        $('#updateQuestionContent').val(questions[index].question.content);
+        $('#updateQuestionTitle').val(contestDetailVos[index].question.title);
+        $('#updateQuestionContent').val(contestDetailVos[index].question.content);
         var selectQuestionTypes = document.getElementById('updateQuestionType');
         for (var i = 0; i < selectQuestionTypes.length; i++) {
-            if (selectQuestionTypes[i].value == questions[index].question.questionType) {
+            if (selectQuestionTypes[i].value == contestDetailVos[index].question.questionType) {
                 selectQuestionTypes[i].selected = true;
             }
         }
-        $('#updateOptionA').val(questions[index].question.optionA);
-        $('#updateOptionB').val(questions[index].question.optionB);
-        $('#updateOptionC').val(questions[index].question.optionC);
-        $('#updateOptionD').val(questions[index].question.optionD);
-        $('#updateQuestionAnswer').val(questions[index].question.answer);
-        $('#updateQuestionParse').val(questions[index].question.parse);
+        $('#updateOptionA').val(contestDetailVos[index].question.optionA);
+        $('#updateOptionB').val(contestDetailVos[index].question.optionB);
+        $('#updateOptionC').val(contestDetailVos[index].question.optionC);
+        $('#updateOptionD').val(contestDetailVos[index].question.optionD);
+        $('#updateQuestionAnswer').val(contestDetailVos[index].question.answer);
+        $('#updateQuestionParse').val(contestDetailVos[index].question.parse);
         var selectQuestionDifficulty = document.getElementById('updateQuestionDifficulty');
         for (var i = 0; i < selectQuestionDifficulty.length; i++) {
-            if (selectQuestionDifficulty[i].value == questions[index].contestContent.diffculty) {
+            if (selectQuestionDifficulty[i].value == contestDetailVos[index].contestContent.diffculty) {
                 selectQuestionDifficulty[i].selected = true;
             }
         }
-        $('#updateQuestionScore').val(questions[index].contestContent.score);
+        $('#updateQuestionScore').val(contestDetailVos[index].contestContent.score);
     },
     checkUpdateQuestionData: function (questionTitle, questionContent, questionType,
                                        optionA, optionB, optionC, optionD,
@@ -190,7 +191,7 @@ var manageEditContestProblemPage = {
         var subjectId = manageEditContestProblemPage.data.contest.subjectId;
 
         var id = manageEditContestProblemPage.data.contest.id;
-        var questionId = manageEditContestProblemPage.data.questions[index].question.id;
+        var questionId = manageEditContestProblemPage.data.contestDetailVos[index].question.id;
         if (manageEditContestProblemPage.checkUpdateQuestionData(questionTitle, questionContent,
                 questionType, optionA, optionB, optionC, optionD, questionAnswer, questionParse)) {
             $.ajax({
@@ -246,7 +247,6 @@ var manageEditContestProblemPage = {
             data: {
                 contestId: manageEditContestProblemPage.data.contest.id,
                 questionId: questionId
-
             },
             success: function (result) {
                 if (result && result['success']) {

@@ -1,15 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8" />
-    <title>GDUFE在线考试系统</title>
-    <link rel="stylesheet" th:href="@{https://cdn.bootcss.com/semantic-ui/2.2.13/semantic.min.css}" />
-    <link rel="stylesheet" th:href="@{/css/app.css}" />
+    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/contest/detail.css}" />
-    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js}"></script>
-    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/semantic-ui/2.2.13/semantic.min.js}"></script>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery.countdown/2.2.0/jquery.countdown.min.js}"></script>
-    <script type="text/javascript" th:src="@{/js/app.js}"></script>
     <script type="text/javascript" th:src="@{/js/contest/detail.js}"></script>
 </head>
 <body>
@@ -86,47 +80,9 @@
                 <div class="ui segment">
                     <div class="title">答题卡</div>
                     <div class="content ui segment" id="currentQuestionButton">
-                        <!--
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            1
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            2
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            3
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            4
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            1
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            2
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            3
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            4
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            1
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            2
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            3
-                        </button>
-                        <button class="mini ui button" style="margin-top: 10px;margin-left: 5px;">
-                            4
-                        </button>
-                        -->
                     </div>
                     <div class="extra content">
-                        <button type="button" th:onclick="contestDetailPage.finishContestAction(${current_account.id})" class="ui positive button">交卷</button>
+                        <button type="button" th:onclick="'contestDetailPage.finishContestAction('+${current_account.id}+')'" class="ui positive button">交卷</button>
                     </div>
                 </div>
             </div>
@@ -135,41 +91,10 @@
         </div>
     </div>
 </div>
-<!-- 不可抗力元素 -->
-<div class="second-footer">
-</div>
-<div id="footer">
-    <div class="ui container">
-        <div class="ui stackable two columns grid">
-            <div class="column">
-                <div class="ui two columns grid">
-                    <div class="column">
-                        <h3>项目介绍</h3>
-                        在线考试系统是一个在线测试学习系统，并用于辅助课程教学和学生学习。
-                    </div>
-                    <div class="column">
-                        <h3>联系我们</h3>
-                        如有问题请发邮件到
-                        zzqnxx@foxmail.com
-                    </div>
-                </div>
-            </div>
-            <div class="right aligned column">
-                &copy; 2018 GDUFE All Rights Reserved &nbsp;&nbsp;
-                <br />
-                网站版本：<a href="#">v1.0.0 Beta #20180109</a>&nbsp;&nbsp;
-                服务器时间：<span id="current_server_timer"></span>
-                <br />
-                站长统计 | 今日IP[91] | 今日PV[4511] | 昨日IP[133] | 昨日PV[10109] | 当前在线[1]
-                <!--
-                TODO::pv,uv统计
-                <span id='cnzz_stat_icon_1261763113'></span>
-                <script th:src='@{//s95.cnzz.com/stat.php?id=1261763113&amp;online=1&amp;show=line}' type='text/javascript'></script>
-                -->
-            </div>
-        </div>
-    </div>
-</div>
+
+<!--页脚-->
+<th:block th:include="/common/footer::footer"></th:block>
+
 <!-- 正在提交试卷模态框 -->
 <div class="ui mini modal" id="waitSubmitModal">
     <div class="header">信息</div>
@@ -180,12 +105,12 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     var contest = /*[[${data['contest']}]]*/;
-    var questions = /*[[${data['questions']}]]*/;
+    var contestDetailVos = /*[[${data['contestDetailVos']}]]*/;
     var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/;
 
     $(function(){
         app.init(contextPath);
-        contestDetailPage.init(contest, questions);
+        contestDetailPage.init(contest, contestDetailVos);
     });
     /*]]>*/
 </script>

@@ -1,20 +1,16 @@
 package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.qexz.common.QexzConst;
 import com.qexz.dao.ContestMapper;
 import com.qexz.dao.SubjectMapper;
 import com.qexz.model.Contest;
-import com.qexz.model.Subject;
 import com.qexz.service.ContestService;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service("contestService")
 public class ContestServiceImpl implements ContestService {
@@ -64,15 +60,9 @@ public class ContestServiceImpl implements ContestService {
             data.put("contests", new ArrayList<>());
             return data;
         }
-        List<Subject> subjects = subjectMapper.getSubjects();
+
         PageHelper.startPage(pageNum, pageSize);
         List<Contest> contests = contestMapper.getContests();
-        Map<Integer, String> subjectId2name = subjects.stream().
-                collect(Collectors.toMap(Subject::getId, Subject::getName));
-        for (Contest contest : contests) {
-            contest.setSubjectName(subjectId2name.
-                    getOrDefault(contest.getSubjectId(), "未知科目"));
-        }
         data.put("pageNum", pageNum);
         data.put("pageSize", pageSize);
         data.put("totalPageNum", totalPageNum);

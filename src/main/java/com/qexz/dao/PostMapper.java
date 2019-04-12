@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Component
 @Mapper
@@ -22,11 +23,15 @@ public interface PostMapper {
 
     int getCount();
 
-    List<Post> getPosts();
+    //得到类型的帖子，0最新回复，1最新发表，2最热
+    List<Post> getPosts(@Param("type") int type);
 
     int updateReplyNumById(@Param("id") int id, @Param("lastReplyTime") Date lastReplyTime);
 
     int getCountByAuthorId(@Param("authorId") int authorId);
 
     List<Post> getPostsByAuthorId(@Param("authorId") int authorId);
+
+    List<Post> getPostsByIds(@Param("ids") Set<Integer> ids);
+
 }

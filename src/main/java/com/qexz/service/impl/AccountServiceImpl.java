@@ -1,13 +1,19 @@
 package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.qexz.common.QexzConst;
-import com.qexz.dao.AccountMapper;
-import com.qexz.model.Account;
+import com.qexz.dao.*;
+import com.qexz.vo.ExamDetailVo;
+import com.qexz.vo.AnswerVo;
+import com.qexz.vo.ReasonVo;
+import com.qexz.model.*;
 import com.qexz.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -16,6 +22,18 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountMapper accountMapper;
+
+    @Autowired
+    private GradeMapper gradeMapper;
+
+    @Autowired
+    private AnswerMapper answerMapper;
+
+    @Autowired
+    QuestionMapper questionMapper;
+
+    @Autowired
+    ContestContentMapper contestContentMapper;
 
     @Override
     public int addAccount(Account account) {
@@ -97,5 +115,47 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account getAccountById(int id) {
         return accountMapper.getAccountById(id);
+    }
+
+    @Override
+    public List<ExamDetailVo> getContestDetailInfo(int contestId, int studentId) {
+        List<ExamDetailVo> examDetailVos = new ArrayList<>();
+
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<AnswerVo.AnswerContent>>() {
+        }.getType();
+        //得到某场考试的所有问题
+        List<ContestContent> contestContents = contestContentMapper.getContentByContestId(contestId);
+        ArrayList<Integer> questionIds = contestContents.stream().map(ContestContent::getQuestionId).collect(Collectors.toCollection(ArrayList::new));
+        List<Question> questions = questionMapper.getQuestionByIds(questionIds);
+        Answer answer = answerMapper.queryAnswer(contestId, studentId, 1);
+        List<AnswerVo.AnswerContent> answerContents = gson.fromJson(answer.getAnswerJson(), type);
+        Map<Integer, String> collect = answerContents.stream().collect(Collectors.toMap(AnswerVo.AnswerContent::getQuestionId, AnswerVo.AnswerContent::getAnswer));
+        Grade grade = gradeMapper.getGradeByStudentIdAndContestId(contestId, studentId);
+
+        List<ReasonVo> list = gson.fromJson(grade.getManulReason(), new TypeToken<List<ReasonVo>>(){}.getType());
+        Map<Integer, String> reason = list.stream().collect(Collectors.toMap(ReasonVo::getQuestionId, ReasonVo::getManulReason));
+        List<ContestContent> contestContests = contestContentMapper.getContentByContestId(contestId);
+        Map<Integer, Integer> scores = contestContests.stream().collect(Collectors.toMap(ContestContent::getQuestionId, ContestContent::getScore));
+        for (Question question : questions) {
+            ExamDetailVo detailDto = new ExamDetailVo();
+            detailDto.setQuestionAnswer(question.getAnswer());
+            detailDto.setQuestionContent(question.getContent());
+            detailDto.setQuestionParse(question.getParse());
+            detailDto.setQuestionType(question.getQuestionType());
+            detailDto.setAnswer(collect.get(question.getId()));
+            if (question.getQuestionType() == 2) {
+                detailDto.setMark(reason.get(question.getId()));
+            }
+            if (question.getQuestionType() == 0) {
+                detailDto.setOptionA(question.getOptionA());
+                detailDto.setOptionB(question.getOptionB());
+                detailDto.setOptionC(question.getOptionC());
+                detailDto.setOptionD(question.getOptionD());
+            }
+            detailDto.setQuestionScore(scores.get(question.getId()));
+            examDetailVos.add(detailDto);
+        }
+        return examDetailVos;
     }
 }

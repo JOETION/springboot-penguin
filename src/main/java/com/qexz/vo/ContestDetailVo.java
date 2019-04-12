@@ -1,4 +1,4 @@
-package com.qexz.dto;
+package com.qexz.vo;
 
 /* 				    
  **********************************************
@@ -13,8 +13,7 @@ import com.qexz.model.Question;
 
 import java.io.Serializable;
 
-public class ContestContentDto implements Serializable {
-    private static final long serialVersionUID = 1L;
+public class ContestDetailVo {
 
     private Question question;
 

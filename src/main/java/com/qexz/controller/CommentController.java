@@ -1,11 +1,10 @@
 package com.qexz.controller;
 
-import com.qexz.dto.AjaxResult;
+import com.qexz.dto.AjaxResultDto;
 import com.qexz.model.Comment;
 import com.qexz.service.CommentService;
 import com.qexz.service.PostService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import com.qexz.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,28 +12,27 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/comment")
 public class CommentController {
 
-    private static Log LOG = LogFactory.getLog(CommentController.class);
-
     @Autowired
     private CommentService commentService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private ReplyService replyService;
 
     //添加评论
-    @RequestMapping(value="/api/addComment", method= RequestMethod.POST)
+    @RequestMapping(value = "/api/addComment", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResult addComment(@RequestBody Comment comment) {
-        AjaxResult ajaxResult = new AjaxResult();
+    public AjaxResultDto addComment(@RequestBody Comment comment) {
         postService.updateReplyNumById(comment.getPostId());
         int commentId = commentService.addComment(comment);
-        return new AjaxResult().setData(commentId);
+        return new AjaxResultDto().setData(commentId);
     }
 
     //删除评论
     @DeleteMapping("/api/deleteComment/{id}")
-    public AjaxResult deleteComment(@PathVariable int id) {
-        AjaxResult ajaxResult = new AjaxResult();
+    public AjaxResultDto deleteComment(@PathVariable int id) {
         boolean result = commentService.deleteCommentById(id);
-        return new AjaxResult().setData(result);
+        boolean b = replyService.deleteRepliesByCommentId(id);
+        return new AjaxResultDto().setData(result && b);
     }
 }

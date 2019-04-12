@@ -2,13 +2,15 @@ package com.qexz.dto;
 
 import com.qexz.exception.QexzWebError;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * 封装json对象，所有返回结果都使用它
  */
-public class AjaxResult extends HashMap<String, Object> {
+public class AjaxResultDto extends HashMap<String, Object> implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     //TODO::深度依赖了，后面需要统一throw
     @Deprecated
@@ -19,48 +21,48 @@ public class AjaxResult extends HashMap<String, Object> {
     public static final String DATA = "data";
     public static final String CODE = "code";
 
-    public static final AjaxResult BLANK_SUCCESS = new AjaxResult().setSuccess(true);
+    public static final AjaxResultDto BLANK_SUCCESS = new AjaxResultDto().setSuccess(true);
 
-    private static final Map<QexzWebError, AjaxResult> map = new HashMap<>();
+    private static final Map<QexzWebError, AjaxResultDto> map = new HashMap<>();
 
-    public static AjaxResult fixedError(QexzWebError qexzWebError) {
+    public static AjaxResultDto fixedError(QexzWebError qexzWebError) {
         if (map.get(qexzWebError) == null) {
-            synchronized (AjaxResult.class) {
-                map.computeIfAbsent(qexzWebError, e -> new AjaxResult().setState(e));
+            synchronized (AjaxResultDto.class) {
+                map.computeIfAbsent(qexzWebError, e -> new AjaxResultDto().setState(e));
             }
         }
         return map.get(qexzWebError);
     }
 
-    public AjaxResult() {
+    public AjaxResultDto() {
         put(MESSAGE, "");
         put(SUCCESS, false);
     }
 
-    public AjaxResult setState(QexzWebError qexzWebError) {
+    public AjaxResultDto setState(QexzWebError qexzWebError) {
         put(MESSAGE, qexzWebError.errMsg);
         put(CODE, qexzWebError.code);
         put(SUCCESS, false);
         return this;
     }
 
-    private AjaxResult setCode(int code) {
+    private AjaxResultDto setCode(int code) {
         put(CODE, code);
         return this;
     }
 
-    public AjaxResult setMessage(String msg) {
+    public AjaxResultDto setMessage(String msg) {
         setSuccess(false);
         put(MESSAGE, msg);
         return this;
     }
 
-    public AjaxResult setSuccess(boolean ret) {
+    public AjaxResultDto setSuccess(boolean ret) {
         put(SUCCESS, ret);
         return this;
     }
 
-    public AjaxResult setData(Object obj) {
+    public AjaxResultDto setData(Object obj) {
         setSuccess(true);
         put(DATA, obj);
         return this;

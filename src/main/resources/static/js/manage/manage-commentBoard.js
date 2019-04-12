@@ -7,14 +7,14 @@ var manageCommentBoardPage = {
         pageSize: 0,
         totalPageNum: 0,
         totalPageSize: 0,
-        comments: [],
+        discussDetailVos: [],
     },
-    init: function (pageNum, pageSize, totalPageNum, totalPageSize, comments) {
+    init: function (pageNum, pageSize, totalPageNum, totalPageSize, discussDetailVos) {
         manageCommentBoardPage.data.pageNum = pageNum;
         manageCommentBoardPage.data.pageSize = pageSize;
         manageCommentBoardPage.data.totalPageNum = totalPageNum;
         manageCommentBoardPage.data.totalPageSize = totalPageSize;
-        manageCommentBoardPage.data.comments = comments;
+        manageCommentBoardPage.data.discussDetailVos = discussDetailVos;
         //分页初始化
         manageCommentBoardPage.subPageMenuInit();
     },

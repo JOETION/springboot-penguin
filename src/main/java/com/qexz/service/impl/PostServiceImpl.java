@@ -14,7 +14,6 @@ import java.util.*;
 @Service("postService")
 public class PostServiceImpl implements PostService {
 
-    private static Log LOG = LogFactory.getLog(PostServiceImpl.class);
 
     @Autowired
     private PostMapper postMapper;
@@ -35,7 +34,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Map<String, Object> getPosts(int pageNum, int pageSize) {
+    public Map<String, Object> getPosts(int pageNum, int pageSize, int type) {
         Map<String, Object> data = new HashMap<>();
         int count = postMapper.getCount();
         if (count == 0) {
@@ -56,7 +55,7 @@ public class PostServiceImpl implements PostService {
             return data;
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Post> posts = postMapper.getPosts();
+        List<Post> posts = postMapper.getPosts(type);
         data.put("pageNum", pageNum);
         data.put("pageSize", pageSize);
         data.put("totalPageNum", totalPageNum);
@@ -104,5 +103,10 @@ public class PostServiceImpl implements PostService {
         data.put("totalPageSize", count);
         data.put("posts", posts);
         return data;
+    }
+
+    @Override
+    public List<Post> getPostsByIds(Set<Integer> ids) {
+        return postMapper.getPostsByIds(ids);
     }
 }

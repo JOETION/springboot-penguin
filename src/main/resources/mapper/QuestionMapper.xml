@@ -22,7 +22,7 @@
         update_time
     </sql>
 
-    <insert id="insertQuestion"  useGeneratedKeys="true" keyProperty="question.id" parameterType="com.qexz.model.Question">
+    <insert id="insertQuestion" useGeneratedKeys="true" keyProperty="question.id" parameterType="com.qexz.model.Question">
         insert into t_penguin_question
         (title, content, question_type, option_a, option_b, option_c,
         option_d, answer, parse, subject_id
@@ -90,28 +90,28 @@
         </if>
     </select>
 
-    <select id="getQuestionByContestId" resultMap="BaseResultMap">
+    <!--<select id="getQuestionByContestId" resultMap="BaseResultMap">
         SELECT
         *
         FROM t_penguin_question
         WHERE
         contest_id = #{contestId}
-    </select>
+    </select>-->
 
-    <select id="getCountByProblemsetIdAndContentAndDiffculty" resultType="int">
+    <select id="getCountByProblemsetIdAndContentAndType" resultType="int">
         SELECT
         COUNT(1)
         FROM t_penguin_question
-        WHERE AND subject_id = #{problemsetId}
+        WHERE subject_id = #{problemsetId}
         <if test="content != null and content != ''">
             AND content LIKE CONCAT(CONCAT('%', #{content}), '%')
         </if>
-        <if test='difficulty != "0"'>
-            AND difficulty = #{difficulty}
+        <if test="type!=null and type !=-1">
+            AND question_type=#{type}
         </if>
     </select>
 
-    <select id="getQuestionsByProblemsetIdAndContentAndDiffculty" resultMap="BaseResultMap">
+    <select id="getQuestionsByProblemsetIdAndContentAndType" resultMap="BaseResultMap">
         SELECT
         *
         FROM t_penguin_question
@@ -119,19 +119,19 @@
         <if test="content != null and content != ''">
             AND content LIKE CONCAT(CONCAT('%', #{content}), '%')
         </if>
-        <if test='difficulty != "0"'>
-            AND difficulty = #{difficulty}
+        <if test="type!=null and type !=-1">
+            AND question_type=#{type}
         </if>
     </select>
 
-  <!--  <update id="updateQuestionsStateByContestId">
-        UPDATE t_penguin_question
-        SET
-          state = #{state}
-        WHERE
-        contest_id = #{contestId}
-    </update>
--->
+    <!--  <update id="updateQuestionsStateByContestId">
+          UPDATE t_penguin_question
+          SET
+            state = #{state}
+          WHERE
+          contest_id = #{contestId}
+      </update>
+  -->
     <insert id="addQuestionToContest">
 
         INSERT INTO t_penguin_contest_content (contest_id,question_id,score,diffculty,state) VALUES (

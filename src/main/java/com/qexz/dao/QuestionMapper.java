@@ -25,15 +25,11 @@ public interface QuestionMapper {
 
     List<Question> getQuestionsByContent(@Param("content") String content);
 
-    List<Question> getQuestionByContestId(@Param("contestId") int contestId);
+    int getCountByProblemsetIdAndContentAndType(@Param("problemsetId") int problemsetId,
+                                                @Param("content") String content, @Param("type") int type);
 
-    int getCountByProblemsetIdAndContentAndDiffculty(@Param("problemsetId") int problemsetId,
-                                                     @Param("content") String content,
-                                                     @Param("difficulty") int diffculty);
-
-    List<Question> getQuestionsByProblemsetIdAndContentAndDiffculty(@Param("problemsetId") int problemsetId,
-                                                                    @Param("content") String content,
-                                                                    @Param("difficulty") int diffculty);
+    List<Question> getQuestionsByProblemsetIdAndContentAndType(@Param("problemsetId") int problemsetId,
+                                                               @Param("content") String content, @Param("type") int type);
 
     int updateQuestionsStateByContestId(@Param("contestId") int contestId,
                                         @Param("state") int state);
@@ -43,5 +39,5 @@ public interface QuestionMapper {
     int addQuestionToContest(@Param("contestId") int contestId, @Param("id") int id);
 
     //根据编号得到信息
-    List<Question> getQuestionByIds(@Param("questionIds")List<Integer> questionIds);
+    List<Question> getQuestionByIds(@Param("questionIds") List<Integer> questionIds);
 }

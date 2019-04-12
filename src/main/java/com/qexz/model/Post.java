@@ -14,8 +14,6 @@ public class Post {
     private int replyNum;
     private String title;
 
-    private Account author;
-
     public int getId() {
         return id;
     }
@@ -80,13 +78,6 @@ public class Post {
         this.replyNum = replyNum;
     }
 
-    public Account getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(Account author) {
-        this.author = author;
-    }
 
     public String getTitle() {
         return title;

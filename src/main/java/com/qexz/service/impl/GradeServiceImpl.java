@@ -113,4 +113,19 @@ public class GradeServiceImpl implements GradeService {
         return data;
     }
 
+    @Override
+    public int getRankByContestIdAndStudentId(int contestId, int studentId) {
+        return gradeMapper.getRankByContestIdAndStudentId(contestId, studentId);
+    }
+
+    @Override
+    public Grade getGradeByContestIdAndStudentId(int contestId, int studentId) {
+        return gradeMapper.getGradeByStudentIdAndContestId(contestId, studentId);
+    }
+
+    @Override
+    public List<Grade> getGradesByContestId(int contestId) {
+        return gradeMapper.getGradesByContestId(contestId);
+    }
+
 }

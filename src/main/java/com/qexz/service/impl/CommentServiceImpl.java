@@ -7,10 +7,7 @@ import com.qexz.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service("commentService")
@@ -63,5 +60,16 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public boolean deleteCommentById(int id) {
         return commentMapper.deleteCommentById(id) > 0;
+    }
+
+    @Override
+    public boolean deleteCommentsByPostId(int postId) {
+
+        return commentMapper.deleteCommentsByPostId(postId) > 0;
+    }
+
+    @Override
+    public List<Comment> getCommentsByIds(Set<Integer> ids) {
+        return commentMapper.getCommentsByIds(ids);
     }
 }

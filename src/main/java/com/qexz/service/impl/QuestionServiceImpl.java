@@ -103,10 +103,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Map<String, Object> getQuestionsByProblemsetIdAndContentAndDiffculty(int pageNum, int pageSize, int problemsetId, String content, int difficulty) {
+    public Map<String, Object> getQuestionsByProblemsetIdAndContentAndType(int pageNum, int pageSize, int problemsetId, String content,int type) {
         Map<String, Object> data = new HashMap<>();
-        int count = questionMapper.getCountByProblemsetIdAndContentAndDiffculty(problemsetId,
-                content, difficulty);
+        int count = questionMapper.getCountByProblemsetIdAndContentAndType(problemsetId,
+                content,type);
         if (count == 0) {
             data.put("pageNum", 0);
             data.put("pageSize", 0);
@@ -129,8 +129,8 @@ public class QuestionServiceImpl implements QuestionService {
             return data;
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Question> questions = questionMapper.getQuestionsByProblemsetIdAndContentAndDiffculty(
-                problemsetId, content, difficulty);
+        List<Question> questions = questionMapper.getQuestionsByProblemsetIdAndContentAndType(
+                problemsetId, content,type);
         data.put("pageNum", pageNum);
         data.put("pageSize", pageSize);
         data.put("totalPageNum", totalPageNum);

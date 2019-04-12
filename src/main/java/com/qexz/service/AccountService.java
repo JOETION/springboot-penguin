@@ -1,5 +1,6 @@
 package com.qexz.service;
 
+import com.qexz.vo.ExamDetailVo;
 import com.qexz.model.Account;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface AccountService {
     List<Account> getAccountsByIds(Set<Integer> ids);
 
     Account getAccountById(int id);
+
+    List<ExamDetailVo> getContestDetailInfo(int contestId,int studentId);
 }

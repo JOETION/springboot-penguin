@@ -19,7 +19,7 @@
 
     <insert id="insertAnswer" parameterType="com.qexz.model.Answer">
         INSERT INTO t_penguin_answer(contest_id,student_id,answer_json,state,start_time,finish_time)
-        VALUES (#{answer.contestId},#{answer.student_id},#{answer.answer_json},#{state},#{start_time},#{finish_time})
+        VALUES (#{answer.contestId},#{answer.studentId},#{answer.answerJson},#{answer.state},#{answer.startTime},#{answer.finishTime})
     </insert>
 
     <update id="updateAnswerState">
@@ -31,8 +31,13 @@
     </update>
 
     <select id="queryAnswer" resultMap="BaseResultMap">
-        SELECT * FROM t_penguin_answer WHERE contest_id=#{contestId} AND
-        student_id=#{studentId} AND state=#{state}
+        SELECT * FROM t_penguin_answer
+        WHERE
+        contest_id=#{contestId} AND
+        student_id=#{studentId}
+        <if test="state==0 or state==1">
+            AND state=#{state}
+        </if>
     </select>
 
     <select id="getAllAnswerByContestId" resultMap="BaseResultMap">

@@ -26,4 +26,9 @@ public interface GradeMapper {
     List<Grade> getGradesByContestId(@Param("contestId") int contestId);
 
     int getCountByContestId(@Param("contestId") int contestId);
+
+    //获取某个学生某堂考试的排名
+    int getRankByContestIdAndStudentId(@Param("contestId")int contestId,@Param("studentId")int studentId);
+
+    Grade getGradeByStudentIdAndContestId(@Param("contestId")int contestId,@Param("studentId")int studentId);
 }

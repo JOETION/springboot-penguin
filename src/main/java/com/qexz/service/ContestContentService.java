@@ -8,16 +8,14 @@ package com.qexz.service;
  */
 
 
-import com.qexz.dto.ContestContentDto;
 import com.qexz.model.ContestContent;
-import com.qexz.model.Question;
 
 import java.util.List;
 
 public interface ContestContentService {
 
     //根据考试编号得到考试内容
-    List<ContestContentDto> getContentByContestId(int contestId);
+    List<ContestContent> getContentByContestId(int contestId);
 
     //根据考试编号和问题编号删除考试内容
     boolean deleteContent(int contestId, int questionId);

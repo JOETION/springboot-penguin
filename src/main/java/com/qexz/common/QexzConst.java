@@ -1,21 +1,10 @@
 package com.qexz.common;
 
+
 public class QexzConst {
 
     // Session
     public final static String CURRENT_ACCOUNT = "current_account";
-
-    //本地服务器-文件,图片所在位置,图片上传位置
-//    public static final String UPLOAD_FILE_PATH = "file:D:/IdeaProjects/data/springboot-penguin/upload/";
-//    public static final String UPLOAD_FILE_IMAGE_PATH = "D:/IdeaProjects/data/springboot-penguin/upload/images/";
-
-    //云服务器-文件,图片所在位置,图片上传位置
-    public static final String UPLOAD_FILE_PATH = "file:/usr/java/data/springboot-penguin/upload/";
-    public static final String UPLOAD_FILE_IMAGE_PATH = "/usr/java/data/springboot-penguin/upload/images/";
-
-
-    //试题Excel文件保存位置
-    public static final String UPLOAD_QUESTION_EXCEL = "E:\\Company\\springboot-penguin\\upload\\excel\\";
 
     //excel后缀
     public static final String EXCEL_XLS_SUFFIX = ".xls";
@@ -38,7 +27,4 @@ public class QexzConst {
     public static final String MD5_SALT = "qexz";
     //分页数据
     public final static String DATA = "data";
-
-    public final static String SPLIT_CHAR = "_~_";
-
 }

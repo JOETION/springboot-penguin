@@ -12,9 +12,6 @@ public class Reply {
     private String content;
     private Date createTime;
 
-    private Account user;
-    private Account atuser;
-
     public int getId() {
         return id;
     }
@@ -71,19 +68,4 @@ public class Reply {
         this.createTime = createTime;
     }
 
-    public Account getUser() {
-        return user;
-    }
-
-    public void setUser(Account user) {
-        this.user = user;
-    }
-
-    public Account getAtuser() {
-        return atuser;
-    }
-
-    public void setAtuser(Account atuser) {
-        this.atuser = atuser;
-    }
 }

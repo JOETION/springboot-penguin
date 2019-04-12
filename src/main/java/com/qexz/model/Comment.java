@@ -1,7 +1,6 @@
 package com.qexz.model;
 
 import java.util.Date;
-import java.util.List;
 
 public class Comment {
 
@@ -10,9 +9,6 @@ public class Comment {
     private int postId;
     private String content;
     private Date createTime;
-
-    Account user;
-    List<Reply> replies;
 
     public int getId() {
         return id;
@@ -52,21 +48,5 @@ public class Comment {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
-    }
-
-    public List<Reply> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<Reply> replies) {
-        this.replies = replies;
-    }
-
-    public Account getUser() {
-        return user;
-    }
-
-    public void setUser(Account user) {
-        this.user = user;
     }
 }

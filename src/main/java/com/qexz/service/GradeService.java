@@ -19,4 +19,9 @@ public interface GradeService {
 
     Map<String, Object> getGradesByContestId(int contestId, int pageNum, int pageSize);
 
+    int getRankByContestIdAndStudentId(int contestId, int studentId);
+
+    Grade getGradeByContestIdAndStudentId(int contestId,int studentId);
+
+    List<Grade> getGradesByContestId(int contestId);
 }

@@ -2,75 +2,87 @@
  * 模块JavaScript
  */
 var app = {
-    data:{
+    data: {
         nowTime: null,
         contextPath: null,
     },
     // 封装相关的ajax的url
     URL: {
         now: function () {
-            return app.data.contextPath+"/time/now";
+            return app.data.contextPath + "/time/now";
         },
         checkLoginUrl: function () {
-            return app.data.contextPath+"/account/api/login";
+            return app.data.contextPath + "/account/api/login";
         },
         logoutUrl: function () {
-            return app.data.contextPath+"/account/logout";
+            return app.data.contextPath + "/account/logout";
         },
         homeUrl: function () {
-            return app.data.contextPath+"/";
+            return app.data.contextPath + "/";
         },
         problemsetUrl: function () {
-            return app.data.contextPath+"/problemset/list";
+            return app.data.contextPath + "/problemset/list";
         },
         problemListUrl: function (problemsetId) {
-            return app.data.contextPath+"/problemset/"+problemsetId+"/problems";
+            return app.data.contextPath + "/problemset/" + problemsetId + "/problems";
         },
         contestIndexUrl: function () {
-            return app.data.contextPath+"/contest/index";
+            return app.data.contextPath + "/contest/index";
         },
         contestDetailUrl: function () {
-            return app.data.contextPath+"/contest/";
+            return app.data.contextPath + "/contest/";
         },
         updateAccountUrl: function () {
-            return app.data.contextPath+"/account/api/updateAccount";
+            return app.data.contextPath + "/account/api/updateAccount";
         },
         updatePasswordUrl: function () {
-            return app.data.contextPath+"/account/api/updatePassword";
+            return app.data.contextPath + "/account/api/updatePassword";
         },
         submitGradeUrl: function () {
-            return app.data.contextPath+"/grade/api/submitContest"
+            return app.data.contextPath + "/grade/api/submitContest"
         },
         addPostUrl: function () {
-            return app.data.contextPath+"/post/api/addPost"
+            return app.data.contextPath + "/post/api/addPost"
         },
         updatePostUrl: function () {
-            return app.data.contextPath+"/post/api/updatePost"
+            return app.data.contextPath + "/post/api/updatePost"
         },
-        deletePostUrl: function () {
-            return app.data.contextPath+"/post/api/deletePost/";
+        deletePostUrl: function (id) {
+            return app.data.contextPath + "/post/api/deletePost/" + id;
         },
         discussUrl: function () {
-            return app.data.contextPath+"/discuss";
+            return app.data.contextPath + "/discuss";
+        },
+        getPostsUrl: function () {
+            return "/post/api/getPosts";
         },
         addCommentUrl: function () {
-            return app.data.contextPath+"/comment/api/addComment";
+            return app.data.contextPath + "/comment/api/addComment";
+        },
+        deleteCommentUrl: function (id) {
+            return app.data.contextPath + "/comment/api/deleteComment/" + id;
         },
         addReplyUrl: function () {
-            return app.data.contextPath+"/reply/api/addReply";
+            return app.data.contextPath + "/reply/api/addReply";
+        },
+        deleteReplyUrl: function (id) {
+            return app.data.contextPath + "/reply/api/deleteReply/" + id;
         },
         myDiscussPostUrl: function () {
-            return app.data.contextPath+"/account/myDiscussPost";
+            return app.data.contextPath + "/account/myDiscussPost";
         },
         myExamUrl: function () {
-            return app.data.contextPath+"/account/myExam";
+            return app.data.contextPath + "/account/myExam";
         },
         uploadAvatarUrl: function () {
-            return app.data.contextPath+'/account/api/uploadAvatar' ;
+            return app.data.contextPath + '/account/api/uploadAvatar';
         },
         uploadImageUrl: function () {
-            return app.data.contextPath+'/upload/images/';
+            return app.data.contextPath + '/upload/images/';
         },
+        addComplaintUrl:function(){
+            return app.data.contextPath+'/complaint/api/addComplaint'
+        }
     },
     /**
      * 全局初始化:服务器时间获取,登录功能,退出登录
@@ -116,7 +128,7 @@ var app = {
         /**
          * 登录错误提示消息可关闭
          */
-        $('#loginModalErrorMessage,.close').on('click', function() {
+        $('#loginModalErrorMessage,.close').on('click', function () {
             $(this).closest('#loginModalErrorMessage').transition('fade');
             //$('#loginModalErrorMessage').addClass('hidden');
         });
@@ -178,7 +190,7 @@ var app = {
     /**
      * 登录模态框显示
      */
-    showLogin: function() {
+    showLogin: function () {
         var username = $.cookie('penguinUsername');
         var password = $.cookie('penguinPassword');
         $('#username').val(username);
@@ -187,7 +199,7 @@ var app = {
             /**
              * 必须点击相关按钮才能关闭
              */
-            closable  : false,
+            closable: false,
             /**
              * 模糊背景
              */
@@ -201,14 +213,14 @@ var app = {
         if (username == null || username == ''
             || username.replace(/(^s*)|(s*$)/g, "").length == 0) {
             $('#loginModalErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
-                '                <p>'+'账号不能为空'+'</p>');
+                '                <p>' + '账号不能为空' + '</p>');
             $('#loginModalErrorMessage').removeClass('hidden');
             return false;
         }
         if (password == null || password == ''
             || password.replace(/(^s*)|(s*$)/g, "").length == 0) {
             $('#loginModalErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
-                '                <p>'+'密码不能为空'+'</p>');
+                '                <p>' + '密码不能为空' + '</p>');
             $('#loginModalErrorMessage').removeClass('hidden');
             return false;
         }
@@ -239,7 +251,7 @@ var app = {
                     window.location.reload();
                 } else {
                     $('#loginModalErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
-                        '                <p>'+result.message+'</p>');
+                        '                <p>' + result.message + '</p>');
                     $('#loginModalErrorMessage').removeClass('hidden');
                 }
             }, "json");

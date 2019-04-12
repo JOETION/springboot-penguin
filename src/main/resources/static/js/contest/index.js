@@ -7,23 +7,23 @@ var contestIndexPage = {
         pageSize: 0,
         totalPageNum: 0,
         totalPageSize: 0,
-        contests: [],
+        contestVos: [],
     },
-    init: function (pageNum, pageSize, totalPageNum, totalPageSize, contests) {
+    init: function (pageNum, pageSize, totalPageNum, totalPageSize, contestVos) {
         contestIndexPage.data.pageNum = pageNum;
         contestIndexPage.data.pageSize = pageSize;
         contestIndexPage.data.totalPageNum = totalPageNum;
         contestIndexPage.data.totalPageSize = totalPageSize;
-        contestIndexPage.data.contests = contests;
+        contestIndexPage.data.contestVos = contestVos;
         //分页初始化
         contestIndexPage.subPageMenuInit();
 
         //考试倒计时
         var killTime = new Date();
         //killTime.setDate(killTime.getDate()+5);
-        for (var i = 0; i < contests.length; i++) {
-            if (contests[i].state == 0) {
-                killTime = new Date(contests[i].startTime);
+        for (var i = 0; i < contestVos.length; i++) {
+            if (contestVos[i].state == 0) {
+                killTime = new Date(contestVos[i].startTime);
             } else {
                 break;
             }

@@ -2,9 +2,7 @@
  * 模块JavaScript
  */
 var home = {
-    data:{
-
-    },
+    data: {},
     init: function () {
 
     },

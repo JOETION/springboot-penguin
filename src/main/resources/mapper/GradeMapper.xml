@@ -8,11 +8,12 @@
         <result column="result" property="result" jdbcType="INTEGER"/>
         <result column="auto_result" property="autoResult" jdbcType="INTEGER"/>
         <result column="manul_result" property="manulResult" jdbcType="INTEGER"/>
+        <result column="manul_reason" property="manulReason" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id,student_id,contest_id,result,auto_result,manul_result,
+        id,student_id,contest_id,result,auto_result,manul_result,manul_reason
         create_time,update_time
     </sql>
 
@@ -31,7 +32,7 @@
     <update id="updateGradeById" parameterType="com.qexz.model.Grade">
         UPDATE t_penguin_grade
         SET
-        result=#{grade.result},auto_result=#{grade.autoResult},manul_result=#{grade.manulResult},manul_Reason=#{grade.manulReason}
+        result=#{grade.result},manul_result=#{grade.manulResult},manul_Reason=#{grade.manulReason}
         WHERE
         student_id=#{grade.studentId} AND contest_id=#{grade.contestId}
     </update>
@@ -62,7 +63,7 @@
         *
         FROM t_penguin_grade
         WHERE contest_id = #{contestId}
-        ORDER BY student_id ASC
+        ORDER BY result ASC
     </select>
 
     <!--    <select id="getCountByStudentId" resultType="int" >
@@ -94,5 +95,21 @@
            WHERE contest_id=#{contestId}
     </select>
 
+    <select id="getRankByContestIdAndStudentId" resultType="int">
+       SELECT
+        COUNT(1)+1 AS rank
+         FROM t_penguin_grade
+          WHERE contest_id=#{contestId} AND
+          result >
+          (
+          SELECT result FROM t_penguin_grade WHERE student_id=#{studentId} AND contest_id=#{contestId}
+          )
+    </select>
+
+    <select id="getGradeByStudentIdAndContestId" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_grade
+        WHERE
+        contest_id=#{contestId} AND student_id=#{studentId}
+    </select>
 
 </mapper>

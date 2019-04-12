@@ -43,4 +43,3 @@ public final class MD5 {
         System.out.println(MD5.md5("967042"));
     }
 }
-
