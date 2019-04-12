@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <link rel="stylesheet" th:href="@{/css/discuss/editDiscuss.css}"/>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js}"></script>
+    <script type="text/javascript" th:src="@{https://cdn.bootcss.com/wangEditor/3.0.15/wangEditor.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/discuss/editDiscuss.js}"></script>
+    <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
+</head>
+<body>
+
+<!--导航条-->
+<div th:replace="/common/nav::nav(${current_account})"></div>
+
+<div class="myMessage pushable attached ui ">
+
+    <!--消息侧边栏-->
+    <th:block th:include="/common/message::message('overlay')"></th:block>
+
+    <div class="pusher">
+
+        <div class="ui postDiscuss container">
+            <div class="ui negative message">
+                <!--<i class="close icon"></i>-->
+                <div class="header"><i class="warning icon"></i>注意</div>
+                <p>请注意帖子的言语措辞,如果出现恶意中伤别人,诽谤他人,帖子将被删除,发帖人将会被惩罚。</p>
+            </div>
+            <form class="ui form">
+                <div class="field">
+                    <div class="two fields">
+                        <div class="four wide field">
+                            <select class="ui fluid dropdown" th:value="1">
+                                <option value="0">选择板块</option>
+                                <option value="1">我要提问</option>
+                                <option value="2">技术交流</option>
+                            </select>
+                        </div>
+                        <div class="twelve wide field">
+                            <input id="postTitle" placeholder="标题：一句话说明你遇到的问题或想分享的经验" type="text" th:value="${data['post'].title}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="field" id="editor">
+                </div>
+                <button class="ui button" onclick="javascript:history.back(-1);">取消</button>
+                <div class="positive ui button" id="postDiscussSubmitButton">发布</div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!--页脚-->
+<th:block th:include="/common/footer::footer"></th:block>
+
+<!-- 登录模态框 -->
+<div th:replace="/common/login::login"></div>
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var post = /*[[${data['post']}]]*/;
+    var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/;
+
+    $(function () {
+        app.init(contextPath);
+        editDiscussPage.init(post);
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>用户信息菜单</title>
+</head>
+<body>
+
+<div th:fragment="userMenu(current_account)">
+
+    <div class="row">
+        <div class="ui card">
+            <div class="blurring dimmable image">
+                <div class="ui dimmer">
+                    <div class="content">
+                        <div class="center">
+                            <!--<div class="ui inverted button">Call to Action</div>-->
+                            <!-- TODO::上传图片 -->
+                            <a th:href="@{/account/profile}" data-inverted="" data-tooltip="更换头像" data-position="bottom center"><i class="huge photo icon"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <img th:src="@{'/upload/images/'+${current_account.avatarImgUrl}}"/>
+            </div>
+            <div class="content">
+                <div class="header" th:text="${current_account.name}"></div>
+                <div class="meta">
+                    <!--<a class="group">信息学院</a>-->
+                    <div class="group">
+                        <i class="student icon"></i>信息学院
+                    </div>
+                </div>
+                <div class="description" th:text="${current_account.description}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row" style="margin-top: 1em;">
+        <div class="ui card">
+            <div class="content">
+                <a th:href="@{/account/profile}">
+                    <i class="user icon"></i>个人信息
+                </a>
+            </div>
+            <div class="content">
+                <a th:href="@{/account/password}">
+                    <i class="edit icon"></i>更改密码
+                </a>
+                <i class="pointing left icon"></i>
+            </div>
+            <div class="content">
+                <a th:href="@{/account/myExam}">
+                    <i class="history icon"></i>考试记录
+                </a>
+            </div>
+            <div class="content">
+                <a th:href="@{/account/myDiscussPost}">
+                    <i class="talk icon"></i>我的发帖
+                </a>
+            </div>
+            <div class="content">
+                <a th:href="@{/account/myComplaint}">
+                    <i class="talk icon"></i>我的投诉
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

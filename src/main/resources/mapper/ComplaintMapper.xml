@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.qexz.dao.ComplaintMapper">
+    <resultMap id="BaseResultMap" type="com.qexz.model.Complaint">
+        <result column="id" property="id" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="complaint_which" property="complaintWhich" jdbcType="INTEGER"/>
+        <result column="which_id" property="whichId" jdbcType="INTEGER"/>
+        <result column="complaint_type" property="complaintType" jdbcType="INTEGER"/>
+        <result column="complaint_content" property="complaintContent" jdbcType="VARCHAR"/>
+        <result column="complaint_state" property="complaintState" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,complaint_which,which_id,complaint_type,complaint_content,complaint_state
+    </sql>
+
+    <insert id="insertComplaint" parameterType="com.qexz.model.Complaint">
+        INSERT INTO t_penguin_complaint(user_id,complaint_which,which_id,complaint_type,complaint_content,complaint_state)
+        VALUES (#{complaint.userId},#{complaint.complaintWhich},#{complaint.whichId},#{complaint.complaintType},#{complaint.complaintContent},0)
+    </insert>
+
+    <select id="queryWhichComplaintByUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_complaint
+        WHERE
+         user_id=#{userId} AND complaint_which=#{which} AND which_id=#{whichId} AND complaint_state=0
+    </select>
+
+    <select id="queryComplaintByWhich" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_complaint
+        WHERE
+        complaint_which=#{which}
+    </select>
+
+    <select id="getCountByWhich" resultType="int">
+        SELECT COUNT(1) FROM t_penguin_complaint
+        WHERE complaint_which=#{which}
+    </select>
+
+    <delete id="deleteComplaint">
+        DELETE FROM t_penguin_complaint
+        WHERE user_id=#{userId} AND which=#{which} AND which_id=#{whichId}
+    </delete>
+
+    <update id="updateComplaint">
+        UPDATE FROM t_penguin_complaint
+        SET complaint_state=#{state} WHERE user_id=#{userId} AND which=#{which} AND which_id=#{whichId}
+    </update>
+
+</mapper>

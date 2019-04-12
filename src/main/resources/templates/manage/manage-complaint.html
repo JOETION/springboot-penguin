@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-投诉管理','manage-app')"></th:block>
+    <script type="text/javascript" th:src="@{/js/manage/manage-complaint.js}"></script>
+    <span th:replace="/common/manage-password::header"></span>
+</head>
+<body>
+
+<div th:replace="/common/manage-password::updatePasswordModal"></div>
+
+<!--导航栏-->
+<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!--菜单项-->
+        <div th:replace="/common/manage-menu::manageMenu(${current_account},'complaint')"></div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">投诉管理</h1>
+
+            <div class="row" style="margin-bottom: 5px;">
+                <div class="col-md-10">
+                </div>
+                <div class="col-md-2">
+                    <span>投诉种类：</span>
+
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-primary" th:if="${kind==0}">用户</button>
+                        <button type="button" class="btn btn-primary" th:if="${kind==1}">帖子</button>
+                        <button type="button" class="btn btn-primary" th:if="${kind==2}">评论</button>
+                        <button type="button" class="btn btn-primary" th:if="${kind==3}">回复</button>
+
+                        <button type="button" class="btn btn-primary dropdown-toggle"
+                                data-toggle="dropdown">
+                            <span class="caret"></span>
+                            <span class="sr-only">切换下拉菜单</span>
+                        </button>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/manage/complaint/list?kind=0">用户</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/manage/complaint/list?kind=1">帖子</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/manage/complaint/list?kind=2">评论</a></li>
+                            <li class="divider"></li>
+                            <li><a href="/manage/complaint/list?kind=3">回复</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th>投诉者</th>
+                        <th>投诉的内容</th>
+                        <th>投诉的类型</th>
+                        <th>投诉的原因</th>
+                        <th>投诉的时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="item,itemStats : ${data['complaintVos']}" th:id="'complaintVo'+${itemStats.index}">
+                        <td th:text="${item.username}"></td>
+                        <td th:text="${item.complaintContent}"></td>
+
+                        <td th:if="${item.complaintType==0}">广告</td>
+                        <td th:if="${item.complaintType==1}">色情</td>
+                        <td th:if="${item.complaintType==2}">言语辱骂</td>
+                        <td th:if="${item.complaintType==3}">其他</td>
+
+
+                        <td th:text="${item.complaintReason}">言语挑衅</td>
+                        <td th:text="${#dates.format(item.complaintTime, 'yyyy-MM-dd HH:mm:ss')}">2018年/10月/20日</td>
+
+                        <td>
+                            <button type="button" class="btn btn-danger btn-xs" th:if="${item.state==0}" th:onclick="'manageComplaintPage.cloudCheck('+${itemStats.index}+')'"><i class="fa fa-eye-slash"></i>云检测</button>
+
+                            <!--投诉成功将删除对应内容，数据库里可能需要添加内容的状态-->
+                            <!--投诉成功或失败需要发消息给用户-->
+                            <button type="button" class="btn btn-info btn-xs" th:if="${item.state==0}" th:onclick="'manageComplaintPage.updateComplaint('+${itemStats.index}+',1,this)'"><i class="fa fa-eye"></i>失败</button>
+                            <button type="button" class="btn btn-info btn-xs" th:if="${item.state!=0}" disabled="disabled"><i class="fa fa-eye"></i>失败</button>
+
+
+                            <button type="button" class="btn btn-primary btn-xs" th:if="${item.state==0}" th:onclick="'manageComplaintPage.updateComplaint('+${itemStats.index}+',2,this)'"><i class="fa fa-edit"></i>成功</button>
+                            <button type="button" class="btn btn-primary btn-xs" th:if="${item.state!=0}" disabled="disabled"><i class="fa fa-edit"></i>成功</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row">
+                <div class="col-md-9" id="subPageHead">
+                </div>
+                <div class="col-md-3">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--加载模态框-->
+<div class="modal fade" id="loadingModal">
+    <div style="width: 200px;height:20px; z-index: 20000; position: absolute; text-align: center; left: 50%; top: 50%;margin-left:-100px;margin-top:-10px">
+        <div class="progress progress-striped active" style="margin-bottom: 0;">
+            <div class="progress-bar" style="width: 100%;"></div>
+        </div>
+        <h5 style="color:black"><strong>正在进行云端检测，敏感词汇会进行特别标注！</strong></h5>
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var pageNum = /*[[${data['pageNum']}]]*/;
+    var pageSize = /*[[${data['pageSize']}]]*/;
+    var totalPageNum = /*[[${data['totalPageNum']}]]*/;
+    var totalPageSize = /*[[${data['totalPageSize']}]]*/;
+    var complaints = /*[[${data['complaintVos']}]]*/;
+    var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/;
+    var kind = /*[[${kind}]]*/;
+
+    $(function () {
+        app.init(contextPath);
+        manageComplaintPage.init(pageNum, pageSize, totalPageNum, totalPageSize, complaints, kind);
+        managePasswordPage.init();
+    });
+    /*]]>*/
+</script>
+</body>
+</html>
+

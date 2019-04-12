@@ -1,0 +1,20 @@
+/**
+.example .pp中间用空格隔开，表示后代选择器，选择的是.example内的.pp
+<div class="example"><div class="pp">被选择的元素</div</div>
+.example.pp选择的是class中同时包含example和pp的元素。
+<div class="example pp">被选择的元素</div>
+**/
+body {
+    background-color: #EEEEEE;
+}
+
+.main.container {
+    margin-top: 7em;
+    width: 1050px;
+}
+.second-footer {
+    height: 560px;
+}
+.ui.menu{
+    margin: 0px 0px;
+}

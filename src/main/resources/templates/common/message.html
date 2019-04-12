@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>消息</title>
+</head>
+<body>
+
+<div th:fragment="message(transition)">
+    <div th:class="'ui sidebar wide inverted inline right vertical menu '+ ${transition}">
+
+        <div class="header item">
+            <p>全部消息</p>
+        </div>
+
+        <div class="ui accordion segment inverted item">
+            <div class="title"><i class="dropdown icon"></i>标题：账号已被封禁&nbsp;&nbsp;&nbsp;2018/10/20</div>
+            <div class="field content ui segment tertiary ">
+                <p>
+                    <a style="text-decoration: none;color: inherit;" href="index.html">内容：<br/>你在2018年10月30日在帖子‘大学生读研究生有用吗’中有违规言论，账号已被封禁，届时将不能操作讨论区，请联系管理员</a>
+                </p>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="已读" onclick="readedMessage(this);" readed="false"><i class="check circle icon large"></i></a>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="删除" onclick="deleteMessage(this);"><i class="trash alternate icon large"></i></a>
+            </div>
+        </div>
+        <div class="ui accordion segment inverted item">
+            <div class="title"><i class="dropdown icon"></i>标题：账号已被封禁&nbsp;&nbsp;&nbsp;2018/10/20</div>
+            <div class="field content ui segment tertiary ">
+                <p>
+                    <a style="text-decoration: none;color: inherit;" href="index.html">内容：<br/>你在2018年10月30日在帖子‘大学生读研究生有用吗’中有违规言论，账号已被封禁，届时将不能操作讨论区，请联系管理员</a>
+                </p>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="已读" onclick="readedMessage(this);" readed="false"><i class="check circle icon large"></i></a>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="删除" onclick="deleteMessage(this);"><i class="trash alternate icon large"></i></a>
+            </div>
+        </div>
+        <div class="ui accordion segment inverted item">
+            <div class="title"><i class="dropdown icon"></i>标题：账号已被封禁&nbsp;&nbsp;&nbsp;2018/10/20</div>
+            <div class="field content ui segment tertiary ">
+                <p>
+                    <a style="text-decoration: none;color: inherit;" href="index.html">内容：<br/>你在2018年10月30日在帖子‘大学生读研究生有用吗’中有违规言论，账号已被封禁，届时将不能操作讨论区，请联系管理员</a>
+                </p>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="已读" onclick="readedMessage(this);" readed="false"><i class="check circle icon large"></i></a>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="删除" onclick="deleteMessage(this);"><i class="trash alternate icon large"></i></a>
+            </div>
+        </div>
+        <div class="ui accordion inverted segment item">
+            <div class="title"><i class="dropdown icon"></i>标题：账号已被封禁&nbsp;&nbsp;&nbsp;2018/10/20</div>
+            <div class="field content ui segment tertiary ">
+                <p>
+                    <a style="text-decoration: none;color: inherit;" href="index.html">内容：<br/>你在2018年10月30日在帖子‘大学生读研究生有用吗’中有违规言论，账号已被封禁，届时将不能操作讨论区，请联系管理员</a>
+                </p>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="已读" onclick="readedMessage(this);" readed="false"><i class="check circle icon large"></i></a>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="删除" onclick="deleteMessage(this);"><i class="trash alternate icon large"></i></a>
+            </div>
+        </div>
+        <div class="ui accordion inverted segment item">
+            <div class="title"><i class="dropdown icon"></i>标题：账号已被封禁&nbsp;&nbsp;&nbsp;2018/10/20</div>
+            <div class="field content ui segment tertiary ">
+                <p>
+                    <a style="text-decoration: none;color: inherit;" href="index.html">内容：<br/>你在2018年10月30日在帖子‘大学生读研究生有用吗’中有违规言论，账号已被封禁，届时将不能操作讨论区，请联系管理员</a>
+                </p>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="已读" onclick="readedMessage(this);" readed="false"><i class="check circle icon large"></i></a>
+                <a href="javascript:void(0);" style="text-decoration: none;color: inherit;" data-tooltip="删除" onclick="deleteMessage(this);"><i class="trash alternate icon large"></i></a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+</body>
+</html>
