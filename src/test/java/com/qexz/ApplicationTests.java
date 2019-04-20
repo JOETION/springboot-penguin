@@ -12,17 +12,7 @@ import java.io.IOException;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ApplicationTests {
-
-	@Autowired
-	RedisService redisService;
-
 	@Test
 	public void contextLoads() {
 	}
-
-	@Test
-	public void testInsertRedis() throws IOException, ClassNotFoundException {
-
-	}
-
 }
