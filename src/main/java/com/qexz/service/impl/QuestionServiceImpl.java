@@ -2,25 +2,24 @@ package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.qexz.dao.ContestContentMapper;
-import com.qexz.dao.ContestMapper;
 import com.qexz.dao.QuestionMapper;
+import com.qexz.dao.SubjectMapper;
 import com.qexz.model.ContestContent;
 import com.qexz.model.Question;
 import com.qexz.service.QuestionService;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-@Service
+@Service("questionService")
 public class QuestionServiceImpl implements QuestionService {
 
-    private static Log LOG = LogFactory.getLog(QuestionServiceImpl.class);
 
     @Autowired
     private QuestionMapper questionMapper;
@@ -28,13 +27,22 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private ContestContentMapper contestContentMapper;
 
+    @Autowired
+    private SubjectMapper subjectMapper;
+
     @Override
     public int addQuestion(Question question) {
+        //更新课程信息
+        subjectMapper.updateQuestionNum(question.getSubjectId(), 1);
         return questionMapper.insertQuestion(question);
     }
 
     @Override
     public int addQuestions(List<Question> questions) {
+        Map<Integer, Long> id2Num = questions.stream().collect(Collectors.groupingBy(Question::getSubjectId, Collectors.counting()));
+        id2Num.forEach((a, b) -> {
+            subjectMapper.updateQuestionNum(a, b);
+        });
         return questionMapper.insertQuestionByList(questions);
     }
 
@@ -93,8 +101,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public boolean deleteQuestion(int id) {
-        return questionMapper.deleteQuestion(id) > 0;
+        questionMapper.deleteQuestion(id);
+        contestContentMapper.deleteAllQuestionById(id);
+        return true;
     }
 
     @Override
@@ -103,10 +114,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Map<String, Object> getQuestionsByProblemsetIdAndContentAndType(int pageNum, int pageSize, int problemsetId, String content,int type) {
+    public Map<String, Object> getQuestionsByProblemsetIdAndContentAndType(int pageNum, int pageSize, int problemsetId, String content, int type) {
         Map<String, Object> data = new HashMap<>();
         int count = questionMapper.getCountByProblemsetIdAndContentAndType(problemsetId,
-                content,type);
+                content, type);
         if (count == 0) {
             data.put("pageNum", 0);
             data.put("pageSize", 0);
@@ -130,7 +141,7 @@ public class QuestionServiceImpl implements QuestionService {
         }
         PageHelper.startPage(pageNum, pageSize);
         List<Question> questions = questionMapper.getQuestionsByProblemsetIdAndContentAndType(
-                problemsetId, content,type);
+                problemsetId, content, type);
         data.put("pageNum", pageNum);
         data.put("pageSize", pageSize);
         data.put("totalPageNum", totalPageNum);

@@ -1,19 +1,17 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('考试排名','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/contest/contest-rank.css}"/>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
-
-<div class="myMessage pushable attached ui ">
+<div th:replace="/common/nav::nav"></div>
 
     <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+    <th:block th:include="/common/message::message"></th:block>
 
     <div class="pusher">
 
@@ -78,13 +76,10 @@
             </div>
         </div>
 
+        <!--页脚-->
+        <th:block th:include="/common/footer::footer"></th:block>
     </div>
 
-
-</div>
-
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 </body>
 </html>

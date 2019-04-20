@@ -1,99 +1,94 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/user/profile.css}"/>
     <script type="text/javascript" th:src="@{/js/user/profile.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
+<div th:replace="/common/nav::nav"></div>
 
-<div class="myMessage pushable attached ui ">
-    <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+<!--消息侧边栏-->
+<th:block th:include="/common/message::message"></th:block>
 
-    <div class="pusher">
+<div class="pusher">
 
-        <div class="ui main container">
-            <div class="ui grid">
-                <div class="four wide column">
-                    <!--用户菜单-->
-                    <th:block th:include="/common/user-menu::userMenu(${current_account})"></th:block>
-                </div>
-                <div class="twelve wide column">
-                    <div class="ui segment">
-                        <h4 class="ui dividing header">基本信息</h4>
+    <div class="ui main container">
+        <div class="ui grid">
+            <div class="four wide column">
+                <!--用户菜单-->
+                <th:block th:include="/common/user-menu::userMenu('profile')"></th:block>
+            </div>
+            <div class="twelve wide column">
+                <div class="ui segment">
+                    <h4 class="ui dividing header">基本信息</h4>
 
-                        <form class="ui form attached fluid segment" id="updateAccountForm">
-                            <div class="ui hidden negative message" id="updateAccountErrorMessage">
-                                <!--
-                                <div class="header">错误提示</div>
-                                <p></p>
-                                -->
-                            </div>
-                            <div class="field">
-                                <label><i class="user icon"></i>姓名</label>
-                                <input id="myName" name="myName" readonly="" placeholder="请输入姓名"
-                                       type="text" th:value="${current_account.name}"/>
-                            </div>
-                            <div class="field">
-                                <label><i class="student icon"></i>学号</label>
-                                <input id="myUsername" name="myUsername" readonly="" placeholder="请输入学号"
-                                       type="text" th:value="${current_account.username}"/>
-                            </div>
-                            <div class="field">
-                                <label><i class="qq icon"></i>QQ</label>
-                                <input id="myQq" name="myQq" placeholder="请输入QQ" type="text"
-                                       th:value="${current_account.qq}"/>
-                            </div>
-                            <div class="field">
-                                <label><i class="mobile icon"></i>手机号码</label>
-                                <input id="myPhone" name="myPhone" placeholder="请输入手机号码" type="text"
-                                       th:value="${current_account.phone}"/>
-                            </div>
-                            <div class="field">
-                                <label><i class="mail outline icon"></i>邮箱</label>
-                                <input id="myEmail" name="myEmail" placeholder="请输入邮箱地址" type="text"
-                                       th:value="${current_account.email}"/>
-                            </div>
-                            <div class="field">
-                                <label><i class="upload icon"></i>上传头像</label>
+                    <form class="ui form attached fluid segment" id="updateAccountForm">
+                        <div class="ui hidden negative message" id="updateAccountErrorMessage">
+                            <!--
+                            <div class="header">错误提示</div>
+                            <p></p>
+                            -->
+                        </div>
+                        <div class="field">
+                            <label><i class="user icon"></i>姓名</label>
+                            <input id="myName" name="myName" readonly="" placeholder="请输入姓名"
+                                   type="text" th:value="${session.current_account.name}"/>
+                        </div>
+                        <div class="field">
+                            <label><i class="student icon"></i>学号</label>
+                            <input id="myUsername" name="myUsername" readonly="" placeholder="请输入学号"
+                                   type="text" th:value="${session.current_account.username}"/>
+                        </div>
+                        <div class="field">
+                            <label><i class="qq icon"></i>QQ</label>
+                            <input id="myQq" name="myQq" placeholder="请输入QQ" type="text"
+                                   th:value="${session.current_account.qq}"/>
+                        </div>
+                        <div class="field">
+                            <label><i class="mobile icon"></i>手机号码</label>
+                            <input id="myPhone" name="myPhone" placeholder="请输入手机号码" type="text"
+                                   th:value="${session.current_account.phone}"/>
+                        </div>
+                        <div class="field">
+                            <label><i class="mail outline icon"></i>邮箱</label>
+                            <input id="myEmail" name="myEmail" placeholder="请输入邮箱地址" type="text"
+                                   th:value="${session.current_account.email}"/>
+                        </div>
+                        <div class="field">
+                            <label><i class="upload icon"></i>上传头像</label>
 
-                                <div class="ui three column grid">
-                                    <div class="column">
-                                        <div class="ui fluid card">
-                                            <div class="image">
-                                                <img id="avatarImgPreview" class="ui tiny image" th:src="@{'/upload/images/'+${current_account.avatarImgUrl}}"/>
-                                            </div>
+                            <div class="ui three column grid">
+                                <div class="column">
+                                    <div class="ui fluid card">
+                                        <div class="image">
+                                            <img id="avatarImgPreview" class="ui tiny image" th:src="@{'/upload/images/'+${session.current_account.avatarImgUrl}}"/>
                                         </div>
                                     </div>
                                 </div>
-                                <input type="file" id="myfile" name="myfile" value="" onchange="profilePage.uploadAvatar()"/>
-                                <input type="hidden" id="myAvatarImgUrl" name="myAvatarImgUrl" value=""/>
                             </div>
-                            <div class="field">
-                                <label><i class="smile icon"></i>自我描述</label>
+                            <input type="file" id="myfile" name="myfile" accept="image/jpeg,image/jpg,image/png" onchange="profilePage.uploadAvatar()"/>
+                            <input type="hidden" id="myAvatarImgUrl" name="myAvatarImgUrl" value=""/>
+                        </div>
+                        <div class="field">
+                            <label><i class="smile icon"></i>自我描述</label>
                         <textarea id="myDescription" name="myDescription" rows="6"
-                                  th:text="${current_account.description}"></textarea>
-                            </div>
-                            <div class="ui primary button" id="updateAccountButton">保存</div>
-                        </form>
-                    </div>
+                                  th:text="${session.current_account.description}"></textarea>
+                        </div>
+                        <div class="ui primary button" id="updateAccountButton">保存</div>
+                    </form>
                 </div>
             </div>
         </div>
-
-
     </div>
 
+    <!--页脚-->
+    <th:block th:include="/common/footer::footer"></th:block>
 
 </div>
-
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 <script th:inline="javascript">
     /*<![CDATA[*/

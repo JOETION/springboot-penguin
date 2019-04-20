@@ -26,6 +26,9 @@ var app = {
         updateAccountUrl: function () {
             return app.data.contextPath + "/account/api/updateAccount";
         },
+        updateManageAccountUrl: function () {
+            return app.data.contextPath + "/account/api/updateManageAccount";
+        },
         updatePasswordUrl: function () {
             return app.data.contextPath + "/account/api/updatePassword";
         },
@@ -86,7 +89,7 @@ var app = {
             return app.data.contextPath + "/account/api/addAccount";
         },
         updateAccountUrl: function () {
-            return app.data.contextPath + "/account/api/updateManegeAccount";
+            return app.data.contextPath + "/account/api/updateManageAccount";
         },
         deleteAccountUrl: function () {
             return app.data.contextPath + "/account/api/deleteAccount/";
@@ -136,7 +139,14 @@ var app = {
 
         cloudCheckUrl: function () {
             return app.data.contextPath + "/complaint/cloudCheck";
+        },
+        addNoticeUrl: function () {
+            return app.data.contextPath + "/notice/api/addNotice";
+        },
+        deleteNoticeUrl: function () {
+            return app.data.contextPath + "/notice/api/deleteNotice";
         }
+
 
     },
     /**

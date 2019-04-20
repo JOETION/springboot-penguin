@@ -1,22 +1,24 @@
 package com.qexz.controller;
 
 import com.qexz.common.QexzConst;
-import com.qexz.vo.ExamDetailVo;
-import com.qexz.vo.ExamVo;
 import com.qexz.dto.AjaxResultDto;
 import com.qexz.exception.QexzWebError;
-import com.qexz.jobs.ImageHandleJobs;
 import com.qexz.model.Account;
 import com.qexz.model.Contest;
 import com.qexz.model.Grade;
 import com.qexz.model.Subject;
 import com.qexz.service.*;
 import com.qexz.util.MD5;
+import com.qexz.vo.ExamDetailVo;
+import com.qexz.vo.ExamVo;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.Session;
+import org.springframework.session.data.redis.RedisOperationsSessionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -48,19 +51,29 @@ public class AccountController {
     @Value("${upload.file.image.path}")
     private String uploadImagePath;
 
+    @Autowired
+    private MessageService messageService;
+
+    @Autowired
+    private RedisOperationsSessionRepository repository;
+
     /**
      * 个人信息页面
      */
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(HttpServletRequest request, Model model) {
-        Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
-        //TODO::拦截器过滤处理
-        if (currentAccount == null) {
-            //用户未登录直接返回首页面
+        try {
+            Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
+            if (currentAccount == null) {
+                return "redirect:/";
+            }
+            model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
+            return "/user/profile";
+        } catch (Exception e) {
+            LOG.error("用户详情页发生错误，原因：" + e);
             return "redirect:/";
         }
-        model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
-        return "/user/profile";
+
     }
 
     /**
@@ -68,14 +81,18 @@ public class AccountController {
      */
     @RequestMapping(value = "/password", method = RequestMethod.GET)
     public String password(HttpServletRequest request, Model model) {
-        Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
-        //TODO::拦截器过滤处理
-        if (currentAccount == null) {
-            //用户未登录直接返回首页面
+        try {
+            Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
+            if (currentAccount == null) {
+                return "redirect:/";
+            }
+            model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
+            return "/user/password";
+        } catch (Exception e) {
+            LOG.error("用户密码页发生错误，原因：" + e);
             return "redirect:/";
         }
-        model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
-        return "/user/password";
+
     }
 
     /**
@@ -83,38 +100,43 @@ public class AccountController {
      */
     @RequestMapping(value = "/myExam", method = RequestMethod.GET)
     public String myExam(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-        Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
-        //TODO::拦截器过滤处理
-        if (currentAccount == null) {
-            //用户未登录直接返回首页面
+        try {
+            Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
+            if (currentAccount == null) {
+                //用户未登录直接返回首页面
+                return "redirect:/";
+            }
+            //得到分数信息
+            Map<String, Object> data = gradeService.getGradesByStudentId(page, QexzConst.gradePageSize, currentAccount.getId());
+            List<Grade> grades = (List<Grade>) data.remove("grades");
+
+            //得到考试信息和课程信息
+            Set<Integer> contestIds = grades.stream().map(Grade::getContestId).collect(Collectors.toCollection(HashSet::new));
+            List<Contest> contests = contestService.getContestsByContestIds(contestIds);
+            List<Subject> subjects = subjectService.getSubjects();
+            Map<Integer, String> subjectId2name = subjects.stream().
+                    collect(Collectors.toMap(Subject::getId, Subject::getName));
+            Map<Integer, Contest> id2contest = contests.stream().
+                    collect(Collectors.toMap(Contest::getId, contest -> contest));
+            List<ExamVo> examVos = new ArrayList<>();
+            for (Grade grade : grades) {
+                ExamVo examVo = new ExamVo();
+                examVo.setSubjectName(subjectId2name.getOrDefault(grade.getContestId(), "未知科目"));
+                examVo.setContest(id2contest.get(grade.getContestId()));
+                examVo.setGrade(grade);
+                //此处效率有点低
+                examVo.setRank(gradeService.getRankByContestIdAndStudentId(grade.getContestId(), grade.getStudentId()));
+                examVos.add(examVo);
+            }
+            data.put("examVos", examVos);
+            model.addAttribute(QexzConst.DATA, data);
+            model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
+            return "/user/myExam";
+        } catch (Exception e) {
+            LOG.error("我的考试页发生错误，原因：" + e);
             return "redirect:/";
         }
-        //得到分数信息
-        Map<String, Object> data = gradeService.getGradesByStudentId(page, QexzConst.gradePageSize, currentAccount.getId());
-        List<Grade> grades = (List<Grade>) data.remove("grades");
 
-        //得到考试信息和课程信息
-        Set<Integer> contestIds = grades.stream().map(Grade::getContestId).collect(Collectors.toCollection(HashSet::new));
-        List<Contest> contests = contestService.getContestsByContestIds(contestIds);
-        List<Subject> subjects = subjectService.getSubjects();
-        Map<Integer, String> subjectId2name = subjects.stream().
-                collect(Collectors.toMap(Subject::getId, Subject::getName));
-        Map<Integer, Contest> id2contest = contests.stream().
-                collect(Collectors.toMap(Contest::getId, contest -> contest));
-        List<ExamVo> examVos = new ArrayList<>();
-        for (Grade grade : grades) {
-            ExamVo examVo = new ExamVo();
-            examVo.setSubjectName(subjectId2name.getOrDefault(grade.getContestId(), "未知科目"));
-            examVo.setContest(id2contest.get(grade.getContestId()));
-            examVo.setGrade(grade);
-            //此处效率有点低
-            examVo.setRank(gradeService.getRankByContestIdAndStudentId(grade.getContestId(), grade.getStudentId()));
-            examVos.add(examVo);
-        }
-        data.put("examVos", examVos);
-        model.addAttribute(QexzConst.DATA, data);
-        model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
-        return "/user/myExam";
     }
 
 
@@ -122,16 +144,20 @@ public class AccountController {
      * 得分详情页
      */
     @RequestMapping(value = "/myExamDetail")
-    public String getContestDetailInfo(HttpServletRequest request, @RequestParam("contestId") int contestId, @RequestParam("studentId") int studentId, Model model) {
-        Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
-        List<ExamDetailVo> data = accountService.getContestDetailInfo(contestId, studentId);
-        if (data == null) {
-            return "/error/404";
+    public String getContestDetailInfo(@RequestParam("contestId") int contestId, @RequestParam("studentId") int studentId, Model model) {
+        try {
+            List<ExamDetailVo> data = accountService.getContestDetailInfo(contestId, studentId);
+            if (data == null) {
+                return "/error/404";
+            }
+            model.addAttribute(QexzConst.DATA, data);
+            model.addAttribute("contestName", contestService.getContestById(contestId).getTitle());
+            return "/user/myExamDetail";
+        } catch (Exception e) {
+            LOG.error("我的考试详情页发生错误，原因：" + e);
+            return "redirect:/";
         }
-        model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
-        model.addAttribute(QexzConst.DATA, data);
-        model.addAttribute("contestName", contestService.getContestById(contestId).getTitle());
-        return "/user/myExamDetail";
+
     }
 
     /**
@@ -139,15 +165,21 @@ public class AccountController {
      */
     @RequestMapping(value = "/myDiscussPost", method = RequestMethod.GET)
     public String myDiscussPost(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
-        Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
-        if (currentAccount == null) {
-            //用户未登录直接返回首页面
+        try {
+            Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
+            if (currentAccount == null) {
+                //用户未登录直接返回首页面
+                return "redirect:/";
+            }
+            Map<String, Object> data = postService.getPostsByAuthorId(page, QexzConst.postPageSize, currentAccount.getId());
+            model.addAttribute(QexzConst.DATA, data);
+            model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
+            return "/user/myDiscussPost";
+        } catch (Exception e) {
+            LOG.error("我的考试发帖页发生错误，原因：" + e);
             return "redirect:/";
         }
-        Map<String, Object> data = postService.getPostsByAuthorId(page, QexzConst.postPageSize, currentAccount.getId());
-        model.addAttribute(QexzConst.DATA, data);
-        model.addAttribute(QexzConst.CURRENT_ACCOUNT, currentAccount);
-        return "/user/myDiscussPost";
+
     }
 
     /**
@@ -201,7 +233,18 @@ public class AccountController {
             currentAccount.setQq(qq);
             currentAccount.setEmail(email);
             currentAccount.setDescription(description);
-            currentAccount.setAvatarImgUrl(avatarImgUrl);
+            String img = currentAccount.getAvatarImgUrl();
+
+            if (avatarImgUrl.equals("")) {
+                if (!img.equals("")) {
+                    currentAccount.setAvatarImgUrl(img);
+                } else {
+                    currentAccount.setAvatarImgUrl(QexzConst.DEFAULT_AVATAR_IMG_URL);
+                }
+
+            } else {
+                currentAccount.setAvatarImgUrl(avatarImgUrl);
+            }
             boolean result = accountService.updateAccount(currentAccount);
 
             //更新session里面的值
@@ -219,10 +262,10 @@ public class AccountController {
      */
     @RequestMapping(value = "/api/login", method = RequestMethod.POST)
     @ResponseBody
-    public AjaxResultDto login(HttpServletRequest request, HttpServletResponse response) {
+    public AjaxResultDto login(HttpServletRequest request) {
+        String username = request.getParameter("username");
         AjaxResultDto ajaxResultDto = new AjaxResultDto();
         try {
-            String username = request.getParameter("username");
             String password = request.getParameter("password");
             Account current_account = accountService.getAccountByUsername(username);
             if (current_account != null) {
@@ -230,7 +273,9 @@ public class AccountController {
                 if (pwd.equals(current_account.getPassword())) {
                     //设置单位为秒，设置为-1永不过期
                     //request.getSession().setMaxInactiveInterval(180*60);    //3小时
-                    request.getSession().setAttribute(QexzConst.CURRENT_ACCOUNT, current_account);
+                    HttpSession session = request.getSession();
+                    session.setAttribute(QexzConst.CURRENT_ACCOUNT, current_account);
+                    session.setAttribute(QexzConst.CURRENT_MESSAGES, messageService.getMessageByUserId(current_account.getId()));
                     ajaxResultDto.setData(current_account);
                 } else {
                     return AjaxResultDto.fixedError(QexzWebError.WRONG_PASSWORD);
@@ -243,6 +288,7 @@ public class AccountController {
             return AjaxResultDto.fixedError(QexzWebError.COMMON);
         }
         return ajaxResultDto;
+
     }
 
     /**
@@ -254,6 +300,8 @@ public class AccountController {
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout(HttpServletRequest request) {
         request.getSession().setAttribute(QexzConst.CURRENT_ACCOUNT, null);
+        request.getSession().setAttribute(QexzConst.CURRENT_MESSAGES, null);
+        request.getSession().invalidate();//spring session自动清除redis中的值
         return "redirect:/";
     }
 
@@ -274,9 +322,7 @@ public class AccountController {
                 //新图片
                 File newFile = new File(uploadImagePath + newFileName);
 
-                //将内存中的数据裁剪并写入磁盘
-                ImageHandleJobs.Param param = new ImageHandleJobs.Param().setInputStream(file.getInputStream()).setSize(150, 150).setOutQuality(1).setToFile(newFile);
-                ImageHandleJobs.addImageHandleJob(param);
+                file.transferTo(newFile);
                 //将新图片名称返回到前端
                 ajaxResultDto.setData(newFileName);
             } else {
@@ -295,15 +341,21 @@ public class AccountController {
     @RequestMapping(value = "/api/addAccount", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResultDto addAccount(@RequestBody Account account) {
-        Account existAccount = accountService.getAccountByUsername(account.getUsername());
-        if (existAccount == null) {//检测该用户是否已经注册
-            account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
-            account.setAvatarImgUrl(QexzConst.DEFAULT_AVATAR_IMG_URL);
-            account.setDescription("");
-            int accountId = accountService.addAccount(account);
-            return new AjaxResultDto().setData(accountId);
+        try {
+            Account existAccount = accountService.getAccountByUsername(account.getUsername());
+            if (existAccount == null) {//检测该用户是否已经注册
+                account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
+                account.setAvatarImgUrl(QexzConst.DEFAULT_AVATAR_IMG_URL);
+                account.setDescription("");
+                int accountId = accountService.addAccount(account);
+                return new AjaxResultDto().setData(accountId);
+            }
+            return AjaxResultDto.fixedError(QexzWebError.AREADY_EXIST_USERNAME);
+        } catch (Exception e) {
+            LOG.error("添加用户发生错误，原因：" + e);
+            return AjaxResultDto.fixedError(QexzWebError.COMMON);
         }
-        return AjaxResultDto.fixedError(QexzWebError.AREADY_EXIST_USERNAME);
+
     }
 
     /**
@@ -312,9 +364,15 @@ public class AccountController {
     @RequestMapping(value = "/api/updateManageAccount", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResultDto updateAccount(@RequestBody Account account) {
-        account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
-        boolean result = accountService.updateAccount(account);
-        return new AjaxResultDto().setData(result);
+        try {
+            account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
+            accountService.updateAccount(account);
+            return new AjaxResultDto().setData(true);
+        } catch (Exception e) {
+            LOG.error("更新用户信息失败，原因：" + e);
+            return AjaxResultDto.fixedError(QexzWebError.COMMON);
+        }
+
     }
 
     /**
@@ -323,8 +381,13 @@ public class AccountController {
     @DeleteMapping("/api/deleteAccount/{id}")
     @ResponseBody
     public AjaxResultDto deleteAccount(@PathVariable int id) {
-        boolean result = accountService.deleteAccount(id);
-        return new AjaxResultDto().setData(result);
+        try {
+            boolean result = accountService.deleteAccount(id);
+            return new AjaxResultDto().setData(result);
+        } catch (Exception e) {
+            LOG.error("删除用户失败，原因：" + e);
+            return AjaxResultDto.fixedError(QexzWebError.COMMON);
+        }
     }
 
     /**
@@ -333,8 +396,14 @@ public class AccountController {
     @RequestMapping(value = "/api/disabledAccount/{id}", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResultDto disabledAccount(@PathVariable int id) {
-        boolean result = accountService.disabledAccount(id);
-        return new AjaxResultDto().setData(result);
+        try {
+            accountService.disabledAccount(id);
+            return new AjaxResultDto().setData(true);
+        } catch (Exception e) {
+            LOG.error("封禁用户失败，原因：" + e);
+            return AjaxResultDto.fixedError(QexzWebError.COMMON);
+        }
+
     }
 
     /**
@@ -343,8 +412,14 @@ public class AccountController {
     @RequestMapping(value = "/api/abledAccount/{id}", method = RequestMethod.POST)
     @ResponseBody
     public AjaxResultDto abledAccount(@PathVariable int id) {
-        boolean result = accountService.abledAccount(id);
-        return new AjaxResultDto().setData(result);
+        try {
+            accountService.abledAccount(id);
+            return new AjaxResultDto().setData(true);
+        } catch (Exception e) {
+            LOG.error("解禁用户失败，原因：" + e);
+            return AjaxResultDto.fixedError(QexzWebError.COMMON);
+        }
+
     }
 
 }

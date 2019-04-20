@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-评论管理','manage-app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统控制台-评论管理','manage-app')"></th:block>
 
     <script type="text/javascript" th:src="@{/js/manage/manage-commentBoard.js}"></script>
     <span th:replace="/common/manage-password::header"></span>
@@ -12,13 +12,13 @@
 <div th:replace="/common/manage-password::updatePasswordModal"></div>
 
 <!--导航栏-->
-<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+<div th:replace="/common/manage-nav::manageNav"></div>
 
 <div class="container-fluid">
     <div class="row">
 
         <!--菜单项-->
-        <div th:replace="/common/manage-menu::manageMenu(${current_account},'comment')"></div>
+        <div th:replace="/common/manage-menu::manageMenu('comment')"></div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">评论管理</h1>

@@ -7,21 +7,27 @@ package com.qexz.controller;
  **********************************************
  */
 
+import com.qexz.common.QexzConst;
 import com.qexz.dto.AjaxResultDto;
 import com.qexz.dto.ComplaintDto;
+import com.qexz.exception.QexzWebError;
 import com.qexz.model.*;
 import com.qexz.service.*;
+import com.qexz.util.CommonUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 @RestController
 @RequestMapping(value = "/complaint")
 public class ComplaintController {
+
+    private static Logger LOG = LoggerFactory.getLogger(ComplaintController.class);
 
     @Autowired
     ComplaintService complaintService;
@@ -38,31 +44,43 @@ public class ComplaintController {
     @Autowired
     PostService postService;
 
+    @Autowired
+    CommentService CommentService;
+
+    @Autowired
+    ReplyService replyService;
+
 
     @RequestMapping(value = "/api/addComplaint", method = RequestMethod.POST)
     @ResponseBody
-    @Transactional
-    public AjaxResultDto addComplaint(@RequestBody Complaint complaint) {
-        Complaint complaintByUserId = complaintService.getWhichComplaintByUserId(complaint.getComplaintWhich(), complaint.getWhichId(), complaint.getUserId());
-        if (complaintByUserId == null) {
-            boolean result = complaintService.addComplaint(complaint);
-            if (result) {
-                return new AjaxResultDto().setData(result);
+    public AjaxResultDto addComplaint(HttpServletRequest request, @RequestBody Complaint complaint) {
+        try {
+            Complaint complaintByUserId = complaintService.getWhichComplaintByUserId(complaint.getComplaintWhich(), complaint.getWhichId(), complaint.getUserId());
+            if (complaintByUserId == null) {
+                complaintService.addComplaint(complaint);
+                //刷新session
+                request.getSession().setAttribute(QexzConst.CURRENT_MESSAGES, messageService.getMessageByUserId(complaint.getUserId()));
+                return new AjaxResultDto().setData(true);
+            } else {
+                return new AjaxResultDto().setMessage("已经投诉过该条信息了！");
             }
-            return new AjaxResultDto().setMessage("添加投诉信息失败！");
-        } else {
-            return new AjaxResultDto().setMessage("已经投诉过该条信息了！");
+        } catch (Exception e) {
+            LOG.error("添加投诉信息失败，原因：" + e);
+            return new AjaxResultDto().fixedError(QexzWebError.COMMON);
         }
+
     }
 
     @RequestMapping(value = "/api/deleteComplaint", method = RequestMethod.GET)
     @ResponseBody
     public AjaxResultDto deleteComplaint(@RequestParam("userId") int userId, @RequestParam("which") int which, @RequestParam("whichId") int whichId) {
-        boolean b = complaintService.deleteWhichComplaintByUserId(which, whichId, userId);
-        if (b) {
-            return new AjaxResultDto().setData(b);
+        try {
+            complaintService.deleteWhichComplaintByUserId(which, whichId, userId);
+            return new AjaxResultDto().setData(true);
+        } catch (Exception e) {
+            LOG.error("删除投诉信息失败，原因：" + e);
+            return AjaxResultDto.fixedError(QexzWebError.COMMON);
         }
-        return new AjaxResultDto().setMessage("删除投诉失败");
     }
 
     //更新投诉状态
@@ -71,55 +89,19 @@ public class ComplaintController {
     @ResponseBody
     public AjaxResultDto updateComplaint(@RequestBody ComplaintDto complaintDto) {
 
-        Account atAccount = accountService.getAccountById(complaintDto.getAtUserId());
-
-        String state = null;
-        if (complaintDto.getState() == 1) {
-            state = "失败";
-        } else if (complaintDto.getState() == 2) {
-            state = "成功";
+        try {
+            Complaint complaint = new Complaint();
+            complaint.setComplaintState(complaintDto.getState());
+            complaint.setComplaintWhich(complaintDto.getWhich());
+            complaint.setWhichId(complaintDto.getWhichId());
+            complaint.setCreateTime(complaintDto.getComplaintTime());
+            complaint.setUserId(complaintDto.getUserId());
+            complaintService.updateWhichComplaintByUserId(complaint, complaintDto.getAtUserId());
+            return new AjaxResultDto().setData(true);
+        } catch (Exception e) {
+            LOG.error("更新投诉状态信息失败，原因：" + e);
+            return AjaxResultDto.fixedError(QexzWebError.COMMON);
         }
-
-        int which = complaintDto.getWhich();
-
-        if (which == 0) {
-            Message message = new Message();
-            message.setMessageContent("你于：" + complaintDto.getComplaintTime() + "中举报用户：" + atAccount.getName() + " " + state);
-            message.setUserId(complaintDto.getUserId());
-            message.setMessageState(0);
-            messageService.addMessage(message);
-            if (complaintDto.getState() == 2) {
-                message.setMessageContent("你于：" + complaintDto.getComplaintTime() + "中被举报，请注意言行！");
-                message.setUserId(complaintDto.getAtUserId());
-                messageService.addMessage(message);
-            }
-
-        } else if (which == 1 || which == 2 || which == 3) {
-            Post post = postService.getPostById(complaintDto.getWhichId());
-            Message message = new Message();
-            if (complaintDto.getState() == 2) {
-                Notice notice = new Notice();
-                notice.setNoticeContent("用户：" + atAccount.getName() + "于 " + post.getCreateTime() + "在帖子《" + post.getTitle() + "》中有违规言行，以封禁");
-                notice.setNoticeType(1);
-                notice.setNoticeUrl("http:www.baidu.com");
-                noticeService.addNotice(notice);
-                message.setMessageContent("你于：" + complaintDto.getComplaintTime() + "在帖子《" + post.getTitle() + "》中有违规言行，请注意言行！");
-                message.setUserId(complaintDto.getAtUserId());
-                message.setMessageState(0);
-                messageService.addMessage(message);
-            }
-            message.setMessageContent("你于：" + complaintDto.getComplaintTime() + "举报帖子《" + post.getTitle() + "》" + state);
-            message.setUserId(complaintDto.getUserId());
-            messageService.addMessage(message);
-        }
-
-        boolean b = complaintService.updateWhichComplaintByUserId(which, complaintDto.getWhichId(), complaintDto.getUserId(), complaintDto.getState());
-
-        if (b) {
-            return new AjaxResultDto().setData(b);
-        }
-        return new AjaxResultDto().setMessage("更新投诉信息失败！");
-
     }
 
 }

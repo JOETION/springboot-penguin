@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-考试管理','manage-app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统控制台-考试管理','manage-app')"></th:block>
     <link type="text/css" th:href="@{/css/bootstrap-datetimepicker/bootstrap-datetimepicker.min.css}" rel="stylesheet"/>
     <script type="text/javascript" th:src="@{/js/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/manage/manage-contestBoard.js}"></script>
@@ -13,12 +13,12 @@
 <div th:replace="/common/manage-password::updatePasswordModal"></div>
 
 <!--导航栏-->
-<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+<div th:replace="/common/manage-nav::manageNav"></div>
 
 <div class="container-fluid">
     <div class="row">
         <!--菜单项-->
-        <div th:replace="/common/manage-menu::manageMenu(${current_account},'contest')"></div>
+        <div th:replace="/common/manage-menu::manageMenu('contest')"></div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">考试管理</h1>

@@ -6,11 +6,14 @@ var contestDetailPage = {
         contest: null,
         contestDetailVos: [],
         currentQuestionIndex: 0,
-        startTime:new Date().getTime()
+        startTime: new Date().getTime()
     },
     init: function (contest, contestDetailVos) {
         contestDetailPage.data.contest = contest;
         contestDetailPage.data.contestDetailVos = contestDetailVos;
+
+
+        toastr.options.positionClass = 'toast-top-center';
 
         //TODO::考试时间倒计时
         $("#contestTimeCountdown").countdown(new Date(contestDetailPage.data.contest.endTime), function (event) {
@@ -255,7 +258,7 @@ var contestDetailPage = {
             questionId = temp.id;
             questionType = temp.questionType;
             answer = temp.answer;
-            obj.answerJson.push({ "questionType": questionType,"questionId": questionId,"answer": answer});
+            obj.answerJson.push({"questionType": questionType, "questionId": questionId, "answer": answer});
         }
         return obj;
     },
@@ -308,5 +311,26 @@ var contestDetailPage = {
             window.location.href = app.URL.contestIndexUrl();
         }, 5000);
     },
+
+    //问题步进步退
+    questionStep: function (type) {
+        if (type == 0) {
+            var prev = $(".mini.ui.positive.button").prev();
+            if (prev.length==0) {
+                toastr.error("已经是第一道题了！")
+            } else {
+                prev.trigger("click");
+            }
+        }
+        else if (type == 1) {
+            var next = $(".mini.ui.positive.button").next();
+            if (next.length==0) {
+                toastr.error("已经是最后一道题了！")
+            } else {
+                next.trigger("click");
+            }
+        }
+
+    }
 
 };

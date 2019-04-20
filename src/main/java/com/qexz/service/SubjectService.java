@@ -18,4 +18,6 @@ public interface SubjectService {
     List<Subject> getSubjects();
 
     boolean deleteSubjectById(int id);
+
+    boolean updateQuestionNum(int id, int num);
 }

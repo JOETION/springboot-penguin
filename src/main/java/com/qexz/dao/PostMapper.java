@@ -21,10 +21,10 @@ public interface PostMapper {
 
     int deletePostById(@Param("id") int id);
 
-    int getCount();
+    int getCount(@Param("type")int type);
 
     //得到类型的帖子，0最新回复，1最新发表，2最热
-    List<Post> getPosts(@Param("type") int type);
+    List<Post> getPosts(@Param("level") int level,@Param("type")int type);
 
     int updateReplyNumById(@Param("id") int id, @Param("lastReplyTime") Date lastReplyTime);
 
@@ -33,5 +33,4 @@ public interface PostMapper {
     List<Post> getPostsByAuthorId(@Param("authorId") int authorId);
 
     List<Post> getPostsByIds(@Param("ids") Set<Integer> ids);
-
 }

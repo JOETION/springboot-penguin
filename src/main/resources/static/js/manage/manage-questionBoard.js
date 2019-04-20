@@ -480,7 +480,7 @@ var manageQuestionBoardPage = {
                 ,
                 success: function (result) {
                     if (result && result['success']) {
-                        toastr.success("添加成功");
+                        toastr.success("添加成功，请前往考试管理中编辑分数和难度！");
                         $("#addQuestionToContestModal").modal('hide');
                     }
                     else {

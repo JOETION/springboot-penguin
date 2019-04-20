@@ -14,6 +14,7 @@ import com.qexz.model.Answer;
 import com.qexz.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

@@ -20,11 +20,9 @@ var contestIndexPage = {
 
         //考试倒计时
         var killTime = new Date();
-        //killTime.setDate(killTime.getDate()+5);
         for (var i = 0; i < contestVos.length; i++) {
-            if (contestVos[i].state == 0) {
-                killTime = new Date(contestVos[i].startTime);
-            } else {
+            if (contestVos[i].contest.state == 0) {
+                killTime = new Date(contestVos[i].contest.startTime);
                 break;
             }
         }

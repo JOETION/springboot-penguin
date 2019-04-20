@@ -23,4 +23,6 @@ public interface ReplyMapper {
     int deleteReplyById(@Param("id") int id);
 
     List<Reply> getRepliesByIds(@Param("ids")Set<Integer> ids);
+
+    Reply getReplyById(@Param("id")int id);
 }

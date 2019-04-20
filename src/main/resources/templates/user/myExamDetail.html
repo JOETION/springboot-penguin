@@ -1,78 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('考试记录详情页','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/user/myExamDetail.css}"/>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
-
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
+<div th:replace="/common/nav::nav"></div>
 
-<div class="myMessage pushable attached ui ">
-    <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+<!--消息侧边栏-->
+<th:block th:include="/common/message::message"></th:block>
 
-    <div class="pusher">
+<div class="pusher">
 
-        <div class="ui main container">
-            <h1 class="ui red header" th:text="${contestName}" style="text-align: center"></h1>
+    <div class="ui main container">
+        <h1 class="ui red header" th:text="${contestName}" style="text-align: center"></h1>
 
-            <div class="ui container" th:each="item,itemStats:${data}">
-                <div class="ui accordion segment">
-                    <div class="title">
-                        <a href="#"><i class="dropdown icon"></i></a>
+        <div class="ui container" th:each="item,itemStats:${data}">
+            <div class="ui accordion segment">
+                <div class="title">
+                    <a href="#"><i class="dropdown icon"></i></a>
 
-                        <span class="ui tiny header" th:text="${itemStats.index+1}+'：'+${item.questionContent}+'（'+${item.questionScore}+' 分）'"></span>
-                    </div>
-
-                    <form class="content ui form segment">
-                        <div class="two stackable fields">
-                            <div class="field" th:if="${item.questionType==0}">
-                                <p th:text="'A：'+${item.optionA}">A:test是什么意思</p>
-
-                                <p th:text="'B：'+${item.optionB}">A:test是什么意思</p>
-
-                                <p th:text="'C：'+${item.optionC}">A:test是什么意思</p>
-
-                                <p th:text="'D：'+${item.optionD}">A:test是什么意思</p>
-
-                                <p th:text="'答案解析：'+${item.questionParse}">答案解析:test中文名测试</p>
-                            </div>
-
-                            <div class="field" th:if="${item.questionType==2}">
-
-                                <p th:text="'答案解析：'+${item.questionParse}">答案解析:test中文名测试</p>
-
-                                <p th:text="'老师建议：'+${item.mark}">老师建议：多读书，多看报，少吃零食多睡觉</p>
-                            </div>
-                        </div>
-                    </form>
-
-                    <div class="ui segment">
-
-                        <p th:if="${item.questionType==0} and ${item.answer} ne ${item.questionAnswer}" style="color: red" th:text="'你的答案：'+${item.answer}"></p>
-
-                        <p th:if="${item.questionType==0} and ${item.answer} eq ${item.questionAnswer}" th:text="'你的答案：'+${item.answer}">你的答案：test</p>
-
-                        <p th:if="${item.questionType==2}" th:text="'你的答案：'+${item.answer}"></p>
-
-                        <p th:text="'参考答案：'+${item.questionAnswer}">参考答案：test</p>
-                    </div>
+                    <span class="ui tiny header" th:text="${itemStats.index+1}+'：'+${item.questionContent}+'（'+${item.questionScore}+' 分）'"></span>
                 </div>
 
+                <form class="content ui form segment">
+                    <div class="two stackable fields">
+                        <div class="field" th:if="${item.questionType==0}">
+                            <p th:text="'A：'+${item.optionA}">A:test是什么意思</p>
+
+                            <p th:text="'B：'+${item.optionB}">A:test是什么意思</p>
+
+                            <p th:text="'C：'+${item.optionC}">A:test是什么意思</p>
+
+                            <p th:text="'D：'+${item.optionD}">A:test是什么意思</p>
+
+                            <p th:text="'答案解析：'+${item.questionParse}">答案解析:test中文名测试</p>
+                        </div>
+
+                        <div class="field" th:if="${item.questionType==2}">
+
+                            <p th:text="'答案解析：'+${item.questionParse}">答案解析:test中文名测试</p>
+
+                            <p th:text="'老师建议：'+${item.mark}">老师建议：多读书，多看报，少吃零食多睡觉</p>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="ui segment">
+
+                    <p th:if="${item.questionType==0} and ${item.answer} ne ${item.questionAnswer}" style="color: red" th:text="'你的答案：'+${item.answer}"></p>
+
+                    <p th:if="${item.questionType==0} and ${item.answer} eq ${item.questionAnswer}" th:text="'你的答案：'+${item.answer}">你的答案：test</p>
+
+                    <p th:if="${item.questionType==2}" th:text="'你的答案：'+${item.answer}"></p>
+
+                    <p th:text="'参考答案：'+${item.questionAnswer}">参考答案：test</p>
+                </div>
             </div>
+
         </div>
-
     </div>
-
+    <!--页脚-->
+    <th:block th:include="/common/footer::footer"></th:block>
 
 </div>
 
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 <!--$(".class1 .class2") 选择class1元素下class2的元素（中间有空格）
 $(".class1.class2") 选择同时含有class1和class2的元素（中间没有空格）

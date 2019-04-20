@@ -14,10 +14,11 @@ import com.qexz.model.ContestContent;
 import com.qexz.service.ContestContentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
+@Service("contestContent")
 public class ContestContentServiceImpl implements ContestContentService {
 
     @Autowired

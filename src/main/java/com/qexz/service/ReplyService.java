@@ -18,4 +18,6 @@ public interface ReplyService {
     boolean deleteReplyById(int id);
 
     List<Reply> getRepliesByIds(Set<Integer> ids);
+
+    Reply getReplyById(int id);
 }

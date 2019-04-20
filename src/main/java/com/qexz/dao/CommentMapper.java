@@ -24,5 +24,7 @@ public interface CommentMapper {
 
     int deleteCommentsByPostId(@Param("postId") int postId);
 
-    List<Comment> getCommentsByIds(@Param("ids")Set<Integer> ids);
+    List<Comment> getCommentsByIds(@Param("ids") Set<Integer> ids);
+
+    Comment getCommentById(@Param("id") int id);
 }

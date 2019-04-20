@@ -13,6 +13,15 @@ public class Post {
     private Date lastReplyTime;
     private int replyNum;
     private String title;
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public int getId() {
         return id;

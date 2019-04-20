@@ -8,6 +8,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -34,9 +35,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Map<String, Object> getPosts(int pageNum, int pageSize, int type) {
+    public Map<String, Object> getPosts(int pageNum, int pageSize, int level,int type) {
         Map<String, Object> data = new HashMap<>();
-        int count = postMapper.getCount();
+        int count = postMapper.getCount(type);
         if (count == 0) {
             data.put("pageNum", 0);
             data.put("pageSize", 0);
@@ -55,7 +56,7 @@ public class PostServiceImpl implements PostService {
             return data;
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Post> posts = postMapper.getPosts(type);
+        List<Post> posts = postMapper.getPosts(level,type);
         data.put("pageNum", pageNum);
         data.put("pageSize", pageSize);
         data.put("totalPageNum", totalPageNum);

@@ -3,6 +3,9 @@ package com.qexz.model;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * 要放进session中的值必须序列化，再者放进redis中的数据序列化后好取出来
+ */
 public class Account implements Serializable {
 
 
@@ -19,6 +22,9 @@ public class Account implements Serializable {
     private int state;
     private int level;
     private Date createTime;
+
+    public Account() {
+    }
 
     public int getId() {
         return id;

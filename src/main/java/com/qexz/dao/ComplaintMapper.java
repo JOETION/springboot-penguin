@@ -28,5 +28,6 @@ public interface ComplaintMapper {
 
     int deleteComplaint(@Param("which") int which, @Param("whichId") int whichId, @Param("useId") int useId);
 
-    int updateComplaint(@Param("which") int which, @Param("whichId") int whichId, @Param("userId") int userId,@Param("state")int state);
+    int updateComplaint(@Param("which") int which, @Param("whichId") int whichId, @Param("userId") int userId, @Param("state") int state);
+
 }

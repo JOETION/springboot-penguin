@@ -8,15 +8,14 @@ package com.qexz.util;
  */
 
 import com.qexz.common.QexzConst;
-import com.qexz.model.Question;
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.web.multipart.MultipartFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ import java.util.List;
  * excel读写工具类
  */
 public class POIUtil {
-    private static Logger logger = Logger.getLogger(POIUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(POIUtil.class);
 
     /**
      * 读入excel文件，解析后返回

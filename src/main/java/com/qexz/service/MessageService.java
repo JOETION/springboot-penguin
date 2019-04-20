@@ -10,8 +10,16 @@ package com.qexz.service;
 
 import com.qexz.model.Message;
 
+import java.util.List;
+
 public interface MessageService {
 
     public boolean addMessage(Message message);
+
+    public List<Message> getMessageByUserId(int userId);
+
+    public boolean updateMessageStateById(int id);
+
+    public boolean deleteMessageById(int id);
 
 }

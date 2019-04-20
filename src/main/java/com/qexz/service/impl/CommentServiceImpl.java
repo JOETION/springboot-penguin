@@ -2,10 +2,13 @@ package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.qexz.dao.CommentMapper;
+import com.qexz.dao.PostMapper;
+import com.qexz.dao.ReplyMapper;
 import com.qexz.model.Comment;
 import com.qexz.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -16,8 +19,16 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentMapper commentMapper;
 
+    @Autowired
+    PostMapper postMapper;
+
+    @Autowired
+    ReplyMapper replyMapper;
+
     @Override
+    @Transactional(rollbackFor = {Exception.class} )
     public int addComment(Comment comment) {
+        postMapper.updateReplyNumById(comment.getPostId(), new Date());
         return commentMapper.insertComment(comment);
     }
 
@@ -58,8 +69,11 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class} )
     public boolean deleteCommentById(int id) {
-        return commentMapper.deleteCommentById(id) > 0;
+        replyMapper.deleteRepliesByCommentId(id);
+        commentMapper.deleteCommentById(id);
+        return true;
     }
 
     @Override
@@ -71,5 +85,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<Comment> getCommentsByIds(Set<Integer> ids) {
         return commentMapper.getCommentsByIds(ids);
+    }
+
+    @Override
+    public Comment getCommentById(int id) {
+        return commentMapper.getCommentById(id);
     }
 }

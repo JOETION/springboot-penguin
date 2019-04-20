@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-课程管理','manage-app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统控制台-课程管理','manage-app')"></th:block>
     <script type="text/javascript" th:src="@{/js/manage/manage-subjectBoard.js}"></script>
     <span th:replace="/common/manage-password::header"></span>
 </head>
@@ -10,12 +10,12 @@
 
 <div th:replace="/common/manage-password::updatePasswordModal"></div>
 <!--导航栏-->
-<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+<div th:replace="/common/manage-nav::manageNav"></div>
 
 <div class="container-fluid">
     <div class="row">
         <!--菜单项-->
-        <div th:replace="/common/manage-menu::manageMenu(${current_account},'subject')"></div>
+        <div th:replace="/common/manage-menu::manageMenu('subject')"></div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">课程管理</h1>
 
@@ -134,7 +134,7 @@
 
     $(function () {
         app.init(contextPath);
-        manageComplaintPage.init(pageNum, pageSize, totalPageNum, totalPageSize, subjects);
+        manageSubjectBoardPage.init(pageNum, pageSize, totalPageNum, totalPageSize, subjects);
         managePasswordPage.init();
     });
     /*]]>*/

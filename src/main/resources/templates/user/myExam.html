@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/user/myExam.css}"/>
     <script type="text/javascript" th:src="@{/js/user/myExam.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
-
-
-<div class="myMessage pushable attached ui ">
+<div th:replace="/common/nav::nav"></div>
 
     <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+    <th:block th:include="/common/message::message"></th:block>
 
     <div class="pusher">
 
@@ -23,7 +20,7 @@
             <div class="ui grid">
                 <div class="four wide column">
                     <!--用户菜单-->
-                    <th:block th:include="/common/user-menu::userMenu(${current_account})"></th:block>
+                    <th:block th:include="/common/user-menu::userMenu('myExam')"></th:block>
                 </div>
                 <div class="twelve wide column">
                     <div class="ui segment">
@@ -46,7 +43,7 @@
                                         </div>
                                         <div class="event">
                                             <div class="content">
-                                                <div class="summary" th:if="${item.contest.state==3}"><a th:href="@{'/account/myExamDetail?contestId='+${item.contest.id}+'&amp;studentId='+${current_account.id}}"><i class="database icon"></i>得分&nbsp;:&nbsp;</a><span th:text="${item.grade.result}">100</span></div>
+                                                <div class="summary" th:if="${item.contest.state==3}"><a th:href="@{'/account/myExamDetail?contestId='+${item.contest.id}+'&amp;studentId='+${session.current_account.id}}"><i class="database icon"></i>得分&nbsp;:&nbsp;</a><span th:text="${item.grade.result}">100</span></div>
                                                 <div class="summary" th:if="${item.contest.state &lt; 3}"><a href="javascript:void(0);"><i class="database icon"></i>得分&nbsp;:&nbsp;</a><span>--</span></div>
                                             </div>
                                         </div>
@@ -70,13 +67,10 @@
             </div>
         </div>
 
+        <!--页脚-->
+        <th:block th:include="/common/footer::footer"></th:block>
     </div>
 
-
-</div>
-
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 <script th:inline="javascript">
     /*<![CDATA[*/

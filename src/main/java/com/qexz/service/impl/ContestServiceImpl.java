@@ -1,26 +1,35 @@
 package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.qexz.dao.ContestContentMapper;
 import com.qexz.dao.ContestMapper;
+import com.qexz.dao.QuestionMapper;
 import com.qexz.dao.SubjectMapper;
 import com.qexz.model.Contest;
+import com.qexz.model.ContestContent;
+import com.qexz.model.Question;
 import com.qexz.service.ContestService;
+import com.qexz.vo.ContestDetailVo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
 @Service("contestService")
 public class ContestServiceImpl implements ContestService {
 
-    private static Log LOG = LogFactory.getLog(ContestServiceImpl.class);
 
     @Autowired
     private ContestMapper contestMapper;
+
     @Autowired
-    private SubjectMapper subjectMapper;
+    private QuestionMapper questionMapper;
+
+    @Autowired
+    private ContestContentMapper contestContentMapper;
 
     @Override
     public int addContest(Contest contest) {
@@ -102,17 +111,43 @@ public class ContestServiceImpl implements ContestService {
     }
 
     @Override
-    public boolean updateContestScore(int contestId, int score) {
-        int i = contestMapper.updateContestScore(contestId, score);
-        if (i > 0) {
+    @Transactional(rollbackFor = {Exception.class})
+    public boolean updateContestContent(ContestDetailVo contestDetailVo) {
+        ContestContent contestContent = contestDetailVo.getContestContent();
+        questionMapper.updateQuestionById(contestDetailVo.getQuestion());
+        contestContentMapper.updateContent(contestContent);
+        //更新分数
+        this.updateContestScore(contestContent.getContestId());
+        return true;
+    }
+
+    @Override
+    public boolean updateContestStateById(int id) {
+        int row = contestMapper.updateContestStateById(id);
+        if (row > 0) {
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean updateContestStateById(int id) {
-        int row = contestMapper.updateContestStateById(id);
+    @Transactional(rollbackFor = {Exception.class})
+    public boolean addContestContent(ContestDetailVo contestDetailVo) {
+        questionMapper.insertQuestion(contestDetailVo.getQuestion());
+        ContestContent contestContent = contestDetailVo.getContestContent();
+        contestContent.setQuestionId(contestDetailVo.getQuestion().getId());
+        contestContentMapper.insertContestContent(contestContent);
+
+        //更新分数
+        this.updateContestScore(contestContent.getContestId());
+        return false;
+    }
+
+    @Override
+    public boolean updateContestScore(int contestId) {
+        //更新分数
+        int totalScore = contestContentMapper.getTotalScoreByContestId(contestId);
+        int row = contestMapper.updateContestScore(contestId, totalScore);
         if (row > 0) {
             return true;
         }

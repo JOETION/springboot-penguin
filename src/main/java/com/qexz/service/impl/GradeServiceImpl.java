@@ -1,10 +1,8 @@
 package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.qexz.dao.AnswerMapper;
-import com.qexz.dao.ContestContentMapper;
-import com.qexz.dao.ContestMapper;
-import com.qexz.dao.GradeMapper;
+import com.qexz.dao.*;
+import com.qexz.model.Answer;
 import com.qexz.model.Grade;
 import com.qexz.service.GradeService;
 import com.qexz.service.QuestionService;
@@ -12,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,23 +20,26 @@ import java.util.Map;
 @Service("gradeService")
 public class GradeServiceImpl implements GradeService {
 
-    private static Log LOG = LogFactory.getLog(GradeServiceImpl.class);
-
     @Autowired
     private GradeMapper gradeMapper;
 
     @Autowired
-    QuestionService questionService;
+    AnswerMapper answerMapper;
 
 
     @Override
-    public int addGrade(Grade grade) {
+    @Transactional(rollbackFor = {Exception.class})
+    public int addGrade(Answer answer,Grade grade) {
+        answerMapper.insertAnswer(answer);
         return gradeMapper.insertGrade(grade);
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public boolean updateGrade(Grade grade) {
-        return gradeMapper.updateGradeById(grade) > 0;
+        answerMapper.updateAnswerState(grade.getStudentId(), grade.getContestId(), 1);
+        gradeMapper.updateGradeById(grade);
+        return  true;
     }
 
     @Override

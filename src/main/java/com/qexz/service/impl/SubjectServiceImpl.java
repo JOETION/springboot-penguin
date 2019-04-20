@@ -10,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,4 +84,14 @@ public class SubjectServiceImpl implements SubjectService {
     public boolean deleteSubjectById(int id) {
         return subjectMapper.deleteSubjectById(id) > 0;
     }
+
+    @Override
+    public boolean updateQuestionNum(int id, int num) {
+        int row = subjectMapper.updateQuestionNum(id, num);
+        if (row > 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

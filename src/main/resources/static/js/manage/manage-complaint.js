@@ -105,16 +105,9 @@ var manageComplaintPage = {
     },
 
     //更新投诉信息
-    updateComplaint: function (index, state, obj) {
+    updateComplaint: function (index, state) {
 
         var complaintVo = manageComplaintPage.data.complaints[index];
-        console.log(complaintVo.which);
-        console.log(complaintVo.whichId);
-        console.log(complaintVo.userId);
-        console.log(complaintVo.atUserId);
-        console.log(complaintVo.complaintTime);
-        console.log(state);
-
 
         $.ajax({
                 url: app.URL.updateComplaintUrl(),
@@ -132,7 +125,9 @@ var manageComplaintPage = {
                 success: function (result) {
                     if (result && result['success']) {
                         toastr.success("操作成功！");
-                        $(obj).attr("disabled", "disabled");
+                        $("#complaintVo" + index + "CheckBtn").attr("disabled", "disabled");
+                        $("#complaintVo" + index + "FailBtn").attr("disabled", "disabled");
+                        $("#complaintVo" + index + "SuccessBtn").attr("disabled", "disabled");
 
                     } else {
                         toastr.error("操作失败，原因：" + result.message);

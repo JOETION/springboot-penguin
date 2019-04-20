@@ -95,7 +95,7 @@
     </select>
 
     <select id="getAllContests" resultMap="BaseResultMap">
-        SELECT * FROM t_penguin_contest
+        SELECT * FROM t_penguin_contest ORDER BY start_time DESC
     </select>
 
     <!--更新考试分数-->

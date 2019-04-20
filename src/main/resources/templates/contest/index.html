@@ -1,93 +1,91 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/contest/index.css}"/>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery.countdown/2.2.0/jquery.countdown.min.js}"></script>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/contest/index.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
+<div th:replace="/common/nav::nav"></div>
 
-<div class="myMessage pushable attached ui ">
-    <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+<!--消息侧边栏-->
+<th:block th:include="/common/message::message"></th:block>
 
-    <div class="pusher">
+<div class="pusher">
 
-        <div class="ui header container">
-            <div class="ui large breadcrumb">
-                <a class="section" th:href="@{/}"><i class="home icon"></i>首页</a>
-                <i class="right chevron icon divider"></i>
+    <div class="ui header container">
+        <div class="ui large breadcrumb">
+            <a class="section" th:href="@{/}"><i class="home icon"></i>首页</a>
+            <i class="right chevron icon divider"></i>
 
-                <div class="active section">在线考试</div>
-            </div>
+            <div class="active section">在线考试</div>
         </div>
+    </div>
 
-        <div class="ui countdownTime container">
-            <div class="red ui tiny horizontal statistic">
-                <div class="value">
-                    <i class="wait icon"></i>
-                    <span id="contest-time-countdown"></span>
-                </div>
-            </div>
-        </div>
-
-        <div class="ui contestList container">
-            <table class="ui table">
-                <thead>
-                <tr>
-                    <th class="eight wide">考试名称</th>
-                    <th class="second wide">开始时间</th>
-                    <th class="second wide">结束时间</th>
-                    <th class="second wide">考试科目</th>
-                    <th class="second wide">操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="item,itemStats : ${data['contestVos']}">
-                    <td>
-                        <span th:if="${item.contest.state == 0}" class="ui yellow ribbon label">未开始</span>
-                        <span th:if="${item.contest.state == 1 and state.get(item.contest.id)==false}" class="ui green ribbon label">进行中</span>
-                        <span th:if="${item.contest.state == 1 and state.get(item.contest.id)==true}" class="ui orange ribbon label">已交卷</span>
-                        <span th:if="${item.contest.state == 2 or item.contest.state == 3}" class="ui red ribbon label">已结束</span>
-                <span class="ui header" th:text="${item.contest.title}">
-                    广东财经大学2017年数据库原理与应用考试试题
-                </span>
-                    </td>
-                    <td><span th:text="${#dates.format(item.contest.startTime, 'yyyy-MM-dd HH:mm:ss')}">2018-1-11 09:00:00</span></td>
-                    <td><span th:text="${#dates.format(item.contest.endTime, 'yyyy-MM-dd HH:mm:ss')}">2018-1-11 11:00:00</span></td>
-                    <td><span th:text="${item.subjectName}">
-                数据库原理与应用
-            </span></td>
-                    <td>
-                        <a th:if="${item.contest.state == 0}" class="small disabled positive ui button">进入考试</a>
-                        <a th:if="${item.contest.state == 1 and current_account == null}" th:onclick="'app.showLogin()'" class="small positive ui button">进入考试</a>
-                        <a th:if="${item.contest.state == 1 and current_account != null and state.get(item.contest.id)==false}" th:onclick="'contestIndexPage.startToContestAction('+${item.contest.id}+')'" class="small positive ui button">进入考试</a>
-                        <a th:if="${item.contest.state == 1 and current_account != null and state.get(item.contest.id)==true}" class="small disabled orange ui button">以完成</a>
-                        <a th:if="${item.contest.state == 2 or item.contest.state == 3}" class="small disabled grey ui button">进入考试</a>
-
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- 分页 -->
-        <div class="ui subPage container">
-            <div class="ui pagination menu" id="subPageMenu">
+    <div class="ui countdownTime container">
+        <div class="red ui tiny horizontal statistic">
+            <div class="value">
+                <i class="wait icon"></i>
+                <span id="contest-time-countdown"></span>
             </div>
         </div>
     </div>
 
+    <div class="ui contestList container">
+        <table class="ui table">
+            <thead>
+            <tr>
+                <th class="eight wide">考试名称</th>
+                <th class="second wide">开始时间</th>
+                <th class="second wide">结束时间</th>
+                <th class="second wide">考试科目</th>
+                <th class="second wide">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item,itemStats : ${data['contestVos']}">
+                <td>
+                    <span th:if="${item.contest.state == 0}" class="ui yellow ribbon label">未开始</span>
+                    <span th:if="${item.contest.state == 1 and state.get(item.contest.id)==false}" class="ui green ribbon label">进行中</span>
+                    <span th:if="${item.contest.state == 1 and state.get(item.contest.id)==true}" class="ui orange ribbon label">已交卷</span>
+                    <span th:if="${item.contest.state == 2 or item.contest.state == 3}" class="ui red ribbon label">已结束</span>
+                <span class="ui header" th:text="${item.contest.title}">
+                    广东财经大学2017年数据库原理与应用考试试题
+                </span>
+                </td>
+                <td><span th:text="${#dates.format(item.contest.startTime, 'yyyy-MM-dd HH:mm:ss')}">2018-1-11 09:00:00</span></td>
+                <td><span th:text="${#dates.format(item.contest.endTime, 'yyyy-MM-dd HH:mm:ss')}">2018-1-11 11:00:00</span></td>
+                <td><span th:text="${item.subjectName}">
+                数据库原理与应用
+            </span></td>
+                <td>
+                    <a th:if="${item.contest.state == 0}" class="small disabled positive ui button">进入考试</a>
+                    <a th:if="${item.contest.state == 1 and session.current_account == null}" th:onclick="'app.showLogin()'" class="small positive ui button">进入考试</a>
+                    <a th:if="${item.contest.state == 1 and session.current_account != null and state.get(item.contest.id)==false}" th:onclick="'contestIndexPage.startToContestAction('+${item.contest.id}+')'" class="small positive ui button">进入考试</a>
+                    <a th:if="${item.contest.state == 1 and session.current_account != null and state.get(item.contest.id)==true}" class="small disabled orange ui button">以完成</a>
+                    <a th:if="${item.contest.state == 2 or item.contest.state == 3}" class="small disabled grey ui button">进入考试</a>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 分页 -->
+    <div class="ui subPage container">
+        <div class="ui pagination menu" id="subPageMenu">
+        </div>
+    </div>
+
+    <!--页脚-->
+    <th:block th:include="/common/footer::footer"></th:block>
 </div>
 
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 <!-- 登录模态框 -->
 <div th:replace="/common/login::login"></div>

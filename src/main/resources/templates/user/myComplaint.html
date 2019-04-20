@@ -1,66 +1,60 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/user/myDiscussPost.css}"/>
     <script type="text/javascript" th:src="@{/js/user/myDiscussPost.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
+<div th:replace="/common/nav::nav"></div>
+
+<!--消息侧边栏-->
+<th:block th:include="/common/message::message"></th:block>
 
 
-<div class="myMessage pushable attached ui ">
+<div class="pusher">
 
-    <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+    <div class="ui main container">
+        <div class="ui grid">
+            <div class="four wide column">
+                <!--用户菜单-->
+                <th:block th:include="/common/user-menu::userMenu('myComplaint')"></th:block>
+            </div>
+            <div class="twelve wide column">
+                <div class="ui segment">
+                    <h4 class="ui dividing header">我的投诉</h4>
+                    <!-- 列表项 -->
+                    <div class="ui divided items">
+                        <div class="item" th:each="item,itemStats : ${data['complaints']}">
+                            <div class="content">
+                                <a th:href="@{'/discuss/'+${item.id}}" class="header" th:text="${item.title}">各位拿到机器学习、数据挖掘Offer的大佬们,是怎么学习的？</a>
 
+                                <div class="extra">
+                                    <span class="right floated" th:text="'发布于: '+${#dates.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}">发布于: 2018-01-11 15:30:09</span>
 
-    <div class="pusher">
-
-        <div class="ui main container">
-            <div class="ui grid">
-                <div class="four wide column">
-                    <!--用户菜单-->
-                    <th:block th:include="/common/user-menu::userMenu(${current_account})"></th:block>
-                </div>
-                <div class="twelve wide column">
-                    <div class="ui segment">
-                        <h4 class="ui dividing header">我的投诉</h4>
-                        <!-- 列表项 -->
-                        <div class="ui divided items">
-                            <div class="item" th:each="item,itemStats : ${data['posts']}">
-                                <div class="content">
-                                    <a th:href="@{'/discuss/'+${item.id}}" class="header" th:text="${item.title}">各位拿到机器学习、数据挖掘Offer的大佬们,是怎么学习的？</a>
-
-                                    <div class="extra">
-                                        <span class="right floated" th:text="'发布于: '+${#dates.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}">发布于: 2018-01-11 15:30:09</span>
-
-                                        <div class="ui label"><i class="talk outline icon"></i><span th:text="${item.replyNum}">23</span></div>
-                                    </div>
+                                    <div class="ui label"><i class="talk outline icon"></i><span th:text="${item.replyNum}">23</span></div>
                                 </div>
                             </div>
                         </div>
-                        <!-- 分页 -->
-                        <div class="ui container">
-                            <div class="ui pagination menu" id="subPageMenu">
-                            </div>
+                    </div>
+                    <!-- 分页 -->
+                    <div class="ui container">
+                        <div class="ui pagination menu" id="subPageMenu">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-
     </div>
 
+    <!--页脚-->
+    <th:block th:include="/common/footer::footer"></th:block>
 
 </div>
 
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 <script th:inline="javascript">
     /*<![CDATA[*/

@@ -6,31 +6,37 @@
 </head>
 <body>
 
-<div th:fragment="manageMenu(current_account,which)" class="col-sm-3 col-md-2 sidebar">
+<div th:fragment="manageMenu(which)" class="col-sm-3 col-md-2 sidebar">
     <ul class="nav nav-sidebar">
         <li th:if="${which ne 'contest'}"><a th:href="@{/manage/contest/list}"><i class="fa fa-tv"></i>&nbsp;考试管理</a></li>
-        <li th:if="${which eq 'contest'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;考试管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${which eq 'contest'}" class="active"><a href="#"><i class="fa fa-tv"></i>&nbsp;考试管理<span class="sr-only">(current)</span></a></li>
 
         <li th:if="${which ne 'question'}"><a th:href="@{/manage/question/list}"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;题目管理</a></li>
-        <li th:if="${which eq 'question'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;题目管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${which eq 'question'}" class="active"><a href="#"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;题目管理<span class="sr-only">(current)</span></a></li>
 
-        <li th:if="${current_account.level eq 2} and ${which ne 'subject'}"><a th:href="@{/manage/subject/list}"><span class="glyphicon glyphicon-book"></span>&nbsp;课程管理</a></li>
-        <li th:if="${current_account.level eq 2} and ${which eq 'subject'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;课程管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${session.current_account.level eq 2} and ${which ne 'subject'}"><a th:href="@{/manage/subject/list}"><span class="glyphicon glyphicon-book"></span>&nbsp;课程管理</a></li>
+        <li th:if="${session.current_account.level eq 2} and ${which eq 'subject'}" class="active"><a href="#"><i class="glyphicon glyphicon-book"></i>&nbsp;课程管理<span class="sr-only">(current)</span></a></li>
 
         <li th:if="${which ne 'result'}"><a th:href="@{/manage/result/contest/list}"><span class="glyphicon glyphicon-signal"></span>&nbsp;成绩管理</a></li>
-        <li th:if="${which eq 'result'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;成绩管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${which eq 'result'}" class="active"><a href="#"><i class="glyphicon glyphicon-signal"></i>&nbsp;成绩管理<span class="sr-only">(current)</span></a></li>
 
-        <li th:if="${current_account.level eq 2} and ${which ne 'account'}"><a th:href="@{/manage/account/list}"><span class="glyphicon glyphicon-user"></span>&nbsp;用户管理</a></li>
-        <li th:if="${current_account.level eq 2} and ${which eq 'account'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;用户管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${session.current_account.level eq 2} and ${which ne 'account'}"><a th:href="@{/manage/account/list}"><span class="glyphicon glyphicon-user"></span>&nbsp;用户管理</a></li>
+        <li th:if="${session.current_account.level eq 2} and ${which eq 'account'}" class="active"><a href="#"><i class="glyphicon glyphicon-user"></i>&nbsp;用户管理<span class="sr-only">(current)</span></a></li>
 
-        <li th:if="${current_account.level eq 2} and  ${which ne 'post'}"><a th:href="@{/manage/post/list}"><i class="fa fa-paper-plane"></i>&nbsp;帖子管理</a></li>
-        <li th:if="${current_account.level eq 2} and  ${which eq 'post'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;帖子管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${session.current_account.level eq 2} and  ${which ne 'post'}"><a th:href="@{/manage/post/list}"><i class="fa fa-paper-plane"></i>&nbsp;帖子管理</a></li>
+        <li th:if="${session.current_account.level eq 2} and  ${which eq 'post'}" class="active"><a href="#"><i class="fa fa-paper-plane"></i>&nbsp;帖子管理<span class="sr-only">(current)</span></a></li>
 
-        <li th:if="${current_account.level eq 2} and  ${which ne 'comment'}"><a th:href="@{/manage/comment/list}"><i class="fa fa-commenting-o"></i>&nbsp;评论管理</a></li>
-        <li th:if="${current_account.level eq 2} and  ${which eq 'comment'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;评论管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${session.current_account.level eq 2} and  ${which ne 'comment'}"><a th:href="@{/manage/comment/list}"><i class="fa fa-commenting-o"></i>&nbsp;评论管理</a></li>
+        <li th:if="${session.current_account.level eq 2} and  ${which eq 'comment'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;评论管理<span class="sr-only">(current)</span></a></li>
 
-        <li th:if="${current_account.level eq 2} and  ${which ne 'complaint'}"><a th:href="@{/manage/complaint/list}"><i class="fa fa-commenting-o"></i>&nbsp;投诉管理</a></li>
-        <li th:if="${current_account.level eq 2} and  ${which eq 'complaint'}" class="active"><a href="#"><i class="fa fa-commenting-o"></i>&nbsp;投诉管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${session.current_account.level eq 2} and  ${which ne 'complaint'}"><a th:href="@{/manage/complaint/list}"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;投诉管理</a></li>
+        <li th:if="${session.current_account.level eq 2} and  ${which eq 'complaint'}" class="active"><a href="#"><i class="glyphicon glyphicon-info-sign"></i>&nbsp;投诉管理<span class="sr-only">(current)</span></a></li>
+
+        <li th:if="${session.current_account.level eq 2} and  ${which ne 'notice'}"><a th:href="@{/manage/notice/list}"><i class="glyphicon glyphicon-comment"></i>&nbsp;公告管理<span class="sr-only">(current)</span></a></li>
+        <li th:if="${session.current_account.level eq 2} and  ${which eq 'notice'}" class="active"><a href="#"><i class="glyphicon glyphicon-comment"></i>&nbsp;公告管理<span class="sr-only">(current)</span></a></li>
+
+
+
 
     </ul>
 </div>

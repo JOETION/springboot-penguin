@@ -4,16 +4,17 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.ErrorPage;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpStatus;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.nio.channels.SocketChannel;
 import java.util.Date;
 
 @SpringBootApplication
-@EnableScheduling
+@EnableTransactionManagement
+@ServletComponentScan
 public class Application {
 
     public static void main(String[] args) {
@@ -48,4 +49,5 @@ public class Application {
             container.addErrorPages(error404Page);
         });
     }
+
 }

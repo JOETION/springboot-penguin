@@ -27,7 +27,6 @@ var profilePage = {
          */
         $('#updateAccountErrorMessage,.close').on('click', function () {
             $(this).closest('#updateAccountErrorMessage').transition('fade');
-            //$('#updateAccountErrorMessage').addClass('hidden');
         });
     },
     /**
@@ -39,6 +38,7 @@ var profilePage = {
             $('#updateAccountErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
                 '                <p>' + '手机号码不能为空' + '</p>');
             $('#updateAccountErrorMessage').removeClass('hidden');
+            toastr.error("手机号码不能为空");
             return false;
         }
         if (qq == null || qq == ''
@@ -46,6 +46,7 @@ var profilePage = {
             $('#updateAccountErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
                 '                <p>' + 'QQ不能为空' + '</p>');
             $('#updateAccountErrorMessage').removeClass('hidden');
+            toastr.error("QQ不能为空");
             return false;
         }
         if (email == null || email == ''
@@ -53,6 +54,7 @@ var profilePage = {
             $('#updateAccountErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
                 '                <p>' + '邮箱地址不能为空' + '</p>');
             $('#updateAccountErrorMessage').removeClass('hidden');
+            toastr.error("邮箱地址不能为空");
             return false;
         }
         if (description == null || description == ''
@@ -74,10 +76,6 @@ var profilePage = {
         var email = $('#myEmail').val();
         var description = $('#myDescription').val();
         var avatarImgUrl = $('#myAvatarImgUrl').val();
-        if (avatarImgUrl == null || avatarImgUrl == ''
-            || avatarImgUrl.replace(/(^s*)|(s*$)/g, "").length == 0) {
-            avatarImgUrl = 'headimg_placeholder.png';
-        }
         if (profilePage.checkProfile(phone, qq, email, description, avatarImgUrl)) {
             //调用后端API
             $.post(app.URL.updateAccountUrl(), {
@@ -95,6 +93,7 @@ var profilePage = {
                         window.location.reload();
                     }, 2000);
                 } else {
+                    toastr.error("更新用户信息失败，原因：" + result.message);
                     $('#updateAccountErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
                         '                <p>' + result.message + '</p>');
                     $('#updateAccountErrorMessage').removeClass('hidden');
@@ -125,6 +124,7 @@ var profilePage = {
                             $('#myAvatarImgUrl').val(result.data);
                             $('#avatarImgPreview').attr("src", app.URL.uploadImageUrl() + result.data);
                         } else {
+                            toastr.error("上传头像失败，原因：" + result.message);
                             $('#updateAccountErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
                                 '                <p>' + result.message + '</p>');
                             $('#updateAccountErrorMessage').removeClass('hidden');
@@ -133,14 +133,16 @@ var profilePage = {
                     }
                 });
             } else {
+                toastr.error("请确保文件大小在 100kb 以内");
                 $('#updateAccountErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
                     '                <p>请确保文件大小在 100kb 以内</p>');
                 $('#updateAccountErrorMessage').removeClass('hidden');
             }
 
         } else {
+            toastr.error("上传文件类型错误,支持类型: .jpg .png");
             $('#updateAccountErrorMessage').html('<i class="close icon"></i><div class="header">错误提示</div>\n' +
-                '                <p>*上传文件类型错误,支持类型: .jpg .png</p>');
+                '                <p>上传文件类型错误,支持类型: .jpg .png</p>');
             $('#updateAccountErrorMessage').removeClass('hidden');
         }
     }

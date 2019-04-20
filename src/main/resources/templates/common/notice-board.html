@@ -6,16 +6,20 @@
 </head>
 <body>
 
-<div th:fragment="noticeBoard">
+<div th:fragment="noticeBoard(notices)">
     <div class="ui segment">
         <div class="ui dividing header">
             <i class="sticky note icon"></i>公告栏
         </div>
         <div class="ui">
-            <p>用户方孝勇于2018年10月20日在帖子《大学生考研究生有用吗？》有违规言论，已封禁</p>
-            <p>用户方孝勇于2018年10月20日在帖子《大学生考研究生有用吗？》有违规言论，已封禁</p>
-            <p>用户方孝勇于2018年10月20日在帖子《大学生考研究生有用吗？》有违规言论，已封禁</p>
-            <p>用户方孝勇于2018年10月20日在帖子《大学生考研究生有用吗？》有违规言论，已封禁</p>
+
+            <th:block th:each="item,itemStatus:${notices}">
+                <p th:if="${item.noticeType==0}" style="color: red" th:text="${item.noticeContent}"></p>
+
+                <p th:if="${item.noticeType!=0}" th:text="${item.noticeContent}"></p>
+            </th:block>
+
+
         </div>
         <div style="margin-top: 30px" align="right">
             <button class="ui blue basic primary button">查看更多</button>

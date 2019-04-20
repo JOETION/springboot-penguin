@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-考试管理','manage-app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统控制台-考试管理','manage-app')"></th:block>
     <script type="text/javascript" th:src="@{/js/manage/manage-questionBoard.js}"></script>
     <span th:replace="/common/manage-password::header"></span>
 </head>
@@ -106,14 +106,14 @@
 
 
 <!--导航栏-->
-<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+<div th:replace="/common/manage-nav::manageNav"></div>
 
 
 <div class="container-fluid">
     <div class="row">
 
         <!--菜单项-->
-        <div th:replace="/common/manage-menu::manageMenu(${current_account},'question')"></div>
+        <div th:replace="/common/manage-menu::manageMenu('question')"></div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">题目管理</h1>
 
@@ -155,8 +155,8 @@
                         <td th:if="${item.questionType == 2}">问答</td>
                         <td th:if="${item.questionType == 3}">编程</td>
                         <td>
-                            <button type="button" class="btn btn-primary btn-xs" th:if="${current_account.level eq 2}" th:onclick="'manageQuestionBoardPage.updateQuestionModalAction('+${itemStats.index}+')'"><i class="fa fa-edit"></i> 编辑</button>
-                            <button type="button" class="btn btn-danger btn-xs" th:if="${current_account.level eq 2}" th:onclick="'manageQuestionBoardPage.deleteQuestionAction('+${item.id}+')'"><i class="fa fa-trash"></i> 删除</button>
+                            <button type="button" class="btn btn-primary btn-xs" th:if="${session.current_account.level eq 2}" th:onclick="'manageQuestionBoardPage.updateQuestionModalAction('+${itemStats.index}+')'"><i class="fa fa-edit"></i> 编辑</button>
+                            <button type="button" class="btn btn-danger btn-xs" th:if="${session.current_account.level eq 2}" th:onclick="'manageQuestionBoardPage.deleteQuestionAction('+${item.id}+')'"><i class="fa fa-trash"></i> 删除</button>
                             <button type="button" class="btn btn-success btn-xs" th:onclick="'manageQuestionBoardPage.openAddQuestionToContestModal('+${item.id}+')'"><i class="fa fa-plus-square"></i> 添加到考试</button>
                         </td>
                     </tr>

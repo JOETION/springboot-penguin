@@ -3,7 +3,7 @@ body {
 }
 
 body, html {
-    height: inherit;
+    height: 100%;
 }
 
 .main.container {

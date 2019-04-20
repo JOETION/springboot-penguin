@@ -19,4 +19,6 @@ public interface CommentService {
     boolean deleteCommentsByPostId(int post);
 
     List<Comment> getCommentsByIds(Set<Integer> ids);
+
+    Comment getCommentById(int id);
 }

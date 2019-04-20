@@ -5,6 +5,7 @@ import com.qexz.model.Reply;
 import com.qexz.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -55,5 +56,10 @@ public class ReplyServiceImpl implements ReplyService {
     @Override
     public List<Reply> getRepliesByIds(Set<Integer> ids) {
         return replyMapper.getRepliesByIds(ids);
+    }
+
+    @Override
+    public Reply getReplyById(int id) {
+        return replyMapper.getReplyById(id);
     }
 }

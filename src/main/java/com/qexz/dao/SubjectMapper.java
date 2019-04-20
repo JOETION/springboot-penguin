@@ -22,4 +22,6 @@ public interface SubjectMapper {
     List<Subject> getSubjects();
 
     int deleteSubjectById(@Param("id") int id);
+
+    int updateQuestionNum(@Param("id")int id,@Param("num")long num);
 }

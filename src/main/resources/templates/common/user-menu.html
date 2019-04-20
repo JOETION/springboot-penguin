@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div th:fragment="userMenu(current_account)">
+<div th:fragment="userMenu(which)">
 
     <div class="row">
         <div class="ui card">
@@ -20,48 +20,76 @@
                         </div>
                     </div>
                 </div>
-                <img th:src="@{'/upload/images/'+${current_account.avatarImgUrl}}"/>
+                <img th:src="@{'/upload/images/'+${session.current_account.avatarImgUrl}}"/>
             </div>
             <div class="content">
-                <div class="header" th:text="${current_account.name}"></div>
+                <div class="header" th:text="${session.current_account.name}"></div>
                 <div class="meta">
                     <!--<a class="group">信息学院</a>-->
                     <div class="group">
                         <i class="student icon"></i>信息学院
                     </div>
                 </div>
-                <div class="description" th:text="${current_account.description}"></div>
+                <div class="description" th:text="${session.current_account.description}"></div>
             </div>
         </div>
     </div>
     <div class="row" style="margin-top: 1em;">
         <div class="ui card">
-            <div class="content">
+
+            <div class="content" th:if="${which=='profile'}">
+                <a th:href="@{/account/profile}">
+                    <i class="user icon"></i>个人信息
+                </a>
+                <i class="pointing left icon"></i>
+            </div>
+
+            <div class="content" th:if="${which!='profile'}">
                 <a th:href="@{/account/profile}">
                     <i class="user icon"></i>个人信息
                 </a>
             </div>
-            <div class="content">
+
+
+            <div class="content" th:if="${which=='password'}">
                 <a th:href="@{/account/password}">
                     <i class="edit icon"></i>更改密码
                 </a>
                 <i class="pointing left icon"></i>
             </div>
-            <div class="content">
+
+            <div class="content" th:if="${which!='password'}">
+                <a th:href="@{/account/password}">
+                    <i class="edit icon"></i>更改密码
+                </a>
+            </div>
+
+
+            <div class="content" th:if="${which=='myExam'}">
+                <a th:href="@{/account/myExam}">
+                    <i class="history icon"></i>考试记录
+                </a>
+                <i class="pointing left icon"></i>
+            </div>
+
+            <div class="content" th:if="${which!='myExam'}">
                 <a th:href="@{/account/myExam}">
                     <i class="history icon"></i>考试记录
                 </a>
             </div>
-            <div class="content">
+
+            <div class="content" th:if="${which=='myDiscussPost'}">
+                <a th:href="@{/account/myDiscussPost}">
+                    <i class="talk icon"></i>我的发帖
+                </a>
+                <i class="pointing left icon"></i>
+            </div>
+            <div class="content" th:if="${which!='myDiscussPost'}">
                 <a th:href="@{/account/myDiscussPost}">
                     <i class="talk icon"></i>我的发帖
                 </a>
             </div>
-            <div class="content">
-                <a th:href="@{/account/myComplaint}">
-                    <i class="talk icon"></i>我的投诉
-                </a>
-            </div>
+
         </div>
     </div>
 

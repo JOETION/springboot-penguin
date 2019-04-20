@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/problem/problemset.css}"/>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery.countdown/2.2.0/jquery.countdown.min.js}"></script>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/problem/problemset.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
-
-<div class="myMessage pushable attached ui ">
+<div th:replace="/common/nav::nav"></div>
 
     <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+    <th:block th:include="/common/message::message"></th:block>
 
     <div class="pusher">
 
@@ -43,8 +41,8 @@
 
                         <div class="content">
                             <div class="header">
-                                <a th:if="${current_account != null}" th:href="@{'/problemset/'+${item.id}+'/problems'}" th:text="${item.name}">计算机组成原理</a>
-                                <a th:if="${current_account == null}" th:onclick="'app.showLogin()'" th:text="${item.name}">计算机组成原理</a>
+                                <a th:if="${session.current_account != null}" th:href="@{'/problemset/'+${item.id}+'/problems'}" th:text="${item.name}">计算机组成原理</a>
+                                <a th:if="${session.current_account == null}" th:onclick="'app.showLogin()'" th:text="${item.name}">计算机组成原理</a>
                             </div>
                             <p class="meta">
                                 <i class="user icon"></i>
@@ -72,13 +70,10 @@
             </div>
         </div>
 
+        <!--页脚-->
+        <th:block th:include="/common/footer::footer"></th:block>
     </div>
 
-
-</div>
-
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 <!-- 登录模态框 -->
 <div th:replace="/common/login::login"></div>

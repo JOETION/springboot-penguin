@@ -3,7 +3,7 @@
  **/
 var manageResultStudentBoardPage = {
         data: {
-            contest: "",
+            contest: null,
             questions: [],
             contestRankVos: [],
             answer: [],
@@ -74,20 +74,20 @@ var manageResultStudentBoardPage = {
             //输入框初始化数据
             manageResultStudentBoardPage.initGradeModal(index);
 
-            var contestResultDto = manageResultStudentBoardPage.data.contestRankVos[index];
+            var contestRankVo = manageResultStudentBoardPage.data.contestRankVos[index];
             //第0号选项用于保存学生编号和考试结果索引
-            var accountId = contestResultDto.account.id;
+            var accountId = contestRankVo.account.id;
             var questions = manageResultStudentBoardPage.data.questions;
             var text;
-            document.getElementById("gradeTitle").innerHTML = contestResultDto.account.name + "的主观题答题卡 (每批完一道题保存，批完所有题提交)";
+            document.getElementById("gradeTitle").innerHTML = contestRankVo.account.name + "的主观题答题卡 (每批完一道题保存，批完所有题提交)";
             $("#selectContest").append("<option value='" + accountId + "'name='" + index + "'>请选择</option>");
             for (var i = 0; i < questions.length; i++) {
-                if (manageResultStudentBoardPage.isExistAnswer(accountId, contestResultDto.grade.contestId, questions[i].id)) {
+                if (manageResultStudentBoardPage.isExistAnswer(accountId, contestRankVo.grade.contestId, questions[i].id)) {
                     text = "第 " + (i + 1) + " 道题  以批阅";
                 } else {
                     text = "第 " + (i + 1) + " 道题";
                 }
-                $("#selectContest").append("<option value='" + questions[i].id + "'name='" + contestResultDto.grade.contestId + "'>" + text + "</option>");
+                $("#selectContest").append("<option value='" + questions[i].id + "'name='" + contestRankVo.grade.contestId + "'>" + text + "</option>");
             }
             $("#updateGradeModal").modal({
                 keyboard: false,
@@ -139,9 +139,9 @@ var manageResultStudentBoardPage = {
             $("#grade").val("");
             $("#gradeReason").val("");
             var index = document.getElementById("selectContest").options[0].getAttribute("name");
-            var contestResultDto = manageResultStudentBoardPage.data.contestRankVos[index];
-            var manulQuestions = contestResultDto.answerDto.answerContents;
-            var accountId = contestResultDto.account.id;
+            var contestRankVo = manageResultStudentBoardPage.data.contestRankVos[index];
+            var manulQuestions = contestRankVo.answerVo.answerContents;
+            var accountId = contestRankVo.account.id;
             for (var i = 0; i < manulQuestions.length; i++) {
                 if (manulQuestions[i].questionId == questionId) {
                     //40个字一行，60px
@@ -251,23 +251,32 @@ var manageResultStudentBoardPage = {
 
 //完成考试批改ajax
         finishContestAction: function (contestId) {
-            $.ajax({
-                url: app.URL.finishContestUrl() + contestId,
-                type: "POST",
-                dataType: "json",
-                contentType: "application/json;charset=UTF-8",
-                success: function (result) {
-                    if (result && result['success']) {
-                        // 验证通过 刷新页面
-                        window.location.reload();
-                    } else {
+            var buttons = $(".btn.btn-primary.btn-xs");
+            if (buttons.length!=0) {
+                toastr.error("请批完所有试题在进行完成批改操作！");
+            }
+            else {
+
+                $.ajax({
+                    url: app.URL.finishContestUrl() + contestId,
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json;charset=UTF-8",
+                    success: function (result) {
+                        if (result && result['success']) {
+                            // 验证通过 刷新页面
+                            window.location.reload();
+                        } else {
+                            toastr.error("提交失败，原因：" + result.message);
+                        }
+                    },
+                    error: function (result) {
                         toastr.error("提交失败，原因：" + result.message);
                     }
-                },
-                error: function (result) {
-                    toastr.error("提交失败，原因：" + result.message);
-                }
-            });
+                });
+            }
+
+
         },
 
         //table排序

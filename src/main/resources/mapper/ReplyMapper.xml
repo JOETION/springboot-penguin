@@ -25,24 +25,27 @@
         SELECT
         *
         FROM t_penguin_reply
-        WHERE post_id = #{postId}
+        WHERE post_id = #{postId} AND deleted=0
         ORDER BY create_time ASC
     </select>
 
-    <delete id="deleteRepliesByPostId" parameterType="int">
-        DELETE FROM t_penguin_reply
+    <update id="deleteRepliesByPostId" parameterType="int">
+        UPDATE t_penguin_reply
+        SET deleted=1
         WHERE post_id=#{postId}
-    </delete>
+    </update>
 
-    <delete id="deleteRepliesByCommentId" parameterType="int">
-        DELETE FROM t_penguin_reply
-        WHERE  comment_id=#{commentId}
-    </delete>
+    <update id="deleteRepliesByCommentId" parameterType="int">
+        UPDATE t_penguin_reply
+        SET deleted=1
+        WHERE comment_id=#{commentId}
+    </update>
 
-    <delete id="deleteReplyById" parameterType="int">
-        DELETE FROM t_penguin_reply
+    <update id="deleteReplyById" parameterType="int">
+        UPDATE t_penguin_reply
+        SET deleted=1
         WHERE id=#{id}
-    </delete>
+    </update>
 
     <select id="getRepliesByIds" resultMap="BaseResultMap">
         SELECT * FROM t_penguin_reply
@@ -53,6 +56,11 @@
                 #{id1}
             </foreach>
         </if>
+    </select>
+
+    <select id="getReplyById" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_reply
+        WHERE id=#{id}
     </select>
 
 </mapper>

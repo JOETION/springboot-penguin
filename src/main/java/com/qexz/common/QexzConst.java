@@ -5,6 +5,7 @@ public class QexzConst {
 
     // Session
     public final static String CURRENT_ACCOUNT = "current_account";
+    public final static String CURRENT_MESSAGES="messages";
 
     //excel后缀
     public static final String EXCEL_XLS_SUFFIX = ".xls";
@@ -22,6 +23,7 @@ public class QexzConst {
     public static final int postPageSize = 8;
     public static final int gradePageSize = 12;
     public static final int commentPageSize = 16;
+    public static final int complaintPageSize = 8;
 
     //MD5加盐
     public static final String MD5_SALT = "qexz";

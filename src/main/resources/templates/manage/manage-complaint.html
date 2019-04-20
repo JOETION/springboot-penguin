@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-投诉管理','manage-app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统控制台-投诉管理','manage-app')"></th:block>
     <script type="text/javascript" th:src="@{/js/manage/manage-complaint.js}"></script>
     <span th:replace="/common/manage-password::header"></span>
 </head>
@@ -10,12 +10,12 @@
 <div th:replace="/common/manage-password::updatePasswordModal"></div>
 
 <!--导航栏-->
-<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+<div th:replace="/common/manage-nav::manageNav"></div>
 
 <div class="container-fluid">
     <div class="row">
         <!--菜单项-->
-        <div th:replace="/common/manage-menu::manageMenu(${current_account},'complaint')"></div>
+        <div th:replace="/common/manage-menu::manageMenu('complaint')"></div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <h1 class="page-header">投诉管理</h1>
@@ -77,15 +77,16 @@
                         <td th:text="${#dates.format(item.complaintTime, 'yyyy-MM-dd HH:mm:ss')}">2018年/10月/20日</td>
 
                         <td>
-                            <button type="button" class="btn btn-danger btn-xs" th:if="${item.state==0}" th:onclick="'manageComplaintPage.cloudCheck('+${itemStats.index}+')'"><i class="fa fa-eye-slash"></i>云检测</button>
+                            <button type="button" class="btn btn-info btn-xs" th:if="${item.state==0}" th:id="'complaintVo'+${itemStats.index}+'CheckBtn'" th:onclick="'manageComplaintPage.cloudCheck('+${itemStats.index}+')'"><i class="fa fa-eye-slash"></i>云检测</button>
+                            <button type="button" class="btn btn-info btn-xs" th:if="${item.state!=0}" disabled="disabled"><i class="fa fa-eye-slash"></i>云检测</button>
 
                             <!--投诉成功将删除对应内容，数据库里可能需要添加内容的状态-->
                             <!--投诉成功或失败需要发消息给用户-->
-                            <button type="button" class="btn btn-info btn-xs" th:if="${item.state==0}" th:onclick="'manageComplaintPage.updateComplaint('+${itemStats.index}+',1,this)'"><i class="fa fa-eye"></i>失败</button>
-                            <button type="button" class="btn btn-info btn-xs" th:if="${item.state!=0}" disabled="disabled"><i class="fa fa-eye"></i>失败</button>
+                            <button type="button" class="btn btn-danger btn-xs" th:if="${item.state==0}" th:id="'complaintVo'+${itemStats.index}+'FailBtn'" th:onclick="'manageComplaintPage.updateComplaint('+${itemStats.index}+',1)'"><i class="fa fa-eye"></i>失败</button>
+                            <button type="button" class="btn btn-danger btn-xs" th:if="${item.state!=0}" disabled="disabled"><i class="fa fa-eye"></i>失败</button>
 
 
-                            <button type="button" class="btn btn-primary btn-xs" th:if="${item.state==0}" th:onclick="'manageComplaintPage.updateComplaint('+${itemStats.index}+',2,this)'"><i class="fa fa-edit"></i>成功</button>
+                            <button type="button" class="btn btn-primary btn-xs" th:if="${item.state==0}" th:id="'complaintVo'+${itemStats.index}+'SuccessBtn'" th:onclick="'manageComplaintPage.updateComplaint('+${itemStats.index}+',2)'"><i class="fa fa-edit"></i>成功</button>
                             <button type="button" class="btn btn-primary btn-xs" th:if="${item.state!=0}" disabled="disabled"><i class="fa fa-edit"></i>成功</button>
                         </td>
                     </tr>

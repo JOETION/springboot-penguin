@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-成绩管理','manage-app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统控制台-成绩管理','manage-app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/manage/manage-resultStudentBoard.css}"/>
 
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery.tablesorter/2.31.1/js/jquery.tablesorter.js}"></script>
@@ -11,12 +11,12 @@
 
 <body>
 <!--导航栏-->
-<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+<div th:replace="/common/manage-nav::manageNav"></div>
 
 <div class="container-fluid">
     <div class="row">
         <!--菜单项-->
-        <div th:replace="/common/manage-menu::manageMenu(${current_account},'result')"></div>
+        <div th:replace="/common/manage-menu::manageMenu('result')"></div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <!--<h1 class="page-header">考试管理</h1>-->
@@ -111,7 +111,7 @@
                             <label class="col-sm-2 control-label">题干</label>
 
                             <div class="col-sm-8">
-                                <textarea class="form-control" readonly="readonly" id="content" placeholder="选择后显示"></textarea>
+                                <textarea class="form-control" readonly="readonly" id="content" placeholder="选择后显示" style="resize: vertical"></textarea>
                             </div>
                         </div>
 
@@ -120,7 +120,7 @@
                             <label class="col-sm-2 control-label">考生答案</label>
 
                             <div class="col-sm-8">
-                                <textarea class="form-control" readonly="readonly" id="studentAnswer" placeholder="选择后显示"></textarea>
+                                <textarea class="form-control" readonly="readonly" id="studentAnswer" placeholder="选择后显示" style="resize: vertical"></textarea>
                             </div>
                         </div>
 
@@ -129,7 +129,7 @@
                             <label class="col-sm-2 control-label">参考答案</label>
 
                             <div class="col-sm-8">
-                                <textarea class="form-control" readonly="readonly" id="answer" placeholder="选择后显示"></textarea>
+                                <textarea class="form-control" readonly="readonly" id="answer" placeholder="选择后显示" style="resize: vertical"></textarea>
                             </div>
                         </div>
 
@@ -138,7 +138,7 @@
                             <label class="col-sm-2 control-label">答案解析</label>
 
                             <div class="col-sm-8">
-                                <textarea class="form-control" readonly="readonly" id="parse" placeholder="选择后显示"></textarea>
+                                <textarea class="form-control" readonly="readonly" id="parse" placeholder="选择后显示" style="resize: vertical"></textarea>
                             </div>
                         </div>
 
@@ -156,7 +156,7 @@
                             <label class="col-sm-2 control-label">所给分值原因</label>
 
                             <div class="col-sm-8">
-                                <textarea class="form-control" id="gradeReason" placeholder="所给分值原因"></textarea>
+                                <textarea class="form-control" id="gradeReason" placeholder="所给分值原因" style="resize: vertical"></textarea>
                             </div>
                         </div>
                     </form>
@@ -185,7 +185,6 @@
     var pageSize = /*[[${data['pageSize']}]]*/;
     var totalPageNum = /*[[${data['totalPageNum']}]]*/;
     var totalPageSize = /*[[${data['totalPageSize']}]]*/;
-    var content = /*[[${data['content']}]]*/;
     var contest = /*[[${data['contest']}]]*/;
     var questions = /*[[${data['questions']}]]*/;
     var contestRankVos = /*[[${data['contestRankVos']}]]*/;

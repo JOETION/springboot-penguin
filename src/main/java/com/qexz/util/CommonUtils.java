@@ -36,9 +36,20 @@ public class CommonUtils {
      *
      * @return
      */
-    public static String geCurrentTime() {
+    public static String getCurrentTime() {
         DateFormat format = new SimpleDateFormat(DEFAULT_TIME_FORMAT);
         return format.format(new Date());
+    }
+
+    /**
+     *
+     * @param date 日期
+     * @param format 格式
+     * @return
+     */
+    public static String getDateByFormat(Date date, String format) {
+        DateFormat dateFormat = new SimpleDateFormat(format);
+        return dateFormat.format(date);
     }
 
 }

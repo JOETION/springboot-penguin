@@ -161,7 +161,7 @@ var manageAccountListPage = {
     initUpdateAccountData: function (index) {
         var accounts = manageAccountListPage.data.accounts;
         //初始化数据
-        $('#updateAccountIndex').val(accounts[index].id);
+        $('#updateAccountIndex').val(index);
         $('#updateName').val(accounts[index].name);
         $('#updateUsername').val(accounts[index].username);
         $('#updatePassword').val("");
@@ -187,16 +187,19 @@ var manageAccountListPage = {
         var phone = $('#updatePhone').val();
         var email = $('#updateEmail').val();
         var level = $('#updateLevel').val();
+        var account=manageAccountListPage.data.accounts[index];
+        var state=account.state;
+        var avatarImgUrl=account.avatarImgUrl;
 
         if (manageAccountListPage.checkUpdateAccountData(username, phone, qq, password)) {
             $.ajax({
-                url : app.URL.updateAccountUrl(),
+                url : app.URL.updateManageAccountUrl(),
                 type : "POST",
                 dataType: "json",
                 contentType : "application/json;charset=UTF-8",
                 <!-- 向后端传输的数据 -->
                 data : JSON.stringify({
-                    id: index,
+                    id: account.id,
                     name: name,
                     username: username,
                     password: password,
@@ -204,6 +207,8 @@ var manageAccountListPage = {
                     phone: phone,
                     email: email,
                     level: level,
+                    state:state,
+                    avatarImgUrl:avatarImgUrl
                 }),
                 success:function(result) {
                     if (result && result['success']) {

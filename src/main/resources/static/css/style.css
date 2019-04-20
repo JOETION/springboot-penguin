@@ -1,4 +1,4 @@
-/*错误页面*/
+/*404错误页面*/
 #errorpage{width:600px;text-align: center;padding: 80px 0;margin:0 auto;height:360px;}
 #errorpage .pinknum{color: #fe3a3b;}
 #errorpage p{font-size: 18px;font-weight: bold;padding-top: 30px;}
@@ -21,6 +21,32 @@
 #errorpage .e404{display: inline-block;position:absolute;top: -60px;left: 145px;;height:164px; width:150px;background: url(../img/404.jpg);}
 #errorpage .lh{height:90px;}
 #errorpage .err{font-size: 36px;}
+
+
+/*500错误页面*/
+#invalidpage{width:600px;text-align: center;padding: 80px 0;margin:0 auto;height:360px;}
+#invalidpage .pinknum{color: #fe3a3b;}
+#invalidpage p{font-size: 18px;font-weight: bold;padding-top: 30px;}
+#invalidpage .greyspan{color: #999;}
+#invalidpage i{font-size: 72px;color: #ccc;}
+#invalidpage .errorsug{margin: 12px auto 62px;text-align: left;display: inline-block;*display: inline;}
+#invalidpage .errorsug p{font-size: 14px;padding-top: 6px;text-indent: 15px;}
+#invalidpage .bt a{background: #fe3a3b;padding: 9px 46px 11px;*padding: 7px 24px 9px;color: #fff;border: 0;font-size: 14px;}
+
+#invalidpage .tfans_error .tfans{float: left;}
+#invalidpage .tfans_error .errortans{margin: 0;text-align: left;float: left;z-index: 5;height: 300px;position: relative;padding: 80px 0 0 24px;}
+#invalidpage .tfans_error .errortans .ter{position: absolute; left: 155px; top: 10px; z-index: 3; }
+#invalidpage .tfans_error .errortans p{font-weight: normal;z-index: 10;position: relative;}
+#invalidpage .tfans_error .errortans p b{font-size: 38px; }
+#invalidpage .tfans_error .errortans div{margin-top: 30px; }
+#invalidpage .tfans_error .errortans div button{font-size: 17px; padding: 3px 42px 5px; border-radius: 3px; }
+
+#invalidpage .logo{display: inline-block;float: left;height:303px; width:256px;background: url(../img/tfans.jpg);}
+#invalidpage .info{display: inline-block;float: left;position: relative;}
+#invalidpage .e404{display: inline-block;position:absolute;top: -60px;left: 145px;;height:164px; width:150px;background: url(../img/500.jpg);}
+#invalidpage .lh{height:90px;}
+#invalidpage .err{font-size: 36px;}
+
 
 
 /*右侧菜单*/

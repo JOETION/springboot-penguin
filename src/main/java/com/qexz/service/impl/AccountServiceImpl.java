@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qexz.common.QexzConst;
 import com.qexz.dao.*;
+import com.qexz.util.CommonUtils;
 import com.qexz.vo.ExamDetailVo;
 import com.qexz.vo.AnswerVo;
 import com.qexz.vo.ReasonVo;
@@ -12,6 +13,7 @@ import com.qexz.model.*;
 import com.qexz.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -35,6 +37,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     ContestContentMapper contestContentMapper;
 
+    @Autowired
+    MessageMapper messageMapper;
+
     @Override
     public int addAccount(Account account) {
         account.setAvatarImgUrl(QexzConst.DEFAULT_AVATAR_IMG_URL);
@@ -42,8 +47,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public boolean updateAccount(Account account) {
-        return accountMapper.updateAccountById(account) > 0;
+        accountMapper.updateAccountById(account);
+        Message message = new Message();
+        message.setMessageContent("你的账户信息已由管理员在 " + CommonUtils.getCurrentTimeByFormat("yyyy-MM-dd HH:mm:ss") + " 更新，详情请查看个人主页，如有疑问请联系管理员！");
+        message.setMessageState(0);
+        message.setMessageTitle("账户信息更新");
+        message.setMessageUrl("http://www.baidu.com");
+        message.setUserId(account.getId());
+        messageMapper.insertMessage(message);
+        return true;
     }
 
     @Override
@@ -98,13 +112,31 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public boolean disabledAccount(int id) {
-        return accountMapper.updateState(id, 1) > 0;
+        Message message = new Message();
+        message.setMessageContent("你的账户已由管理员在 " + CommonUtils.getCurrentTimeByFormat("yyyy-MM-dd HH:mm:ss") + " 进行封禁，详情请联系管理员！");
+        message.setMessageState(0);
+        message.setMessageTitle("账号被封禁");
+        message.setMessageUrl("http://www.baidu.com");
+        message.setUserId(id);
+        messageMapper.insertMessage(message);
+        accountMapper.updateState(id, 1);
+        return true;
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public boolean abledAccount(int id) {
-        return accountMapper.updateState(id, 0) > 0;
+        accountMapper.updateState(id, 0);
+        Message message = new Message();
+        message.setMessageContent("你的账户已由管理员在 " + CommonUtils.getCurrentTimeByFormat("yyyy-MM-dd HH:mm:ss") + " 解封，详情请联系管理员！");
+        message.setMessageState(0);
+        message.setMessageTitle("账户被解封");
+        message.setMessageUrl("http://www.baidu.com");
+        message.setUserId(id);
+        messageMapper.insertMessage(message);
+        return true;
     }
 
     @Override
@@ -133,7 +165,8 @@ public class AccountServiceImpl implements AccountService {
         Map<Integer, String> collect = answerContents.stream().collect(Collectors.toMap(AnswerVo.AnswerContent::getQuestionId, AnswerVo.AnswerContent::getAnswer));
         Grade grade = gradeMapper.getGradeByStudentIdAndContestId(contestId, studentId);
 
-        List<ReasonVo> list = gson.fromJson(grade.getManulReason(), new TypeToken<List<ReasonVo>>(){}.getType());
+        List<ReasonVo> list = gson.fromJson(grade.getManulReason(), new TypeToken<List<ReasonVo>>() {
+        }.getType());
         Map<Integer, String> reason = list.stream().collect(Collectors.toMap(ReasonVo::getQuestionId, ReasonVo::getManulReason));
         List<ContestContent> contestContests = contestContentMapper.getContentByContestId(contestId);
         Map<Integer, Integer> scores = contestContests.stream().collect(Collectors.toMap(ContestContent::getQuestionId, ContestContent::getScore));

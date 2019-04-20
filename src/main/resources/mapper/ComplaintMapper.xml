@@ -41,12 +41,23 @@
 
     <delete id="deleteComplaint">
         DELETE FROM t_penguin_complaint
-        WHERE user_id=#{userId} AND which=#{which} AND which_id=#{whichId}
+        WHERE user_id=#{userId} AND complaint_which=#{which} AND which_id=#{whichId}
     </delete>
 
     <update id="updateComplaint">
-        UPDATE FROM t_penguin_complaint
-        SET complaint_state=#{state} WHERE user_id=#{userId} AND which=#{which} AND which_id=#{whichId}
+        UPDATE t_penguin_complaint
+        SET complaint_state=#{state} WHERE user_id=#{userId} AND complaint_which=#{which} AND which_id=#{whichId}
     </update>
+
+    <select id="queryComplaintByUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_complaint
+        WHERE user_id=#{userId}
+    </select>
+
+    <select id="getCountByUserId" resultType="int">
+        SELECT COUNT(1) FROM t_penguin_complaint
+        WHERE user_id=#{userId}
+    </select>
+
 
 </mapper>

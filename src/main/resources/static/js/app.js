@@ -80,8 +80,14 @@ var app = {
         uploadImageUrl: function () {
             return app.data.contextPath + '/upload/images/';
         },
-        addComplaintUrl:function(){
-            return app.data.contextPath+'/complaint/api/addComplaint'
+        addComplaintUrl: function () {
+            return app.data.contextPath + '/complaint/api/addComplaint';
+        },
+        updateMessageStateUrl: function () {
+            return app.data.contextPath + "/message/api/updateMessageState";
+        },
+        deleteMessageUrl:function(){
+            return app.data.contextPath+"/message/api/deleteMessage";
         }
     },
     /**

@@ -70,8 +70,8 @@ var manageSubjectBoardPage = {
             subPageStr += '<li class="disabled"><a><span>首页</span></a></li>';
             subPageStr += '<li class="disabled"><a><span>上一页</span></a></li>';
         } else {
-            subPageStr += '<li><a onclick="manageComplaintPage.firstPage()"><span>首页</span></a></li>';
-            subPageStr += '<li><a onclick="manageComplaintPage.prevPage()"><span>上一页</span></a></li>';
+            subPageStr += '<li><a onclick="manageSubjectBoardPage.firstPage()"><span>首页</span></a></li>';
+            subPageStr += '<li><a onclick="manageSubjectBoardPage.prevPage()"><span>上一页</span></a></li>';
         }
         var startPage = (manageSubjectBoardPage.data.pageNum-4 > 0 ? manageSubjectBoardPage.data.pageNum-4 : 1);
         var endPage = (startPage+7 > manageSubjectBoardPage.data.totalPageNum ? manageSubjectBoardPage.data.totalPageNum : startPage+7);
@@ -81,17 +81,17 @@ var manageSubjectBoardPage = {
         console.log('totalPageNum = ' + manageSubjectBoardPage.data.totalPageNum);
         for (var i = startPage; i <= endPage; i++) {
             if (i == manageSubjectBoardPage.data.pageNum) {
-                subPageStr += '<li class="active"><a onclick="manageComplaintPage.targetPage('+i+')">'+i+'</a></li>';
+                subPageStr += '<li class="active"><a onclick="manageSubjectBoardPage.targetPage('+i+')">'+i+'</a></li>';
             } else {
-                subPageStr += '<li><a onclick="manageComplaintPage.targetPage('+i+')">'+i+'</a></li>';
+                subPageStr += '<li><a onclick="manageSubjectBoardPage.targetPage('+i+')">'+i+'</a></li>';
             }
         }
         if (manageSubjectBoardPage.data.pageNum == manageSubjectBoardPage.data.totalPageNum) {
             subPageStr += '<li class="disabled"><a><span>下一页</span></a></li>';
             subPageStr += '<li class="disabled"><a><span>末页</span></a></li>';
         } else {
-            subPageStr += '<li><a onclick="manageComplaintPage.nextPage()"><span>下一页</span></a></li>';
-            subPageStr += '<li><a onclick="manageComplaintPage.lastPage()"><span>末页</span></a></li>';
+            subPageStr += '<li><a onclick="manageSubjectBoardPage.nextPage()"><span>下一页</span></a></li>';
+            subPageStr += '<li><a onclick="manageSubjectBoardPage.lastPage()"><span>末页</span></a></li>';
         }
         $('#subPageHead').html(subPageStr);
     },

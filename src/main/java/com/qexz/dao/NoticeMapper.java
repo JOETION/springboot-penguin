@@ -13,9 +13,17 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Mapper
 public interface NoticeMapper {
 
-    public int insertNotice(@Param("notice")Notice notice);
+    public int insertNotice(@Param("notice") Notice notice);
+
+    public List<Notice> queryBasicNotice();
+
+    public int deleteNotice(@Param("id")int id);
+
+    public List<Notice> querySystemNotice();
 }

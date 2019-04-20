@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/discuss/editDiscuss.css}"/>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js}"></script>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/wangEditor/3.0.15/wangEditor.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/discuss/editDiscuss.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
-
-<div class="myMessage pushable attached ui ">
+<div th:replace="/common/nav::nav"></div>
 
     <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+    <th:block th:include="/common/message::message"></th:block>
 
     <div class="pusher">
 
@@ -30,10 +28,16 @@
                 <div class="field">
                     <div class="two fields">
                         <div class="four wide field">
-                            <select class="ui fluid dropdown" th:value="1">
-                                <option value="0">选择板块</option>
+                            <select class="ui fluid dropdown" id="type">
+                                <option value="0">笔试面经</option>
                                 <option value="1">我要提问</option>
                                 <option value="2">技术交流</option>
+                                <option value="3">产品运营</option>
+                                <option value="4">留学生</option>
+                                <option value="5">职业发展</option>
+                                <option value="6">招聘信息</option>
+                                <option value="7">资源分享</option>
+                                <option value="8">猿生活</option>
                             </select>
                         </div>
                         <div class="twelve wide field">
@@ -48,11 +52,10 @@
             </form>
         </div>
 
+        <!--页脚-->
+        <th:block th:include="/common/footer::footer"></th:block>
     </div>
-</div>
 
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
 
 <!-- 登录模态框 -->
 <div th:replace="/common/login::login"></div>
@@ -61,10 +64,18 @@
     /*<![CDATA[*/
     var post = /*[[${data['post']}]]*/;
     var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/;
-
     $(function () {
         app.init(contextPath);
         editDiscussPage.init(post);
+
+        //设置选中的值
+        var items = $("#type option");
+        for (var i = 0; i < items.length; i++) {
+            var value = $(items[i]).val();
+            if (value == post.type) {
+                $(items[i]).attr("selected", "selected");
+            }
+        }
     });
     /*]]>*/
 </script>

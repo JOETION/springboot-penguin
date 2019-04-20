@@ -8,15 +8,37 @@ package com.qexz.model;
  */
 
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Message {
+public class Message implements Serializable{
+
+    private static final long serialVersionUID =1L;
+
     private int id;
     private int userId;
+    private String messageTitle;
     private String messageContent;
+    private String messageUrl;
     private int messageState;
     private Date createTime;
     private Date updateTime;
+
+    public String getMessageTitle() {
+        return messageTitle;
+    }
+
+    public void setMessageTitle(String messageTitle) {
+        this.messageTitle = messageTitle;
+    }
+
+    public String getMessageUrl() {
+        return messageUrl;
+    }
+
+    public void setMessageUrl(String messageUrl) {
+        this.messageUrl = messageUrl;
+    }
 
     public int getId() {
         return id;

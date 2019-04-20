@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-@Component
+//@Component
 public class ImportQuestionJobs {
 
     @Autowired
@@ -35,7 +35,7 @@ public class ImportQuestionJobs {
     private int num = 0;
 
     //调度任务只能是public修饰吗？
-    @Scheduled(fixedDelay = ONE_MINUTE)
+//    @Scheduled(fixedDelay = ONE_MINUTE)
     public void fixedDelayJob() {
 
         num = 0;

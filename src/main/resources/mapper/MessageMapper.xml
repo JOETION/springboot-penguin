@@ -4,19 +4,37 @@
     <resultMap id="BaseResultMap" type="com.qexz.model.Message">
         <result column="id" property="id" jdbcType="INTEGER"/>
         <result column="user_id" property="userId" jdbcType="INTEGER"/>
-        <result column="message_content" property="complaintContent" jdbcType="VARCHAR"/>
+        <result column="message_title" property="messageTitle" jdbcType="VARCHAR"/>
+        <result column="message_content" property="messageContent" jdbcType="VARCHAR"/>
+        <result column="message_url" property="messageUrl" jdbcType="VARCHAR"/>
         <result column="message_state" property="messageState" jdbcType="INTEGER"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        user_id,message_content,which_id,message_state
+        user_id,message_title,message_content,message_url,which_id,message_state
     </sql>
 
     <insert id="insertMessage" parameterType="com.qexz.model.Message">
-        INSERT INTO t_penguin_message(user_id,message_content,message_state)
-        VALUES (#{message.userId},#{message.messageContent},#{message.messageState})
+        INSERT INTO t_penguin_message(user_id,message_title,message_content,message_url,message_state)
+        VALUES (#{message.userId},#{message.messageTitle},#{message.messageContent},#{message.messageUrl},#{message.messageState})
     </insert>
+
+    <select id="queryMessageByUserId" resultMap="BaseResultMap">
+        SELECT * FROM t_penguin_message
+        WHERE user_id=#{userId} ORDER BY update_time DESC
+    </select>
+
+    <update id="updateMessageStateById">
+        UPDATE t_penguin_message
+        SET message_state=1
+        WHERE id=#{id}
+    </update>
+
+    <delete id="deleteMessageById">
+        DELETE FROM t_penguin_message
+        WHERE id=#{id}
+    </delete>
 
 </mapper>

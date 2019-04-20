@@ -1,6 +1,7 @@
 package com.qexz.service;
 
 import com.qexz.model.Contest;
+import com.qexz.vo.ContestDetailVo;
 
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,14 @@ public interface ContestService {
     //得到所有考试内容
     List<Contest> getAllContests();
 
-    //更新考试分数
-    boolean updateContestScore(int contestId, int score);
+    //更新考试内容
+    boolean updateContestContent(ContestDetailVo contestDetailVo);
 
     //更新考试状态
     boolean updateContestStateById(int id);
+
+    //添加考试内容
+    boolean addContestContent(ContestDetailVo contestDetailVo);
+
+    boolean updateContestScore(int contestId);
 }

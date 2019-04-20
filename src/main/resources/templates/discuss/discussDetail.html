@@ -1,54 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统','app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统','app')"></th:block>
     <link rel="stylesheet" th:href="@{/css/discuss/discussDetail.css}"/>
     <script type="text/javascript" th:src="@{https://cdn.bootcss.com/jquery-cookie/1.4.1/jquery.cookie.min.js}"></script>
     <script type="text/javascript" th:src="@{/js/discuss/discussDetail.js}"></script>
     <script type="text/javascript" th:src="@{/js/common/message.js}"></script>
 </head>
-<body>
+<body class="myMessage pushable attached ui ">
 
 
 <!--导航条-->
-<div th:replace="/common/nav::nav(${current_account})"></div>
+<div th:replace="/common/nav::nav"></div>
 
-<div class="myMessage pushable attached ui ">
+<!--消息侧边栏-->
+<th:block th:include="/common/message::message"></th:block>
 
-    <!--消息侧边栏-->
-    <th:block th:include="/common/message::message('overlay')"></th:block>
+<div class="pusher">
 
-    <div class="pusher">
+    <div class="ui header container">
+        <div class="ui large breadcrumb">
+            <a class="section" th:href="@{/}"><i class="home icon"></i>首页</a>
+            <i class="right chevron icon divider"></i>
+            <a class="section" th:href="@{/discuss}">讨论区</a>
+            <i class="right chevron icon divider"></i>
 
-        <div class="ui header container">
-            <div class="ui large breadcrumb">
-                <a class="section" th:href="@{/}"><i class="home icon"></i>首页</a>
-                <i class="right chevron icon divider"></i>
-                <a class="section" th:href="@{/discuss}">讨论区</a>
-                <i class="right chevron icon divider"></i>
-
-                <div class="active section" th:text="${data['discussVo'].post.title}">某保险公司多年的资料表明，在索赔户中，被盗索赔户占20%，以 表示在随机抽查100个索赔户中因被盗而向保险公司索赔的户数，求 . x 0 0.5 1 1.5 2 2.5 3 Ф (x) 0.500 0.691 0.841 0.933 0.977 0.994 0.999</div>
-            </div>
+            <div class="active section" th:text="${data['discussVo'].post.title}">某保险公司多年的资料表明，在索赔户中，被盗索赔户占20%，以 表示在随机抽查100个索赔户中因被盗而向保险公司索赔的户数，求 . x 0 0.5 1 1.5 2 2.5 3 Ф (x) 0.500 0.691 0.841 0.933 0.977 0.994 0.999</div>
         </div>
+    </div>
 
-        <div class="ui discussList container">
-            <div class="ui grid">
-                <div class="eleven wide column">
-                    <h2 class="ui header discuss-title" style="font-size: 16px;">
-                        <i class="talk outline icon"></i>
+    <div class="ui discussList container">
+        <div class="ui grid">
+            <div class="eleven wide column">
+                <h2 class="ui header discuss-title" style="font-size: 16px;">
+                    <i class="talk outline icon"></i>
 
-                        <div class="content" th:text="${data['discussVo'].post.title}">校招结束回顾：第一份工作的选择有多重要？应该考虑清楚些什么？</div>
-                    </h2>
-                    <h2 class="ui header">
-                        <img class="ui avatar image discuss-author-avatar" style="height: 50px;width: 50px;" th:src="@{'/upload/images/'+${data['discussVo'].author.avatarImgUrl}}"/>
+                    <div class="content" th:text="${data['discussVo'].post.title}">校招结束回顾：第一份工作的选择有多重要？应该考虑清楚些什么？</div>
+                </h2>
+                <h2 class="ui header">
+                    <img class="ui avatar image discuss-author-avatar" style="height: 50px;width: 50px;" th:src="@{'/upload/images/'+${data['discussVo'].author.avatarImgUrl}}"/>
 
-                        <div class="content">
-                            <a href="#" class="header discuss-author-name" th:text="${data['discussVo'].author.name}">
-                                曾庆熙
-                            </a>
+                    <div class="content">
+                        <a href="#" class="header discuss-author-name" th:text="${data['discussVo'].author.name}">
+                            曾庆熙
+                        </a>
 
-                            <div class="extra discuss-author-edit-info">
-                                <span th:text="'编辑于 '+${#dates.format(data['discussVo'].post.updateTime, 'yyyy-MM-dd HH:mm:ss')}">编辑于 2018-01-13 11:33:51</span>
+                        <div class="extra discuss-author-edit-info">
+                            <span th:text="'编辑于 '+${#dates.format(data['discussVo'].post.updateTime, 'yyyy-MM-dd HH:mm:ss')}">编辑于 2018-01-13 11:33:51</span>
                         <span style="margin-left: 28em;">
                                 <i class="talk outline icon"></i>
                                 <span th:text="${data['discussVo'].post.replyNum}">23</span>
@@ -59,103 +57,100 @@
                                 <i class="unhide icon"></i>
                                 <span>400</span>
                         </span>
-                            </div>
                         </div>
-                    </h2>
-                    <div class="ui piled segment" id="postContent">
                     </div>
+                </h2>
+                <div class="ui piled segment" id="postContent">
+                </div>
 
 
-                    <div class="ui vertical right aligned segment">
-                        <!--编辑帖子-->
-                        <a th:if="${current_account ne null} and ${data['discussVo'].author.id eq current_account.id}" th:href="@{'/discuss/editPost/'+${data['discussVo'].post.id}}"><i class="edit icon"></i>编辑</a>
+                <div class="ui vertical right aligned segment">
+                    <!--编辑帖子-->
+                    <a th:if="${session.current_account ne null} and ${data['discussVo'].author.id eq session.current_account.id}" th:href="@{'/discuss/editPost/'+${data['discussVo'].post.id}}"><i class="edit icon"></i>编辑</a>
 
-                        <!--删除帖子-->
-                        <a th:if="${current_account ne null} and ${data['discussVo'].author.id eq current_account.id}" href="javascript:void(0);" th:onclick="@{'discussDetailPage.deletePost('+${data['discussVo'].post.id}+')'}"><i class="remove circle outline icon"></i>删除</a>
-                    </div>
+                    <!--删除帖子-->
+                    <a th:if="${session.current_account ne null} and ${data['discussVo'].author.id eq session.current_account.id}" href="javascript:void(0);" th:onclick="@{'discussDetailPage.deletePost('+${data['discussVo'].post.id}+')'}"><i class="remove circle outline icon"></i>删除</a>
+                </div>
 
 
-                    <div class="ui vertical segment">
-                        <div class="ui comments" th:if="${current_account ne null}">
-                            <h3 class="ui dividing header"><i class="comments icon"></i><span th:text="${data['discussVo'].post.replyNum}+'条回帖'"></span></h3>
+                <div class="ui vertical segment">
+                    <div class="ui comments" th:if="${session.current_account ne null}">
+                        <h3 class="ui dividing header"><i class="comments icon"></i><span th:text="${data['discussVo'].post.replyNum}+'条回帖'"></span></h3>
 
-                            <div class="comment" th:each="item,itemStats : ${data['discussDetailVos']}">
-                                <a class="avatar">
-                                    <img class="ui avatar image" th:src="@{'/upload/images/'+${item.user.avatarImgUrl}}"/>
-                                </a>
+                        <div class="comment" th:each="item,itemStats : ${data['discussDetailVos']}">
+                            <a class="avatar">
+                                <img class="ui avatar image" th:src="@{'/upload/images/'+${item.user.avatarImgUrl}}"/>
+                            </a>
 
-                                <div class="content">
-                                    <a class="author" th:text="${item.user.name}">Elliot Fu</a>
+                            <div class="content">
+                                <a class="author" th:text="${item.user.name}">Elliot Fu</a>
 
-                                    <div class="metadata">
-                                        <span class="date" th:text="${#dates.format(item.comment.createTime, 'yyyy-MM-dd HH:mm:ss')}">昨天上午12:30</span>
-                                    </div>
-                                    <div class="text">
-                                        <p th:text="${item.comment.content}">這對我的研究是非常有用.謝謝!</p>
-                                    </div>
-                                    <div class="actions">
-                                        <a class="reply" th:onclick="'discussDetailPage.showReplyModal('+${itemStats.index}+',0)'">回复</a>
-                                        <a class="complaint" href="javascript:void(0);" th:if="${current_account.id ne item.user.id}" th:onclick="'discussDetailPage.showComplaintModal(2,'+${item.comment.id}+')'">投诉</a>
-                                        <a class="delete" th:if="${current_account.id eq item.user.id}" href="javascript:void(0);" th:onclick="'discussDetailPage.deleteComment('+${item.comment.id}+')'">删除</a>
-                                    </div>
+                                <div class="metadata">
+                                    <span class="date" th:text="${#dates.format(item.comment.createTime, 'yyyy-MM-dd HH:mm:ss')}">昨天上午12:30</span>
                                 </div>
-                                <div class="comments">
-                                    <div class="comment" th:each="item2,itemStats2 : ${item.replies}">
-                                        <a class="avatar">
-                                            <img class="ui avatar image" th:src="@{'/upload/images/'+${item2.user.avatarImgUrl}}"/>
-                                        </a>
+                                <div class="text">
+                                    <p th:text="${item.comment.content}">這對我的研究是非常有用.謝謝!</p>
+                                </div>
+                                <div class="actions">
+                                    <a class="reply" th:onclick="'discussDetailPage.showReplyModal('+${itemStats.index}+',0)'">回复</a>
+                                    <a class="complaint" href="javascript:void(0);" th:if="${session.current_account.id ne item.user.id}" th:onclick="'discussDetailPage.showComplaintModal(2,'+${item.comment.id}+')'">投诉</a>
+                                    <a class="delete" th:if="${session.current_account.id eq item.user.id}" href="javascript:void(0);" th:onclick="'discussDetailPage.deleteComment('+${item.comment.id}+')'">删除</a>
+                                </div>
+                            </div>
+                            <div class="comments">
+                                <div class="comment" th:each="item2,itemStats2 : ${item.replies}">
+                                    <a class="avatar">
+                                        <img class="ui avatar image" th:src="@{'/upload/images/'+${item2.user.avatarImgUrl}}"/>
+                                    </a>
 
-                                        <div class="content">
-                                            <a class="author" th:text="${item2.user.name}">Jenny Hess</a>
-                                            <span th:if="${item2.reply.atuserId != 0}"> 回复 </span>
-                                            <a class="author" th:if="${item2.reply.atuserId != 0}" th:text="${item2.atuser.name}">Jenny Hess</a>
+                                    <div class="content">
+                                        <a class="author" th:text="${item2.user.name}">Jenny Hess</a>
+                                        <span th:if="${item2.reply.atuserId != 0}"> 回复 </span>
+                                        <a class="author" th:if="${item2.reply.atuserId != 0}" th:text="${item2.atuser.name}">Jenny Hess</a>
 
-                                            <div class="metadata">
-                                                <span class="date" th:text="${#dates.format(item2.reply.createTime, 'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
-                                            </div>
-                                            <div class="text" th:text="${item2.reply.content}">
-                                                艾略特你永远是多么正确 :)
-                                            </div>
-                                            <div class="actions">
-                                                <a class="reply" th:onclick="'discussDetailPage.showReplyModal('+${itemStats.index}+','+${item2.user.id}+')'">回复</a>
-                                                <a class="complaint" href="javascript:void(0);" th:if="${current_account.id ne item2.user.id}" th:onclick="'discussDetailPage.showComplaintModal(3,'+${item2.reply.id}+')'">投诉</a>
-                                                <a class="delete" th:if="${current_account.id eq item2.user.id}" href="javascript:void(0);" th:onclick="'discussDetailPage.deleteReply('+${item2.reply.id}+')'">删除</a>
-                                            </div>
+                                        <div class="metadata">
+                                            <span class="date" th:text="${#dates.format(item2.reply.createTime, 'yyyy-MM-dd HH:mm:ss')}">刚刚</span>
+                                        </div>
+                                        <div class="text" th:text="${item2.reply.content}">
+                                            艾略特你永远是多么正确 :)
+                                        </div>
+                                        <div class="actions">
+                                            <a class="reply" th:onclick="'discussDetailPage.showReplyModal('+${itemStats.index}+','+${item2.user.id}+')'">回复</a>
+                                            <a class="complaint" href="javascript:void(0);" th:if="${session.current_account.id ne item2.user.id}" th:onclick="'discussDetailPage.showComplaintModal(3,'+${item2.reply.id}+')'">投诉</a>
+                                            <a class="delete" th:if="${session.current_account.id eq item2.user.id}" href="javascript:void(0);" th:onclick="'discussDetailPage.deleteReply('+${item2.reply.id}+')'">删除</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <form class="ui reply form">
-                                <div class="field">
-                                    <textarea id="commentContent"></textarea>
-                                </div>
-                                <div class="ui blue labeled submit icon button" th:onclick="'discussDetailPage.addCommentsAction()'"><i class="icon edit"></i>回帖</div>
-                            </form>
                         </div>
+                        <form class="ui reply form">
+                            <div class="field">
+                                <textarea id="commentContent"></textarea>
+                            </div>
+                            <div class="ui blue labeled submit icon button" th:onclick="'discussDetailPage.addCommentsAction()'"><i class="icon edit"></i>回帖</div>
+                        </form>
+                    </div>
 
 
-                        <div class="ui comments" th:if="${current_account eq null}">
-                            <h3 class="ui dividing header"><i class="comments icon"></i><a href="#" th:onclick="'app.showLogin()'"><span>登录后查看</span></a></h3>
-                        </div>
+                    <div class="ui comments" th:if="${session.current_account eq null}">
+                        <h3 class="ui dividing header"><i class="comments icon"></i><a href="#" th:onclick="'app.showLogin()'"><span>登录后查看</span></a></h3>
                     </div>
                 </div>
-                <div class="five wide column">
-                    <!--公告栏-->
-                    <th:block th:include="/common/notice-board::noticeBoard"></th:block>
-                    <!--传送门-->
-                    <th:block th:include="/common/refer::refer"></th:block>
-                </div>
-
             </div>
+            <div class="five wide column">
+                <!--公告栏-->
+                <th:block th:include="/common/notice-board::noticeBoard(${data['notices']})"></th:block>
+                <!--传送门-->
+                <th:block th:include="/common/refer::refer"></th:block>
+            </div>
+
         </div>
-
-
     </div>
 
-</div>
+    <!--页脚-->
+    <th:block th:include="/common/footer::footer"></th:block>
 
-<!--页脚-->
-<th:block th:include="/common/footer::footer"></th:block>
+</div>
 
 
 <!-- 回复模态框 -->
@@ -215,7 +210,7 @@
     var discussVo = /*[[${data['discussVo']}]]*/;
     var discussDetailVos = /*[[${data['discussDetailVos']}]]*/;
     var contextPath = /*[[${#httpServletRequest.getContextPath()}]]*/;
-    var currentAccount =/*[[${current_account}]]*/;
+    var currentAccount =/*[[${session.current_account}]]*/;
 
     $(function () {
         app.init(contextPath);

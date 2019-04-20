@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>GDUFE在线考试系统控制台-考试管理-查看试题</title>
-    <th:block th:include="/common/header::header('GDUFE在线考试系统控制台-考试管理-查看试题','manage-app')"></th:block>
+    <th:block th:include="/common/header::header('在线考试系统控制台-考试管理-查看试题','manage-app')"></th:block>
     <script type="text/javascript" th:src="@{/js/manage/manage-editContestProblem.js}"></script>
     <span th:replace="/common/manage-password::header"></span>
 </head>
@@ -11,12 +10,12 @@
 
 <div th:replace="/common/manage-password::updatePasswordModal"></div>
 <!--导航栏-->
-<div th:replace="/common/manage-nav::manageNav(${current_account})"></div>
+<div th:replace="/common/manage-nav::manageNav"></div>
 
 <div class="container-fluid">
     <div class="row">
         <!--菜单项-->
-        <div th:replace="/common/manage-menu::manageMenu(${current_account},'contest')"></div>
+        <div th:replace="/common/manage-menu::manageMenu('contest')"></div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <!--<h1 class="page-header">考试管理</h1>-->
@@ -251,30 +250,30 @@
                         <label class="col-sm-2 control-label">题目标题</label>
 
                         <div class="col-sm-8">
-                            <input th:id="updateQuestionTitle" type="text" class="form-control" placeholder="" th:if="${current_account.level eq 2}"/>
-                            <input th:id="updateQuestionTitle" type="text" class="form-control" placeholder="" th:if="${current_account.level ne 2}" readonly="readonly"/>
+                            <input th:id="updateQuestionTitle" type="text" class="form-control" placeholder="" th:if="${session.current_account.level eq 2}"/>
+                            <input th:id="updateQuestionTitle" type="text" class="form-control" placeholder="" th:if="${session.current_account.level ne 2}" readonly="readonly"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目内容</label>
 
                         <div class="col-sm-8">
-                            <textarea th:id="updateQuestionContent" class="form-control" rows="8" th:if="${current_account.level eq 2}"></textarea>
-                            <textarea th:id="updateQuestionContent" class="form-control" rows="8" th:if="${current_account.level ne 2}" readonly="readonly"></textarea>
+                            <textarea th:id="updateQuestionContent" class="form-control" rows="8" th:if="${session.current_account.level eq 2}"></textarea>
+                            <textarea th:id="updateQuestionContent" class="form-control" rows="8" th:if="${session.current_account.level ne 2}" readonly="readonly"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目类型</label>
 
                         <div class="col-sm-8">
-                            <select class="form-control" th:id="updateQuestionType" th:if="${current_account.level eq 2}">
+                            <select class="form-control" th:id="updateQuestionType" th:if="${session.current_account.level eq 2}">
                                 <option th:value="0">单选</option>
                                 <option th:value="1">多选</option>
                                 <option th:value="2">问答</option>
                                 <option th:value="3">编程</option>
                             </select>
 
-                            <select class="form-control" th:id="updateQuestionType" th:if="${current_account.level ne 2}" disabled="disabled">
+                            <select class="form-control" th:id="updateQuestionType" th:if="${session.current_account.level ne 2}" disabled="disabled">
                                 <option th:value="0">单选</option>
                                 <option th:value="1">多选</option>
                                 <option th:value="2">问答</option>
@@ -288,40 +287,40 @@
                         <label class="col-sm-2 control-label">A选项</label>
 
                         <div class="col-sm-8">
-                            <input th:id="updateOptionA" type="text" class="form-control" placeholder="" th:if="${current_account.level eq 2}"/>
-                            <input th:id="updateOptionA" type="text" class="form-control" placeholder="" th:if="${current_account.level ne 2}" readonly="readonly"/>
+                            <input th:id="updateOptionA" type="text" class="form-control" placeholder="" th:if="${session.current_account.level eq 2}"/>
+                            <input th:id="updateOptionA" type="text" class="form-control" placeholder="" th:if="${session.current_account.level ne 2}" readonly="readonly"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">B选项</label>
 
                         <div class="col-sm-8">
-                            <input th:id="updateOptionB" type="text" class="form-control" placeholder="" th:if="${current_account.level eq 2}"/>
-                            <input th:id="updateOptionB" type="text" class="form-control" placeholder="" th:if="${current_account.level ne 2}" readonly="readonly"/>
+                            <input th:id="updateOptionB" type="text" class="form-control" placeholder="" th:if="${session.current_account.level eq 2}"/>
+                            <input th:id="updateOptionB" type="text" class="form-control" placeholder="" th:if="${session.current_account.level ne 2}" readonly="readonly"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">C选项</label>
 
                         <div class="col-sm-8">
-                            <input th:id="updateOptionC" type="text" class="form-control" placeholder="" th:if="${current_account.level eq 2}"/>
-                            <input th:id="updateOptionC" type="text" class="form-control" placeholder="" th:if="${current_account.level ne 2}" readonly="readonly"/>
+                            <input th:id="updateOptionC" type="text" class="form-control" placeholder="" th:if="${session.current_account.level eq 2}"/>
+                            <input th:id="updateOptionC" type="text" class="form-control" placeholder="" th:if="${session.current_account.level ne 2}" readonly="readonly"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">D选项</label>
 
                         <div class="col-sm-8">
-                            <input th:id="updateOptionD" type="text" class="form-control" placeholder="" th:if="${current_account.level eq 2}"/>
-                            <input th:id="updateOptionD" type="text" class="form-control" placeholder="" th:if="${current_account.level ne 2}" readonly="readonly"/>
+                            <input th:id="updateOptionD" type="text" class="form-control" placeholder="" th:if="${session.current_account.level eq 2}"/>
+                            <input th:id="updateOptionD" type="text" class="form-control" placeholder="" th:if="${session.current_account.level ne 2}" readonly="readonly"/>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">题目答案</label>
 
                         <div class="col-sm-8">
-                            <textarea th:id="updateQuestionAnswer" class="form-control" rows="8" th:if="${current_account.level eq 2}"></textarea>
-                            <textarea th:id="updateQuestionAnswer" class="form-control" rows="8" th:if="${current_account.level ne 2}" readonly="readonly"></textarea>
+                            <textarea th:id="updateQuestionAnswer" class="form-control" rows="8" th:if="${session.current_account.level eq 2}"></textarea>
+                            <textarea th:id="updateQuestionAnswer" class="form-control" rows="8" th:if="${session.current_account.level ne 2}" readonly="readonly"></textarea>
                         </div>
                     </div>
 
@@ -329,8 +328,8 @@
                         <label class="col-sm-2 control-label">答案解析</label>
 
                         <div class="col-sm-8">
-                            <textarea th:id="updateQuestionParse" class="form-control" rows="8" th:if="${current_account.level eq 2}"></textarea>
-                            <textarea th:id="updateQuestionParse" class="form-control" rows="8" th:if="${current_account.level ne 2}" readonly="readonly"></textarea>
+                            <textarea th:id="updateQuestionParse" class="form-control" rows="8" th:if="${session.current_account.level eq 2}"></textarea>
+                            <textarea th:id="updateQuestionParse" class="form-control" rows="8" th:if="${session.current_account.level ne 2}" readonly="readonly"></textarea>
                         </div>
                     </div>
 

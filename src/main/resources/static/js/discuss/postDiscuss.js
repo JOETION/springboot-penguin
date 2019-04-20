@@ -2,7 +2,7 @@
  * 模块JavaScript
  */
 var postDiscussPage = {
-    data:{
+    data: {
         authorId: 0,
         E: null,
         editor: null,
@@ -21,20 +21,21 @@ var postDiscussPage = {
         var authorId = postDiscussPage.data.authorId;
         var editor = postDiscussPage.data.editor;
         var title = $('#postTitle').val();
-        //alert(editor.txt.text());
+        var type = $("#type").val();
         $.ajax({
-            url : app.URL.addPostUrl(),
-            type : "POST",
+            url: app.URL.addPostUrl(),
+            type: "POST",
             dataType: "json",
-            contentType : "application/json;charset=UTF-8",
+            contentType: "application/json;charset=UTF-8",
             <!-- 向后端传输的数据 -->
-            data : JSON.stringify({
+            data: JSON.stringify({
                 authorId: authorId,
                 title: title,
+                type: type,
                 htmlContent: editor.txt.html(),
                 textContent: editor.txt.text(),
             }),
-            success:function(result) {
+            success: function (result) {
                 if (result && result['success']) {
                     // 验证通过 刷新页面
                     //window.location.reload();
@@ -43,9 +44,9 @@ var postDiscussPage = {
                     console.log(result.message);
                 }
             },
-            error:function(result){
+            error: function (result) {
                 console.log(result.message);
             }
         });
-    },
+    }
 };

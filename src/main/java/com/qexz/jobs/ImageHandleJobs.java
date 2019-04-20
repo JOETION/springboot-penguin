@@ -17,14 +17,14 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 /**
  * 尽可能成为一个公用的组件
  */
-@Component
+//@Component
 public class ImageHandleJobs {
 
     private static ConcurrentLinkedQueue<Param> jobs = new ConcurrentLinkedQueue<>();
 
     public final static long ONE_MINUTE = 60 * 1000;
 
-    @Scheduled(fixedDelay = ONE_MINUTE)
+//    @Scheduled(fixedDelay = ONE_MINUTE)
     public void fixedDelayJob() throws IOException {
 
         while (!jobs.isEmpty()) {
