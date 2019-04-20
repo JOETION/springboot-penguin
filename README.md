@@ -70,7 +70,7 @@
 ## 预览效果
 ![首页](https://github.com/JOETION/springboot-penguin/blob/master/preview/首页.jpg)
 
-![首页](https://github.com/JOETION/springboot-penguin/blob/master/preview/首页1.png)
+![首页](https://github.com/JOETION/springboot-penguin/blob/master/preview/首页1.jpg)
 
 ![考试页](https://github.com/JOETION/springboot-penguin/blob/master/preview/考试页.png)
 
