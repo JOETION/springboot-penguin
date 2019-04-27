@@ -110,7 +110,7 @@ var manageAccountListPage = {
     addAccountAction: function () {
         var name = $('#addName').val();
         var username = $('#addUsername').val();
-        var password = $('#addPassword').val();
+        var password = $.md5($('#addPassword').val()+app.data.md5Salt);
         var qq = $('#addQq').val();
         var phone = $('#addPhone').val();
         var email = $('#addEmail').val();
@@ -182,7 +182,7 @@ var manageAccountListPage = {
         var index = $('#updateAccountIndex').val();
         var name = $('#updateName').val();
         var username = $('#updateUsername').val();
-        var password = $('#updatePassword').val();
+        var password = $.md5( $('#updatePassword').val()+app.data.md5Salt);
         var qq = $('#updateQq').val();
         var phone = $('#updatePhone').val();
         var email = $('#updateEmail').val();

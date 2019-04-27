@@ -23,10 +23,7 @@ public class QexzConst {
     public static final int postPageSize = 8;
     public static final int gradePageSize = 12;
     public static final int commentPageSize = 16;
-    public static final int complaintPageSize = 8;
 
-    //MD5加盐
-    public static final String MD5_SALT = "qexz";
     //分页数据
     public final static String DATA = "data";
 }

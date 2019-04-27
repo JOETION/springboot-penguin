@@ -83,9 +83,9 @@ var managePasswordPage = {
      * 更新密码事件触发
      */
     updatePassword: function () {
-        var oldPassword = $('#oldPassword').val();
-        var newPassword = $('#newPassword').val();
-        var confirmPassword = $('#confirmNewPassword').val();
+        var oldPassword = $.md5($('#oldPassword').val()+app.data.md5Salt);
+        var newPassword = $.md5($('#newPassword').val()+app.data.md5Salt);
+        var confirmPassword = $.md5($('#confirmNewPassword').val()+app.data.md5Salt);
         if (managePasswordPage.checkPassword(oldPassword, newPassword, confirmPassword)) {
             //调用后端API
             $.post(app.URL.updatePasswordUrl(), {

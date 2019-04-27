@@ -1,8 +1,12 @@
 /**
  * 模块JavaScript
  */
+/*$(document).ajaxSend(function (event, xhr) {
+ xhr.setRequestHeader("test", "bearer " + 123456);  // 增加一个自定义请求头
+ });*/
 var app = {
     data: {
+        md5Salt: "penguin",
         nowTime: null,
         contextPath: null,
     },
@@ -86,8 +90,8 @@ var app = {
         updateMessageStateUrl: function () {
             return app.data.contextPath + "/message/api/updateMessageState";
         },
-        deleteMessageUrl:function(){
-            return app.data.contextPath+"/message/api/deleteMessage";
+        deleteMessageUrl: function () {
+            return app.data.contextPath + "/message/api/deleteMessage";
         }
     },
     /**
@@ -238,6 +242,10 @@ var app = {
     checkLogin: function () {
         var username = $('#username').val();
         var password = $('#password').val();
+
+        if (password != $.cookie("penguinPassword")) {
+            password = $.md5(password + app.data.md5Salt);
+        }
         if (app.checkUsernameAndPassword(username, password)) {
             //调用后端API
             $.post(app.URL.checkLoginUrl(), {
@@ -250,8 +258,10 @@ var app = {
                 if (result && result['success']) {
                     if ($('#rememberMe').is(":checked")) {
                         // 把账号信息记入cookie
-                        $.cookie('penguinUsername', username, {expires: 7, path: '/'});
-                        $.cookie('penguinPassword', password, {expires: 7, path: '/'});
+                        var date = new Date();
+                        date.setTime(date.getTime() + 2 * 60 * 60 * 1000);
+                        $.cookie('penguinUsername', username, {expires: date, path: '/', secure:true});
+                        $.cookie('penguinPassword', password, {expires: date, path: '/',secure:true});
                     }
                     // 验证通过 刷新页面
                     window.location.reload();

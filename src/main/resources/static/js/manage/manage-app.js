@@ -5,6 +5,7 @@ var app = {
     data: {
         nowTime: null,
         contextPath: null,
+        md5Salt:"penguin"
     },
     // 封装相关的ajax的url
     URL: {

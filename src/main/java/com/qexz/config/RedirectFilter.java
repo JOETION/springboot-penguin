@@ -72,6 +72,6 @@ public class RedirectFilter implements Filter {
 
     @Override
     public void destroy() {
-
+        LOG.info("拦截器销毁");
     }
 }

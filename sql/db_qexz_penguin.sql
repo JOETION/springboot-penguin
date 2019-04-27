@@ -22,19 +22,19 @@ DROP TABLE IF EXISTS `t_penguin_account`;
 CREATE TABLE `t_penguin_account` (
   `id` int(8) NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `name` varchar(63) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '姓名',
-  `username` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '账号,一般为学号或者教工号',
-  `password` varchar(60) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '密码',
+  `username` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '账号,一般为学号或者教工号',
+  `password` varchar(60) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '密码',
   `qq` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'QQ',
-  `phone` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '电话',
   `email` varchar(30) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '邮箱',
   `description` varchar(63) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '个人描述',
   `avatar_img_url` varchar(63) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '头像',
-  `state` int(8) DEFAULT '0' COMMENT '当前账号状态,0表示正常,1表示封禁',
-  `level` int(8) DEFAULT '0' COMMENT '0表示学生,1表示教师,2表示管理员',
-  `create_time` datetime NOT NULL COMMENT '创建时间',
-  `update_time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `state` int(8) NOT NULL DEFAULT '0' COMMENT '当前账号状态,0表示正常,1表示封禁',
+  `level` int(8) NOT NULL DEFAULT '0' COMMENT '0表示学生,1表示教师,2表示管理员',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
 -- Records of t_penguin_account

@@ -9,7 +9,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  * 分布式session一致性,redis,30分钟
  */
 @Configuration
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 2*60*60)
 public class SessionConfig {
 
     /**

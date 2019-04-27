@@ -54,9 +54,6 @@ public class AccountController {
     @Autowired
     private MessageService messageService;
 
-    @Autowired
-    private RedisOperationsSessionRepository repository;
-
     /**
      * 个人信息页面
      */
@@ -193,17 +190,15 @@ public class AccountController {
             String oldPassword = request.getParameter("oldPassword");
             String newPassword = request.getParameter("newPassword");
             String confirmNewPassword = request.getParameter("confirmNewPassword");
-            String md5OldPassword = MD5.md5(QexzConst.MD5_SALT + oldPassword);
-            String md5NewPassword = MD5.md5(QexzConst.MD5_SALT + newPassword);
             if (StringUtils.isNotEmpty(newPassword) && StringUtils.isNotEmpty(confirmNewPassword)
                     && !newPassword.equals(confirmNewPassword)) {
                 return AjaxResultDto.fixedError(QexzWebError.NOT_EQUALS_CONFIRM_PASSWORD);
             }
             Account currentAccount = (Account) request.getSession().getAttribute(QexzConst.CURRENT_ACCOUNT);
-            if (!currentAccount.getPassword().equals(md5OldPassword)) {
+            if (!currentAccount.getPassword().equals(oldPassword)) {
                 return AjaxResultDto.fixedError(QexzWebError.WRONG_PASSWORD);
             }
-            currentAccount.setPassword(md5NewPassword);
+            currentAccount.setPassword(newPassword);
             boolean result = accountService.updateAccount(currentAccount);
             ajaxResultDto.setSuccess(result);
         } catch (Exception e) {
@@ -266,11 +261,11 @@ public class AccountController {
         String username = request.getParameter("username");
         AjaxResultDto ajaxResultDto = new AjaxResultDto();
         try {
+            //此处需要修改
             String password = request.getParameter("password");
             Account current_account = accountService.getAccountByUsername(username);
             if (current_account != null) {
-                String pwd = MD5.md5(QexzConst.MD5_SALT + password);
-                if (pwd.equals(current_account.getPassword())) {
+                if (password.equals(current_account.getPassword())) {
                     //设置单位为秒，设置为-1永不过期
                     //request.getSession().setMaxInactiveInterval(180*60);    //3小时
                     HttpSession session = request.getSession();
@@ -344,7 +339,7 @@ public class AccountController {
         try {
             Account existAccount = accountService.getAccountByUsername(account.getUsername());
             if (existAccount == null) {//检测该用户是否已经注册
-                account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
+                account.setPassword(account.getPassword());
                 account.setAvatarImgUrl(QexzConst.DEFAULT_AVATAR_IMG_URL);
                 account.setDescription("");
                 int accountId = accountService.addAccount(account);
@@ -365,7 +360,7 @@ public class AccountController {
     @ResponseBody
     public AjaxResultDto updateAccount(@RequestBody Account account) {
         try {
-            account.setPassword(MD5.md5(QexzConst.MD5_SALT + account.getPassword()));
+            account.setPassword(account.getPassword());
             accountService.updateAccount(account);
             return new AjaxResultDto().setData(true);
         } catch (Exception e) {
