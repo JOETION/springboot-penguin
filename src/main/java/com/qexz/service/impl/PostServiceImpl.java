@@ -1,7 +1,9 @@
 package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
+import com.qexz.dao.CommentMapper;
 import com.qexz.dao.PostMapper;
+import com.qexz.dao.ReplyMapper;
 import com.qexz.model.Post;
 import com.qexz.service.PostService;
 import org.apache.commons.logging.Log;
@@ -19,6 +21,12 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostMapper postMapper;
 
+    @Autowired
+    private CommentMapper commentMapper;
+
+    @Autowired
+    ReplyMapper replyMapper;
+
     @Override
     public int addPost(Post post) {
         return postMapper.insertPost(post);
@@ -30,12 +38,16 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional(rollbackFor = {Exception.class})
     public boolean deletePostById(int id) {
-        return postMapper.deletePostById(id) > 0;
+        replyMapper.deleteRepliesByPostId(id);
+        commentMapper.deleteCommentsByPostId(id);
+        postMapper.deletePostById(id);
+        return true;
     }
 
     @Override
-    public Map<String, Object> getPosts(int pageNum, int pageSize, int level,int type) {
+    public Map<String, Object> getPosts(int pageNum, int pageSize, int level, int type) {
         Map<String, Object> data = new HashMap<>();
         int count = postMapper.getCount(type);
         if (count == 0) {
@@ -56,7 +68,7 @@ public class PostServiceImpl implements PostService {
             return data;
         }
         PageHelper.startPage(pageNum, pageSize);
-        List<Post> posts = postMapper.getPosts(level,type);
+        List<Post> posts = postMapper.getPosts(level, type);
         data.put("pageNum", pageNum);
         data.put("pageSize", pageSize);
         data.put("totalPageNum", totalPageNum);

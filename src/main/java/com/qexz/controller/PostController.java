@@ -65,12 +65,9 @@ public class PostController {
 
     //删除帖子
     @DeleteMapping("/api/deletePost/{id}")
-    @Transactional
     public AjaxResultDto deletePost(@PathVariable int id) {
         try {
             postService.deletePostById(id);
-            commentService.deleteCommentsByPostId(id);
-            replyService.deleteRepliesByPostId(id);
             return new AjaxResultDto().setData(true);
         } catch (Exception e) {
             LOG.error("删除帖子信息失败，原因：" + e);
@@ -84,7 +81,6 @@ public class PostController {
     public AjaxResultDto getPosts(HttpServletRequest request, @RequestParam(value = "pageNum", defaultValue = "1") int pageNum, @RequestParam(value = "pageSize", defaultValue = "1") int pageSize) {
 
         try {
-            //todo 此处可以考虑能否在前端区分类型
             String level = request.getParameter("level");
             String type = request.getParameter("type");
             if (level != null) {

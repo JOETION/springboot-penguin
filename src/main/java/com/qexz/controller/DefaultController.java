@@ -59,8 +59,8 @@ public class DefaultController {
     /**
      * 身份信息失效，需要重新登录
      */
-    @RequestMapping(value = "/invalid",method = RequestMethod.GET)
-    public String invalid(){
+    @RequestMapping(value = "/invalid", method = RequestMethod.GET)
+    public String invalid() {
         return "/error/500";
     }
 
@@ -165,13 +165,12 @@ public class DefaultController {
     /**
      * 得到考试排名
      *
-     * @param request
      * @param contestId
      * @param model
      * @return
      */
     @RequestMapping(value = "/contest/{contestId}/rank")
-    public String contestRank(HttpServletRequest request, @PathVariable int contestId, Model model) {
+    public String contestRank(@PathVariable int contestId, Model model) {
 
         try {
             List<ContestRankVo> contestRankVos = new ArrayList<>();
@@ -199,7 +198,7 @@ public class DefaultController {
      * 题库中心页
      */
     @RequestMapping(value = "/problemset/list", method = RequestMethod.GET)
-    public String problemSet(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+    public String problemSet(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
         try {
             Map<String, Object> data = subjectService.getSubjects(page, QexzConst.subjectPageSize);
 
@@ -216,8 +215,7 @@ public class DefaultController {
      * 题目列表页
      */
     @RequestMapping(value = "/problemset/{problemsetId}/problems", method = RequestMethod.GET)
-    public String problemList(HttpServletRequest request,
-                              @PathVariable("problemsetId") Integer problemsetId,
+    public String problemList(@PathVariable("problemsetId") Integer problemsetId,
                               @RequestParam(value = "page", defaultValue = "1") int page,
                               @RequestParam(value = "content", defaultValue = "") String content,
                               @RequestParam(value = "type", defaultValue = "-1") int type,
@@ -240,10 +238,9 @@ public class DefaultController {
      * 题目详情页
      */
     @RequestMapping(value = "/problemset/{problemsetId}/problem/{problemId}", method = RequestMethod.GET)
-    public String problemDetail(HttpServletRequest request,
-                                @PathVariable("problemsetId") Integer problemsetId,
-                                @PathVariable("problemId") Integer problemId,
-                                Model model) {
+    public String problemDetail(@PathVariable("problemsetId") Integer problemsetId,
+            @PathVariable("problemId") Integer problemId,
+            Model model) {
         try {
             Map<String, Object> data = new HashMap<>();
             Question question = questionService.getQuestionById(problemId);
@@ -262,7 +259,7 @@ public class DefaultController {
      * 讨论区首页
      */
     @RequestMapping(value = "/discuss", method = RequestMethod.GET)
-    public String discuss(HttpServletRequest request, @RequestParam(value = "page", defaultValue = "1") int page, Model model) {
+    public String discuss(@RequestParam(value = "page", defaultValue = "1") int page, Model model) {
         try {
 
 
@@ -296,7 +293,7 @@ public class DefaultController {
      * 帖子详情页
      */
     @RequestMapping(value = "/discuss/{postId}", method = RequestMethod.GET)
-    public String discussDetail(HttpServletRequest request, @PathVariable("postId") Integer postId, Model model) {
+    public String discussDetail(@PathVariable("postId") Integer postId, Model model) {
 
         try {
 
@@ -396,7 +393,7 @@ public class DefaultController {
      * 编辑帖子
      */
     @RequestMapping(value = "/discuss/editPost/{postId}")
-    public String editDiscuss(HttpServletRequest request, Model model, @PathVariable int postId) {
+    public String editDiscuss(Model model, @PathVariable int postId) {
         try {
             Post post = postService.getPostById(postId);
             Map<String, Object> data = new HashMap<>();

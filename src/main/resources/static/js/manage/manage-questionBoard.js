@@ -160,11 +160,23 @@ var manageQuestionBoardPage = {
     //成功上传文件
     uploadComplete: function (evt) {
         /* 服务器端返回响应时候触发event事件*/
-        toastr.success('上传成功，请耐心等待试题导入系统');
-        setTimeout(function () {
-            //刷新页面
-            window.location.reload();
-        }, 2000);
+        if (this.responseText) {
+            var result = JSON.parse(this.responseText).success;
+            if (result) {
+                toastr.success('上传成功，请耐心等待试题导入系统');
+                setTimeout(function () {
+                    //刷新页面
+                    window.location.reload();
+                }, 2000);
+            } else {
+                toastr.error('上传失败，原因：' + this.responseText.message);
+                $("#uploadQuestionModal").modal('hide');
+            }
+
+        } else {
+            toastr.error('上传失败，原因：' + this.responseText.message);
+            $("#uploadQuestionModal").modal('hide');
+        }
     },
 
     //上传文件失败
@@ -197,7 +209,6 @@ var manageQuestionBoardPage = {
         $("#startTime").val("");
         $("#endTime").val("");
     },
-
 
 
     //分页开始----------------------------------------------------------------------------------------
@@ -259,8 +270,6 @@ var manageQuestionBoardPage = {
     },
 
     //分页结束-----------------------------------------------------------------------
-
-
 
 
     //初始化信息考试信息

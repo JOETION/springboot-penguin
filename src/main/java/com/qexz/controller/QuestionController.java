@@ -21,9 +21,6 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @Autowired
-    private ContestContentService contestContentService;
-
     //添加题目
     @RequestMapping(value = "/api/addQuestion", method = RequestMethod.POST)
     @ResponseBody
@@ -78,6 +75,5 @@ public class QuestionController {
                 return new AjaxResultDto().setMessage(e.getMessage());
         }
         return new AjaxResultDto().setState(QexzWebError.COMMON);
-
     }
 }

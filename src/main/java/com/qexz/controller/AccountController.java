@@ -398,7 +398,6 @@ public class AccountController {
             LOG.error("封禁用户失败，原因：" + e);
             return AjaxResultDto.fixedError(QexzWebError.COMMON);
         }
-
     }
 
     /**

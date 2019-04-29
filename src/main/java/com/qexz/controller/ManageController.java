@@ -3,6 +3,7 @@ package com.qexz.controller;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.qexz.common.QexzConst;
+import com.qexz.dto.AjaxResultDto;
 import com.qexz.exception.QexzWebError;
 import com.qexz.exception.QexzWebException;
 import com.qexz.model.*;
@@ -211,15 +212,16 @@ public class ManageController {
     }
 
 
+
+    //TODO 此处需要添加返回值，看能不能提取到service中
     /**
      * 上传试题excel文件，并处理后放进数据库
-     *
      * @param file
      * @throws QexzWebException
      */
     @RequestMapping(value = "/question/upload", method = RequestMethod.POST)
     @ResponseBody
-    public void fileUpload(@RequestParam("file") MultipartFile file) throws QexzWebException {
+    public AjaxResultDto fileUpload(@RequestParam("file") MultipartFile file) throws QexzWebException {
 
         // 判断文件是否为空
         String fileName = file.getOriginalFilename().toLowerCase();
@@ -255,6 +257,7 @@ public class ManageController {
                 throw new QexzWebException(QexzWebError.UPLOAD_FILE_IMAGE_ANALYZE_ERROR);
             }
         }
+        return new AjaxResultDto().setSuccess(true);
 
     }
 

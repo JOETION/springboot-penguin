@@ -1,15 +1,13 @@
 package com.qexz.config;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
- * 分布式session一致性,redis,30分钟
+ * 分布式session一致性,redis,半天
  */
 @Configuration
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 2*60*60)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 6*60*60)
 public class SessionConfig {
 
     /**

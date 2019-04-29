@@ -22,8 +22,6 @@ public class ContestController {
 
     @Autowired
     private ContestService contestService;
-    @Autowired
-    private QuestionService questionService;
 
     @Autowired
     private ContestContentService contestContentService;
