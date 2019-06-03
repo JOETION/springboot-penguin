@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <context id="db_qexz_penguin" targetRuntime="MyBatis3">
+        <property name="autoDelimitKeywords" value="true"/>
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <property name="javaFileEncoding" value="UTF-8"/>
+        </commentGenerator>
+
+        <!--数据库没有密码时，password字段值为空就好-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://106.15.178.137:3306/db_qexz_penguin" userId="root"
+                        password="123456">
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+
+        <javaModelGenerator targetPackage="com.qexz.model"
+                            targetProject="src/main/java">
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper"
+                         targetProject="src/main/resources">
+        </sqlMapGenerator>
+
+        <javaClientGenerator targetPackage="com.qexz.dao"
+                             targetProject="src/main/java" type="XMLMAPPER">
+        </javaClientGenerator>
+
+        <!--下面是需要生成的表名-->
+        <table tableName="t_penguin_account">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_answer">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_comment">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_complaint">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_contest">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_contest_content">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_grade">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_message">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_notice">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_post">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+            <columnOverride column="html_content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="text_Content" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>
+
+        <table tableName="t_penguin_question">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+            <columnOverride column="content" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="answer" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="parse" javaType="java.lang.String" jdbcType="VARCHAR" />
+        </table>
+
+        <table tableName="t_penguin_reply">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+
+        <table tableName="t_penguin_subject">
+            <generatedKey column="id" sqlStatement="MySql"
+                          identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>
