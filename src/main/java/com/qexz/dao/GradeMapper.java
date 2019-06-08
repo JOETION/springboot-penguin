@@ -31,4 +31,7 @@ public interface GradeMapper {
     int getRankByContestIdAndStudentId(@Param("contestId")int contestId,@Param("studentId")int studentId);
 
     Grade getGradeByStudentIdAndContestId(@Param("contestId")int contestId,@Param("studentId")int studentId);
+
+    //删除某堂考试的所有分数
+    int deleteGradeByContestId(@Param("contestId")int contestId);
 }

@@ -33,4 +33,7 @@ public interface AnswerMapper {
 
     //得到某堂考试的学生答案
     public List<Answer> getAllAnswerByContestId(@Param("contestId") int contestId);
+
+    //删除某堂考试的所有答案
+    public int deleteAnswerByContestId(@Param("contestId") int contestId);
 }

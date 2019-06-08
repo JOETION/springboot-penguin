@@ -29,4 +29,7 @@ public interface AnswerService {
     //得到某堂考试的答案
     public List<Answer> getAnswerByContestId(int contestId, int pageNum, int pageSize);
 
+    //删除某堂考试的所有考上答案
+    public boolean deleteAnswerByContestId(int contestId);
+
 }

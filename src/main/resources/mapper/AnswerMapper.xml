@@ -44,4 +44,8 @@
         SELECT * FROM t_penguin_answer WHERE contest_id=#{contestId} ORDER BY student_id ASC
     </select>
 
+    <delete id="deleteAnswerByContestId">
+        DELETE FROM t_penguin_answer WHERE contest_id=#{contestId}
+    </delete>
+
 </mapper>
