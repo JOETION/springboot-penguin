@@ -34,4 +34,7 @@ public interface ContestContentService {
 
     //更新考试内容状态
     boolean updateContestContentState(int contestId, int questionId, int state);
+
+    //删除某堂考试的所有内容
+    boolean deleteContentByContestId(int contestId);
 }

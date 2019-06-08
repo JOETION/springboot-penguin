@@ -42,4 +42,7 @@ public interface ContestContentMapper {
 
     //更新问题状态
     int updateContestContentState(@Param("contestId")int contestId,@Param("questionId")int questionId,@Param("state")int state);
+
+    //删除所有考试的内容
+    int deleteContentByContestId(@Param("contestId")int contestId);
 }

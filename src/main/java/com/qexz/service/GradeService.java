@@ -25,4 +25,7 @@ public interface GradeService {
     Grade getGradeByContestIdAndStudentId(int contestId,int studentId);
 
     List<Grade> getGradesByContestId(int contestId);
+
+    //删除某堂考试的所有分数
+    boolean deleteGradeByContestId(int contestId);
 }

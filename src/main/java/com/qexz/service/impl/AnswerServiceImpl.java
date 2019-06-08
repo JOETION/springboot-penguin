@@ -52,4 +52,9 @@ public class AnswerServiceImpl implements AnswerService {
         PageHelper.startPage(pageNum, pageSize);
         return answerMapper.getAllAnswerByContestId(contestId);
     }
+
+    @Override
+    public boolean deleteAnswerByContestId(int contestId) {
+        return answerMapper.deleteAnswerByContestId(contestId) > 0;
+    }
 }

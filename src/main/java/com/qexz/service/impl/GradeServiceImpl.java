@@ -130,4 +130,9 @@ public class GradeServiceImpl implements GradeService {
         return gradeMapper.getGradesByContestId(contestId);
     }
 
+    @Override
+    public boolean deleteGradeByContestId(int contestId) {
+        return gradeMapper.deleteGradeByContestId(contestId)>0;
+    }
+
 }

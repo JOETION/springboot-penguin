@@ -112,4 +112,8 @@
         contest_id=#{contestId} AND student_id=#{studentId}
     </select>
 
+    <delete id="deleteGradeByContestId">
+        DELETE FROM t_penguin_grade WHERE contest_id=#{contestId}
+    </delete>
+
 </mapper>

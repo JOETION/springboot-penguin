@@ -55,4 +55,8 @@
         contest_id=#{contestId} AND question_id=#{questionId}
     </update>
 
+    <delete id="deleteContentByContestId">
+        DELETE FROM t_penguin_contest_content WHERE contest_id=#{contestId}
+    </delete>
+
 </mapper>

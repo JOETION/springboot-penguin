@@ -85,4 +85,9 @@ public class ContestContentServiceImpl implements ContestContentService {
         }
         return false;
     }
+
+    @Override
+    public boolean deleteContentByContestId(int contestId) {
+        return contestContentMapper.deleteContentByContestId(contestId)>0;
+    }
 }

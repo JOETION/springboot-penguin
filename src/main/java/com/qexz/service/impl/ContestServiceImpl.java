@@ -1,10 +1,7 @@
 package com.qexz.service.impl;
 
 import com.github.pagehelper.PageHelper;
-import com.qexz.dao.ContestContentMapper;
-import com.qexz.dao.ContestMapper;
-import com.qexz.dao.QuestionMapper;
-import com.qexz.dao.SubjectMapper;
+import com.qexz.dao.*;
 import com.qexz.model.Contest;
 import com.qexz.model.ContestContent;
 import com.qexz.model.Question;
@@ -21,7 +18,6 @@ import java.util.*;
 @Service("contestService")
 public class ContestServiceImpl implements ContestService {
 
-
     @Autowired
     private ContestMapper contestMapper;
 
@@ -30,6 +26,12 @@ public class ContestServiceImpl implements ContestService {
 
     @Autowired
     private ContestContentMapper contestContentMapper;
+
+    @Autowired
+    private AnswerMapper answerMapper;
+
+    @Autowired
+    private GradeMapper gradeMapper;
 
     @Override
     public int addContest(Contest contest) {
@@ -80,9 +82,15 @@ public class ContestServiceImpl implements ContestService {
         return data;
     }
 
+    //删除考试会删除所有考试答案，考试内容，考试分数等
+    @Transactional(rollbackFor = {Exception.class})
     @Override
     public boolean deleteContest(int id) {
-        return contestMapper.deleteContest(id) > 0;
+        contestMapper.deleteContest(id);
+        contestContentMapper.deleteContentByContestId(id);
+        answerMapper.deleteAnswerByContestId(id);
+        gradeMapper.deleteGradeByContestId(id);
+        return true;
     }
 
     @Override
